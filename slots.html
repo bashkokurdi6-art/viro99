@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VIRO99 Slots</title>
 
+<style>
+
+body{
+background:#07111d;
+color:white;
+font-family:Arial;
+text-align:center;
+padding:40px;
+}
+
+.reels{
+display:flex;
+justify-content:center;
+gap:20px;
+font-size:60px;
+margin:40px;
+}
+
+button{
+padding:15px 30px;
+border:none;
+border-radius:10px;
+background:limegreen;
+font-size:20px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🎰 VIRO99 Slots</h1>
+
+<div class="reels">
+<div id="r1">7</div>
+<div id="r2">🍒</div>
+<div id="r3">💎</div>
+</div>
+
+<button onclick="spin()">SPIN</button>
+
+<h2 id="result"></h2>
+
+<script>
+
+let symbols=["7","💎","🍒","⭐","🍋"]
+
+function spin(){
+
+let a=symbols[Math.floor(Math.random()*symbols.length)]
+let b=symbols[Math.floor(Math.random()*symbols.length)]
+let c=symbols[Math.floor(Math.random()*symbols.length)]
+
+document.getElementById("r1").innerText=a
+document.getElementById("r2").innerText=b
+document.getElementById("r3").innerText=c
+
+if(a==b && b==c){
+document.getElementById("result").innerText="JACKPOT!"
+}else{
+document.getElementById("result").innerText="TRY AGAIN"
+}
+
+}
+
+</script>
+
+</body>
+</html>
