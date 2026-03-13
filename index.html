@@ -2,333 +2,459 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>VIRO99 Mobile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIRO99</title>
   <style>
     :root{
       --bg:#07111d;
-      --bg-2:#0b1626;
+      --bg2:#0c1728;
       --panel:#0f1d31;
-      --panel-2:#13243c;
+      --panel2:#13243b;
       --line:rgba(255,255,255,.08);
-      --text:#f3f7ff;
-      --muted:#94a8c8;
+      --text:#f5f8ff;
+      --muted:#97abca;
       --green:#1fd37a;
-      --green-2:#0fb868;
-      --blue:#2f7bff;
-      --cyan:#1ec8ff;
-      --purple:#705cff;
-      --orange:#ffb11f;
-      --danger:#ff5478;
-      --shadow:0 16px 40px rgba(0,0,0,.32);
-      --radius:18px;
+      --green2:#0fb868;
+      --blue:#2d7cff;
+      --purple:#735cff;
+      --pink:#ff4fe0;
+      --gold:#ffbf2f;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:22px;
     }
 
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--bg),var(--bg-2));color:var(--text);font-family:Inter,Arial,Helvetica,sans-serif}
-    body{min-height:100vh}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(45,124,255,.16), transparent 22%),
+        radial-gradient(circle at top left, rgba(255,79,224,.10), transparent 18%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
     a{text-decoration:none;color:inherit}
-    button{font:inherit}
-    .app{max-width:430px;margin:0 auto;min-height:100vh;background:
-      radial-gradient(circle at top right, rgba(47,123,255,.18), transparent 22%),
-      radial-gradient(circle at top left, rgba(31,211,122,.14), transparent 18%),
-      linear-gradient(180deg,#07111d,#091627 36%,#091523 100%);
-      position:relative;overflow:hidden;padding-bottom:88px}
+    img{display:block;max-width:100%}
+    .container{width:min(1380px,94%);margin:auto}
 
-    .status-glow{
-      position:absolute;inset:auto -90px auto auto;width:180px;height:180px;border-radius:50%;
-      background:radial-gradient(circle, rgba(31,211,122,.18), transparent 66%);filter:blur(8px);pointer-events:none;
+    .topbar{
+      background:rgba(7,17,29,.86);
+      border-bottom:1px solid var(--line);
+      position:sticky;top:0;z-index:100;
+      backdrop-filter:blur(10px);
     }
+    .topbar-inner{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:14px 0;
+    }
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .brand-logo{
+      width:64px;height:64px;border-radius:18px;overflow:hidden;
+      box-shadow:0 10px 28px rgba(255,79,224,.12);
+      background:#0d1625;border:1px solid rgba(255,255,255,.08);
+      flex:0 0 auto;
+    }
+    .brand-logo img{width:100%;height:100%;object-fit:cover}
+    .brand-text strong{display:block;font-size:24px;letter-spacing:.5px}
+    .brand-text span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
 
-    .topbar{padding:14px 16px 10px;position:sticky;top:0;z-index:10;background:rgba(7,17,29,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-    .top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:42px;height:42px;border-radius:14px;box-shadow:0 10px 24px rgba(31,211,122,.18);background:linear-gradient(135deg,#25e28a,#1b7cff 58%,#7d62ff);display:grid;place-items:center;position:relative;overflow:hidden}
-    .logo::after{content:"";position:absolute;inset:1px;border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.02));mix-blend-mode:screen}
-    .logo svg{position:relative;z-index:1}
-    .brand-text strong{display:block;font-size:18px;letter-spacing:.4px}
-    .brand-text span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
-    .icon-btns{display:flex;gap:8px}
-    .icon-btn{width:38px;height:38px;border:none;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:#eaf2ff;display:grid;place-items:center}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .nav a{
+      padding:10px 14px;border-radius:12px;font-size:14px;color:#dce5f8;
+      background:transparent;border:1px solid transparent;transition:.2s;
+    }
+    .nav a:hover,.nav a.active{background:rgba(255,255,255,.05);border-color:var(--line)}
 
-    .balances{display:flex;gap:10px;margin-top:12px}
-    .wallet,.auth-pill{flex:1;border-radius:14px;padding:11px 13px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line)}
-    .wallet small,.auth-pill small{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}
-    .wallet strong,.auth-pill strong{font-size:14px}
-    .auth-pill{max-width:136px;text-align:center;background:linear-gradient(135deg,rgba(31,211,122,.18),rgba(47,123,255,.15));}
+    .actions{display:flex;gap:10px;align-items:center}
+    .btn{border:none;cursor:pointer;border-radius:14px;padding:12px 16px;font-weight:800;transition:.2s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-login{background:rgba(255,255,255,.05);color:#fff;border:1px solid var(--line)}
+    .btn-register{background:linear-gradient(135deg,var(--green),var(--green2));color:#03110a;box-shadow:0 10px 24px rgba(31,211,122,.22)}
 
-    .search-wrap{padding:14px 16px 0}
-    .search{display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)}
-    .search input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:14px}
-    .search input::placeholder{color:#8ea3c4}
+    .ticker{
+      overflow:hidden;white-space:nowrap;border-bottom:1px solid var(--line);
+      background:linear-gradient(90deg,#09111d,#0d1727);
+    }
+    .ticker-track{display:inline-block;padding:11px 0;animation:ticker 26s linear infinite}
+    .ticker-item{display:inline-flex;align-items:center;margin-right:28px;font-size:13px;color:#d7e3fa}
+    .badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;margin-right:8px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+    .badge.live{background:rgba(31,211,122,.12);border-color:rgba(31,211,122,.24);color:#85f5bf}
+    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-    .section{padding:16px}
-    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:12px}
-    .section-head h2{font-size:17px;margin:0}
-    .section-head a{font-size:12px;color:#84c8ff}
+    .layout{display:grid;grid-template-columns:250px 1fr 310px;gap:18px;padding:20px 0 34px}
+    .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
 
-    .tabs{display:flex;gap:8px;overflow:auto;padding-bottom:2px;scrollbar-width:none}
-    .tabs::-webkit-scrollbar{display:none}
-    .tab{white-space:nowrap;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:#d6e3ff;font-size:13px}
-    .tab.active{background:linear-gradient(135deg,rgba(31,211,122,.2),rgba(47,123,255,.18));border-color:rgba(31,211,122,.25);color:#fff}
+    .sidebar,.rightbar{height:fit-content;position:sticky;top:98px}
+    .sidebar{padding:16px}
+    .side-title{font-size:13px;font-weight:900;letter-spacing:.5px;margin:4px 0 12px}
+    .menu-list{display:grid;gap:10px}
+    .menu-item{display:flex;align-items:center;justify-content:space-between;padding:12px 13px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.04);color:#d7e3fa;transition:.2s;font-size:14px}
+    .menu-item:hover,.menu-item.active{background:rgba(31,211,122,.10);border-color:rgba(31,211,122,.22)}
+    .menu-left{display:flex;align-items:center;gap:10px}
+    .menu-count{font-size:12px;color:var(--muted);padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.05)}
 
-    .hero{padding:0 16px 4px}
-    .hero-card{position:relative;overflow:hidden;border-radius:24px;padding:18px;background:
-      radial-gradient(circle at top right, rgba(31,211,122,.18), transparent 24%),
-      radial-gradient(circle at bottom left, rgba(112,92,255,.18), transparent 24%),
-      linear-gradient(135deg,#112643,#0e1f34 42%,#0f1a2c);
-      border:1px solid var(--line);box-shadow:var(--shadow)}
-    .hero-card::before{content:"";position:absolute;right:-40px;top:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle, rgba(47,123,255,.24), transparent 62%)}
-    .live-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);font-size:11px;color:#d5e3ff}
-    .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
-    .hero-grid{display:grid;grid-template-columns:1.2fr .9fr;gap:14px;margin-top:14px;align-items:end}
-    .hero-copy h1{font-size:30px;line-height:1.02;margin:0 0 10px;font-weight:900;letter-spacing:-.8px}
-    .hero-copy p{margin:0;color:#a7bcda;font-size:13px;line-height:1.7;max-width:220px}
-    .hero-cta{display:flex;gap:10px;margin-top:14px}
-    .btn{border:none;border-radius:14px;padding:12px 14px;font-weight:800}
-    .btn-primary{background:linear-gradient(135deg,var(--green),var(--green-2));color:#031109;box-shadow:0 10px 22px rgba(31,211,122,.2)}
-    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff}
+    .content{display:grid;gap:18px}
 
-    .promo-stack{display:grid;gap:10px}
-    .offer-box,.mini-box{border-radius:18px;border:1px solid rgba(255,255,255,.08);overflow:hidden;position:relative}
-    .offer-box{padding:14px;background:linear-gradient(135deg,#0f8fe2,#1a6eff 60%,#13c673);min-height:118px}
-    .offer-box::after{content:"";position:absolute;inset:auto -24px -26px auto;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle, rgba(255,255,255,.28), transparent 64%)}
-    .offer-box small{display:block;font-size:11px;opacity:.9}
-    .offer-box strong{display:block;margin-top:6px;font-size:28px;line-height:1}
-    .offer-box span{display:block;font-size:13px;margin-top:6px}
-    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .mini-box{padding:10px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));min-height:74px}
-    .mini-box strong{display:block;font-size:13px;margin-top:18px}
+    .hero{overflow:hidden;padding:22px;position:relative;background:
+      radial-gradient(circle at right top, rgba(45,124,255,.22), transparent 26%),
+      radial-gradient(circle at left bottom, rgba(255,79,224,.12), transparent 22%),
+      linear-gradient(135deg,#11233d,#0f1b2e 45%,#132543);
+    }
+    .hero::after{content:"";position:absolute;right:-50px;top:-30px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle, rgba(31,211,122,.18), transparent 66%)}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:center;position:relative;z-index:1}
+    .hero-logo{
+      width:110px;height:110px;border-radius:28px;overflow:hidden;margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);background:#0d1625;
+      box-shadow:0 14px 34px rgba(255,79,224,.12);
+    }
+    .hero-logo img{width:100%;height:100%;object-fit:cover}
+    .hero h1{font-size:46px;line-height:1.02;margin-bottom:12px;letter-spacing:-1px}
+    .hero p{color:#a7bbda;line-height:1.8;font-size:15px;max-width:680px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .hero-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:12px;color:#dce6fa;margin-bottom:12px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+    .promo-box{border-radius:20px;padding:18px;background:linear-gradient(135deg,#0f96e6,#1c71ff 60%,#13c975);border:1px solid rgba(255,255,255,.08);min-height:132px;position:relative;overflow:hidden}
+    .promo-box::after{content:"";position:absolute;inset:auto -20px -24px auto;width:92px;height:92px;border-radius:50%;background:radial-gradient(circle, rgba(255,255,255,.28), transparent 64%)}
+    .promo-box small{display:block;font-size:11px;opacity:.92}
+    .promo-box strong{display:block;font-size:34px;margin-top:6px;line-height:1}
+    .promo-box span{display:block;font-size:14px;margin-top:6px}
+    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .mini{padding:16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-weight:700}
 
-    .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px}
-    .qa{border-radius:18px;padding:12px 8px;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line)}
-    .qa-icon{width:42px;height:42px;margin:0 auto 8px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(31,211,122,.24),rgba(47,123,255,.22));font-size:20px}
-    .qa span{display:block;font-size:12px;color:#dce7ff}
+    .section{padding:18px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+    .section-head h2{font-size:22px}
+    .section-head p{font-size:14px;color:var(--muted)}
 
-    .games-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .game-card{border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#102038,#0f1a2f);border:1px solid var(--line);box-shadow:var(--shadow)}
-    .game-thumb{height:126px;position:relative;overflow:hidden}
-    .game-thumb::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.3))}
+    .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .quick-card{overflow:hidden;border-radius:20px;background:#0d1524;border:1px solid var(--line);transition:.2s}
+    .quick-card:hover{transform:translateY(-3px)}
+    .quick-thumb{height:136px;position:relative;overflow:hidden}
+    .quick-body{padding:14px}
+    .quick-body h3{font-size:16px;margin-bottom:8px}
+    .quick-body span{font-size:13px;color:var(--muted)}
+
     .thumb-roulette{background:
       radial-gradient(circle at center, #1b1b1b 0 18%, transparent 19%),
       conic-gradient(#cf0f2f 0 10%, #121212 10% 20%, #cf0f2f 20% 30%, #121212 30% 40%, #cf0f2f 40% 50%, #121212 50% 60%, #cf0f2f 60% 70%, #121212 70% 80%, #cf0f2f 80% 90%, #121212 90% 100%),
       radial-gradient(circle at center, #dfb056 0 52%, #7a4c00 53% 57%, transparent 58%),
-      radial-gradient(circle at 50% 50%, rgba(255,255,255,.18), transparent 40%),
       linear-gradient(135deg,#0e1b2f,#182136);
-      background-size:120px 120px,120px 120px,120px 120px,auto,auto;
-      background-repeat:no-repeat;background-position:center 18px,center 18px,center 18px,center,center}
+      background-size:120px 120px,120px 120px,120px 120px,auto;
+      background-repeat:no-repeat;background-position:center 12px,center 12px,center 12px,center}
     .thumb-slots{background:
       linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0)),
       repeating-linear-gradient(90deg,#f5f7fb 0 28%, #dbe5f7 28% 32%),
       linear-gradient(135deg,#0f2742,#16355f)}
-    .thumb-slots::after{content:"7  7  💎";position:absolute;left:16px;right:16px;bottom:16px;height:44px;border-radius:12px;background:#f8fbff;color:#10213a;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;letter-spacing:4px;box-shadow:0 8px 20px rgba(0,0,0,.2)}
-    .thumb-football{background:
-      radial-gradient(circle at 72% 28%, rgba(255,255,255,.18), transparent 12%),
-      linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.28)),
-      linear-gradient(180deg,#1a9f52,#11522d)}
+    .thumb-slots::after{content:"7  7  💎";position:absolute;left:16px;right:16px;bottom:16px;height:42px;border-radius:12px;background:#f8fbff;color:#10213a;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;letter-spacing:4px;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+    .thumb-football{background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.28)),linear-gradient(180deg,#1a9f52,#11522d)}
     .thumb-football::after{content:"";position:absolute;left:50%;top:52%;width:74px;height:74px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 40% 35%, #fff 0 60%, #dce3ef 61% 100%);box-shadow:0 14px 24px rgba(0,0,0,.2)}
     .thumb-blackjack{background:linear-gradient(135deg,#0b1730,#13284a 55%,#101d36)}
     .thumb-blackjack::after{content:"A♠  K♣";position:absolute;left:16px;bottom:16px;padding:12px 14px;border-radius:14px;background:#fff;color:#111;font-size:24px;font-weight:900;box-shadow:18px -10px 0 0 rgba(255,255,255,.9)}
-    .game-body{padding:12px 12px 14px}
-    .game-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-    .game-body h3{margin:0;font-size:15px}
-    .badge{padding:6px 9px;border-radius:999px;font-size:10px;font-weight:800;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#dce8ff}
-    .game-body p{margin:8px 0 0;font-size:12px;line-height:1.6;color:var(--muted)}
 
-    .matches{display:grid;gap:10px}
-    .match-card{border-radius:20px;padding:14px;background:linear-gradient(180deg,#102038,#0f1a2e);border:1px solid var(--line)}
-    .match-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#c9d8f1;font-size:11px}
-    .teams{display:grid;gap:8px;margin-bottom:12px}
-    .team{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px}
-    .crest{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid var(--line);font-size:12px}
-    .odds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-    .odd{padding:11px 8px;border-radius:14px;text-align:center;background:rgba(255,255,255,.05);border:1px solid var(--line)}
-    .odd small{display:block;color:#8ea5c7;font-size:10px;margin-bottom:4px}
-    .odd strong{font-size:14px}
+    .sports-table{overflow:hidden}
+    .table-head,.match-row{display:grid;grid-template-columns:1.2fr 1fr 84px 84px 84px;gap:10px;align-items:center}
+    .table-head{padding:14px 16px;color:#9bb0d6;font-size:12px;letter-spacing:.6px;text-transform:uppercase;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+    .match-row{padding:14px 16px;border-bottom:1px solid var(--line);transition:.2s}
+    .match-row:last-child{border-bottom:none}
+    .match-row:hover{background:rgba(255,255,255,.03)}
+    .teams{display:flex;flex-direction:column;gap:8px}
+    .team{display:flex;align-items:center;gap:10px;font-weight:800}
+    .crest{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:rgba(255,255,255,.08);border:1px solid var(--line)}
+    .league,.time{color:var(--muted);font-size:13px}
+    .odd{text-align:center;padding:12px 8px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-weight:800;cursor:pointer;transition:.2s}
+    .odd:hover{background:rgba(31,211,122,.10);border-color:rgba(31,211,122,.22)}
 
-    .result-list{display:grid;gap:10px}
-    .result{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line)}
-    .result strong{display:block;font-size:13px}
-    .result span{display:block;color:var(--muted);font-size:11px;margin-top:4px}
-    .score{min-width:58px;text-align:center;padding:10px 10px;border-radius:12px;background:rgba(31,211,122,.12);border:1px solid rgba(31,211,122,.18);color:#87f7bf;font-weight:900}
+    .casino-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .casino-card{overflow:hidden;border-radius:20px;background:#0d1524;border:1px solid var(--line);transition:.2s}
+    .casino-card:hover{transform:translateY(-3px)}
+    .casino-image{height:152px;position:relative}
+    .casino-body{padding:14px}
+    .casino-body h3{margin-bottom:8px}
+    .casino-body p{font-size:13px;color:var(--muted);line-height:1.6}
+    .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .small-tag{font-size:12px;color:#dce7ff;background:rgba(255,255,255,.05);border:1px solid var(--line);padding:6px 10px;border-radius:999px}
 
-    .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);z-index:20;background:rgba(8,16,28,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px calc(10px + env(safe-area-inset-bottom))}
-    .nav-item{display:grid;place-items:center;gap:5px;color:#8fa5c8;font-size:11px}
-    .nav-item.active{color:#fff}
-    .nav-item .ni{width:40px;height:40px;border-radius:14px;display:grid;place-items:center}
-    .nav-item.active .ni{background:linear-gradient(135deg,rgba(31,211,122,.18),rgba(47,123,255,.2));border:1px solid rgba(31,211,122,.22)}
+    .panel-head{padding:16px 16px 0;display:flex;justify-content:space-between;align-items:center}
+    .panel-head h3{font-size:18px}
+    .panel-body{padding:16px}
+    .bet-slip-empty{display:grid;place-items:center;text-align:center;min-height:200px;color:var(--muted);border:1px dashed rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.02);padding:18px}
+    .results-list{display:grid;gap:12px}
+    .result-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+    .result-item small{display:block;color:var(--muted);margin-top:4px}
+    .score{padding:9px 12px;border-radius:12px;background:rgba(31,211,122,.12);color:#87f7bf;font-weight:900;border:1px solid rgba(31,211,122,.18)}
+
+    .mobile-search,.mobile-sections,.bottom-nav{display:none}
+
+    .footer{padding:28px 0 40px;color:var(--muted);text-align:center;font-size:14px}
+
+    @media (max-width: 1200px){
+      .layout{grid-template-columns:240px 1fr}
+      .rightbar{grid-column:1 / -1;position:static}
+    }
+
+    @media (max-width: 980px){
+      .layout{grid-template-columns:1fr}
+      .sidebar,.rightbar{display:none}
+      .hero-grid{grid-template-columns:1fr}
+      .quick-grid{grid-template-columns:repeat(2,1fr)}
+      .casino-grid{grid-template-columns:repeat(2,1fr)}
+      .table-head,.match-row{grid-template-columns:1.2fr 1fr 74px 74px 74px}
+      .nav{display:none}
+      .mobile-search{display:block;padding:12px 0 0}
+      .search{display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)}
+      .search input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:14px}
+      .search input::placeholder{color:#8ea3c4}
+    }
+
+    @media (max-width: 680px){
+      .topbar-inner{padding:12px 0;align-items:flex-start}
+      .actions{display:none}
+      .brand-logo{width:52px;height:52px;border-radius:16px}
+      .brand-text strong{font-size:20px}
+      .hero{padding:16px}
+      .hero-logo{width:92px;height:92px;border-radius:24px}
+      .hero h1{font-size:32px}
+      .hero p{font-size:13px}
+      .quick-grid,.casino-grid{grid-template-columns:1fr 1fr}
+      .mobile-sections{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px 0 0}
+      .m-item{padding:12px 8px;border-radius:18px;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line)}
+      .m-icon{width:42px;height:42px;margin:0 auto 8px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(31,211,122,.24),rgba(45,124,255,.22));font-size:20px}
+      .m-item span{display:block;font-size:12px;color:#dce7ff}
+      .table-head{display:none}
+      .match-row{grid-template-columns:1fr;gap:12px}
+      .odd-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+      .bottom-nav{display:grid;position:fixed;left:0;right:0;bottom:0;z-index:200;background:rgba(8,16,28,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);grid-template-columns:repeat(5,1fr);padding:10px 8px calc(10px + env(safe-area-inset-bottom))}
+      .nav-item{display:grid;place-items:center;gap:5px;color:#8fa5c8;font-size:11px}
+      .nav-item.active{color:#fff}
+      .ni{width:40px;height:40px;border-radius:14px;display:grid;place-items:center}
+      .nav-item.active .ni{background:linear-gradient(135deg,rgba(31,211,122,.18),rgba(45,124,255,.2));border:1px solid rgba(31,211,122,.22)}
+      body{padding-bottom:82px}
+    }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="status-glow"></div>
-
-    <div class="topbar">
-      <div class="top-row">
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
         <div class="brand">
-          <div class="logo" aria-label="VIRO99 logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 6L10.5 18H13L19 6H15.7L11.8 14.5L8.2 6H5Z" fill="white"/>
-            </svg>
+          <div class="brand-logo">
+            <img src="logo.png" alt="VIRO99 logo" />
           </div>
           <div class="brand-text">
             <strong>VIRO99</strong>
-            <span>Mobile Sports & Casino</span>
+            <span>Premium Sports & Casino</span>
           </div>
         </div>
-        <div class="icon-btns">
-          <button class="icon-btn">🔔</button>
-          <button class="icon-btn">☰</button>
+
+        <nav class="nav">
+          <a href="#" class="active">Home</a>
+          <a href="#sports">Sports</a>
+          <a href="#casino">Casino</a>
+          <a href="#slots">Slots</a>
+          <a href="#results">Results</a>
+        </nav>
+
+        <div class="actions">
+          <button class="btn btn-login">Login</button>
+          <button class="btn btn-register">Register</button>
         </div>
       </div>
 
-      <div class="balances">
-        <div class="wallet">
-          <small>Balance</small>
-          <strong>$ 0.00</strong>
-        </div>
-        <div class="auth-pill">
-          <small>Account</small>
-          <strong>Login</strong>
-        </div>
-      </div>
-    </div>
-
-    <div class="search-wrap">
-      <div class="search">
-        <span>🔎</span>
-        <input type="text" placeholder="Search games, teams, leagues..." />
-      </div>
-    </div>
-
-    <div class="section" style="padding-bottom:10px">
-      <div class="tabs">
-        <div class="tab active">Home</div>
-        <div class="tab">Sports</div>
-        <div class="tab">Live</div>
-        <div class="tab">Casino</div>
-        <div class="tab">Slots</div>
-        <div class="tab">Results</div>
-      </div>
-    </div>
-
-    <div class="hero">
-      <div class="hero-card">
-        <div class="live-pill"><span class="live-dot"></span> LIVE INTERFACE • MOBILE FIRST</div>
-
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <h1>VIRO99<br/>Premium Mobile Style</h1>
-            <p>Original mobile-first sportsbook and casino homepage with a strong premium look, custom logo, realistic-looking game cards, and smooth dark gradients.</p>
-            <div class="hero-cta">
-              <button class="btn btn-primary">Join Now</button>
-              <button class="btn btn-ghost">Explore</button>
-            </div>
-          </div>
-
-          <div class="promo-stack">
-            <div class="offer-box">
-              <small>Featured Promo</small>
-              <strong>100%</strong>
-              <span>Welcome Offer</span>
-            </div>
-            <div class="mini-grid">
-              <div class="mini-box"><strong>⚽ Live Football</strong></div>
-              <div class="mini-box"><strong>🎰 Top Slots</strong></div>
-            </div>
-          </div>
+      <div class="mobile-search">
+        <div class="search">
+          <span>🔎</span>
+          <input type="text" placeholder="Search games, teams, leagues..." />
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="quick-actions">
-      <a class="qa" href="#sports">
-        <div class="qa-icon">⚽</div>
-        <span>Sports</span>
-      </a>
-      <a class="qa" href="#casino">
-        <div class="qa-icon">🎲</div>
-        <span>Casino</span>
-      </a>
-      <a class="qa" href="#slots">
-        <div class="qa-icon">🎰</div>
-        <span>Slots</span>
-      </a>
-      <a class="qa" href="#results">
-        <div class="qa-icon">🏆</div>
-        <span>Results</span>
-      </a>
+  <div class="ticker">
+    <div class="ticker-track">
+      <span class="ticker-item"><span class="badge live">LIVE</span> Arsenal vs Chelsea — 2 : 1</span>
+      <span class="ticker-item"><span class="badge">FT</span> Real Madrid vs Sevilla — 3 : 0</span>
+      <span class="ticker-item"><span class="badge live">LIVE</span> Inter vs Milan — 1 : 1</span>
+      <span class="ticker-item"><span class="badge">HOT</span> New slot releases available now</span>
+      <span class="ticker-item"><span class="badge">VIP</span> Premium VIRO99 interface</span>
+      <span class="ticker-item"><span class="badge live">LIVE</span> Arsenal vs Chelsea — 2 : 1</span>
+      <span class="ticker-item"><span class="badge">FT</span> Real Madrid vs Sevilla — 3 : 0</span>
+      <span class="ticker-item"><span class="badge live">LIVE</span> Inter vs Milan — 1 : 1</span>
+      <span class="ticker-item"><span class="badge">HOT</span> New slot releases available now</span>
+      <span class="ticker-item"><span class="badge">VIP</span> Premium VIRO99 interface</span>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="mobile-sections">
+      <a class="m-item" href="#sports"><div class="m-icon">⚽</div><span>Sports</span></a>
+      <a class="m-item" href="#casino"><div class="m-icon">🎲</div><span>Casino</span></a>
+      <a class="m-item" href="#slots"><div class="m-icon">🎰</div><span>Slots</span></a>
+      <a class="m-item" href="#results"><div class="m-icon">🏆</div><span>Results</span></a>
     </div>
 
-    <section class="section" id="casino">
-      <div class="section-head">
-        <h2>Featured Games</h2>
-        <a href="#">See all</a>
-      </div>
-      <div class="games-grid">
-        <div class="game-card">
-          <div class="game-thumb thumb-roulette"></div>
-          <div class="game-body">
-            <div class="game-top">
-              <h3>Roulette Pro</h3>
-              <span class="badge">LIVE</span>
+    <div class="layout">
+      <aside class="card sidebar">
+        <div class="side-title">POPULAR</div>
+        <div class="menu-list">
+          <a class="menu-item active" href="#sports"><div class="menu-left"><span>⚽</span><span>Football</span></div><span class="menu-count">128</span></a>
+          <a class="menu-item" href="#"><div class="menu-left"><span>🎾</span><span>Tennis</span></div><span class="menu-count">46</span></a>
+          <a class="menu-item" href="#"><div class="menu-left"><span>🏀</span><span>Basketball</span></div><span class="menu-count">32</span></a>
+          <a class="menu-item" href="#"><div class="menu-left"><span>🎮</span><span>Esports</span></div><span class="menu-count">19</span></a>
+          <a class="menu-item" href="#casino"><div class="menu-left"><span>🎲</span><span>Live Casino</span></div><span class="menu-count">58</span></a>
+          <a class="menu-item" href="#slots"><div class="menu-left"><span>🎰</span><span>Slots</span></div><span class="menu-count">210</span></a>
+          <a class="menu-item" href="#results"><div class="menu-left"><span>🏆</span><span>Results</span></div><span class="menu-count">Daily</span></a>
+        </div>
+      </aside>
+
+      <section class="content">
+        <div class="card hero">
+          <div class="hero-grid">
+            <div>
+              <div class="hero-logo"><img src="logo.png" alt="VIRO99 logo" /></div>
+              <div class="hero-pill"><span class="dot"></span> ORIGINAL VIRO99 RESPONSIVE STYLE</div>
+              <h1>VIRO99 Premium Desktop & Mobile Style</h1>
+              <p>A clean responsive homepage for both desktop and mobile with your own logo, a stronger premium look, realistic-looking game cards, football matches, casino sections, and mobile bottom navigation.</p>
+              <div class="hero-actions">
+                <button class="btn btn-register">Join Now</button>
+                <button class="btn btn-login">Explore Games</button>
+              </div>
             </div>
-            <p>Rich gold wheel style with a realistic gaming-card presentation.</p>
+
+            <div>
+              <div class="promo-box">
+                <small>Featured Promo</small>
+                <strong>100%</strong>
+                <span>Welcome Offer</span>
+              </div>
+              <div class="mini-grid">
+                <div class="mini">⚽ Live Football</div>
+                <div class="mini">🎰 Top Slots</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="game-card" id="slots">
-          <div class="game-thumb thumb-slots"></div>
-          <div class="game-body">
-            <div class="game-top">
-              <h3>Neon Slots</h3>
-              <span class="badge">HOT</span>
+        <div class="card section">
+          <div class="section-head">
+            <div>
+              <h2>Featured Games</h2>
+              <p>Realistic styled card blocks for homepage sections.</p>
             </div>
-            <p>Slot-inspired visual card with bright reels and premium contrast.</p>
+          </div>
+
+          <div class="quick-grid">
+            <div class="quick-card">
+              <div class="quick-thumb thumb-football"></div>
+              <div class="quick-body"><h3>Football Live</h3><span>Top leagues and live match zones</span></div>
+            </div>
+            <div class="quick-card" id="slots">
+              <div class="quick-thumb thumb-slots"></div>
+              <div class="quick-body"><h3>Slots</h3><span>Classic and modern slot lobby</span></div>
+            </div>
+            <div class="quick-card" id="casino">
+              <div class="quick-thumb thumb-roulette"></div>
+              <div class="quick-body"><h3>Roulette</h3><span>Live table style presentation</span></div>
+            </div>
+            <div class="quick-card">
+              <div class="quick-thumb thumb-blackjack"></div>
+              <div class="quick-body"><h3>Blackjack</h3><span>Card table section preview</span></div>
+            </div>
           </div>
         </div>
 
-        <div class="game-card">
-          <div class="game-thumb thumb-football"></div>
-          <div class="game-body">
-            <div class="game-top">
-              <h3>Live Football</h3>
-              <span class="badge">TOP</span>
+        <div class="card section sports-table" id="sports">
+          <div class="section-head">
+            <div>
+              <h2>Football Matches</h2>
+              <p>Responsive demo match list and odds buttons.</p>
             </div>
-            <p>Sports-focused card block for match sections and mobile promotions.</p>
+          </div>
+
+          <div class="table-head">
+            <div>Match</div><div>League / Time</div><div>1</div><div>X</div><div>2</div>
+          </div>
+
+          <div class="match-row">
+            <div class="teams">
+              <div class="team"><span class="crest">A</span> Arsenal</div>
+              <div class="team"><span class="crest">C</span> Chelsea</div>
+            </div>
+            <div><div class="league">Premier League</div><div class="time">Today — 21:45</div></div>
+            <div class="odd-wrap"><div class="odd">2.05</div><div class="odd">3.25</div><div class="odd">3.50</div></div>
+          </div>
+
+          <div class="match-row">
+            <div class="teams">
+              <div class="team"><span class="crest">R</span> Real Madrid</div>
+              <div class="team"><span class="crest">B</span> Barcelona</div>
+            </div>
+            <div><div class="league">La Liga</div><div class="time">Tomorrow — 22:00</div></div>
+            <div class="odd-wrap"><div class="odd">2.30</div><div class="odd">3.10</div><div class="odd">2.85</div></div>
+          </div>
+
+          <div class="match-row">
+            <div class="teams">
+              <div class="team"><span class="crest">I</span> Inter</div>
+              <div class="team"><span class="crest">M</span> Milan</div>
+            </div>
+            <div><div class="league">Serie A</div><div class="time">Today — 20:30</div></div>
+            <div class="odd-wrap"><div class="odd">2.15</div><div class="odd">3.05</div><div class="odd">3.20</div></div>
           </div>
         </div>
 
-        <div class="game-card">
-          <div class="game-thumb thumb-blackjack"></div>
-          <div class="game-body">
-            <div class="game-top">
-              <h3>Blackjack VIP</h3>
-              <span class="badge">VIP</span>
+        <div class="card section">
+          <div class="section-head">
+            <div><h2>Casino Zone</h2><p>Homepage cards styled for a premium gaming look.</p></div>
+          </div>
+          <div class="casino-grid">
+            <div class="casino-card">
+              <div class="casino-image thumb-roulette"></div>
+              <div class="casino-body"><h3>Roulette Pro</h3><p>Gold wheel style with realistic visual depth and premium contrast.</p><div class="tag-row"><span class="small-tag">Live</span><span class="small-tag">Popular</span></div></div>
             </div>
-            <p>Luxury table-game card with clean white-card contrast and depth.</p>
+            <div class="casino-card">
+              <div class="casino-image thumb-slots"></div>
+              <div class="casino-body"><h3>Neon Slots</h3><p>Bright slot section card ready for custom game thumbnails and titles.</p><div class="tag-row"><span class="small-tag">New</span><span class="small-tag">Hot</span></div></div>
+            </div>
+            <div class="casino-card">
+              <div class="casino-image thumb-blackjack"></div>
+              <div class="casino-body"><h3>Blackjack VIP</h3><p>Elegant card table section that matches desktop and mobile pages.</p><div class="tag-row"><span class="small-tag">VIP</span><span class="small-tag">Table</span></div></div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="sports">
-      <div class="section-head">
-        <h2>Top Football Matches</h2>
-        <a href="#">More</a>
-      </div>
+      <aside class="rightbar">
+        <div class="card">
+          <div class="panel-head"><h3>Bet Slip</h3></div>
+          <div class="panel-body">
+            <div class="bet-slip-empty"><div><strong style="display:block;color:#fff;margin-bottom:8px;">No selections yet</strong><span>Add your own selections later if you build your own system.</span></div></div>
+          </div>
+        </div>
 
-      <div class="matches">
-        <div class="match-card">
-          <div class="match-top">
-            <span>Premier League</span>
-            <span>Today • 21:45</span>
+        <div class="card" id="results">
+          <div class="panel-head"><h3>Latest Results</h3></div>
+          <div class="panel-body">
+            <div class="results-list">
+              <div class="result-item"><div><strong>Arsenal vs Chelsea</strong><small>Premier League</small></div><div class="score">2 : 1</div></div>
+              <div class="result-item"><div><strong>Real Madrid vs Sevilla</strong><small>La Liga</small></div><div class="score">3 : 0</div></div>
+              <div class="result-item"><div><strong>Inter vs Roma</strong><small>Serie A</small></div><div class="score">1 : 1</div></div>
+            </div>
           </div>
-          <div class="teams">
-            <div class="team"><span class="crest">A</span> Arsenal</div>
-            <div class="team"><span class="crest">C</span> Chelsea</div>
-          </div>
-          <div class="odds">
-            <div class="odd"><small>1</small><strong>2.05</strong></div>
-            <div class="odd"><small>X</small><strong>3.25</strong></div>
-            <div class="odd"><small>2</small><strong
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">© 2026 VIRO99 — Responsive Desktop & Mobile UI</div>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active"><div class="ni">🏠</div><div>Home</div></a>
+    <a href="#sports" class="nav-item"><div class="ni">⚽</div><div>Sports</div></a>
+    <a href="#casino" class="nav-item"><div class="ni">🎲</div><div>Casino</div></a>
+    <a href="#slots" class="nav-item"><div class="ni">🎰</div><div>Slots</div></a>
+    <a href="#results" class="nav-item"><div class="ni">👤</div><div>Profile</div></a>
+  </nav>
+</body>
+</html>
