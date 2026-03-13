@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VIRO99</title>
+  <title>VIRO99 Demo</title>
   <style>
     :root{
       --bg:#07111d;
@@ -34,9 +34,12 @@
         linear-gradient(180deg,var(--bg),var(--bg2));
       min-height:100vh;
       overflow-x:hidden;
+      padding-bottom:0;
     }
+
     a{text-decoration:none;color:inherit}
     img{display:block;max-width:100%}
+    button,input{font:inherit}
     .container{width:min(1380px,94%);margin:auto}
 
     .topbar{
@@ -45,10 +48,12 @@
       position:sticky;top:0;z-index:100;
       backdrop-filter:blur(10px);
     }
+
     .topbar-inner{
       display:flex;align-items:center;justify-content:space-between;gap:16px;
       padding:14px 0;
     }
+
     .brand{display:flex;align-items:center;gap:14px;min-width:0}
     .brand-logo{
       width:64px;height:64px;border-radius:18px;overflow:hidden;
@@ -68,42 +73,93 @@
     .nav a:hover,.nav a.active{background:rgba(255,255,255,.05);border-color:var(--line)}
 
     .actions{display:flex;gap:10px;align-items:center}
-    .btn{border:none;cursor:pointer;border-radius:14px;padding:12px 16px;font-weight:800;transition:.2s}
+    .btn{
+      border:none;cursor:pointer;border-radius:14px;padding:12px 16px;
+      font-weight:800;transition:.2s
+    }
     .btn:hover{transform:translateY(-1px)}
     .btn-login{background:rgba(255,255,255,.05);color:#fff;border:1px solid var(--line)}
-    .btn-register{background:linear-gradient(135deg,var(--green),var(--green2));color:#03110a;box-shadow:0 10px 24px rgba(31,211,122,.22)}
+    .btn-register{
+      background:linear-gradient(135deg,var(--green),var(--green2));
+      color:#03110a;box-shadow:0 10px 24px rgba(31,211,122,.22)
+    }
 
     .ticker{
       overflow:hidden;white-space:nowrap;border-bottom:1px solid var(--line);
       background:linear-gradient(90deg,#09111d,#0d1727);
     }
     .ticker-track{display:inline-block;padding:11px 0;animation:ticker 26s linear infinite}
-    .ticker-item{display:inline-flex;align-items:center;margin-right:28px;font-size:13px;color:#d7e3fa}
-    .badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;margin-right:8px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
-    .badge.live{background:rgba(31,211,122,.12);border-color:rgba(31,211,122,.24);color:#85f5bf}
-    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .ticker-item{
+      display:inline-flex;align-items:center;margin-right:28px;
+      font-size:13px;color:#d7e3fa
+    }
+    .badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;
+      margin-right:8px;background:rgba(255,255,255,.07);border:1px solid var(--line)
+    }
+    .badge.live{
+      background:rgba(31,211,122,.12);
+      border-color:rgba(31,211,122,.24);
+      color:#85f5bf
+    }
+    @keyframes ticker{
+      from{transform:translateX(0)}
+      to{transform:translateX(-50%)}
+    }
 
-    .layout{display:grid;grid-template-columns:250px 1fr 310px;gap:18px;padding:20px 0 34px}
-    .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .layout{
+      display:grid;
+      grid-template-columns:250px 1fr 310px;
+      gap:18px;
+      padding:20px 0 34px;
+    }
+
+    .card{
+      background:linear-gradient(180deg,var(--panel),var(--panel2));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow)
+    }
 
     .sidebar,.rightbar{height:fit-content;position:sticky;top:98px}
     .sidebar{padding:16px}
     .side-title{font-size:13px;font-weight:900;letter-spacing:.5px;margin:4px 0 12px}
     .menu-list{display:grid;gap:10px}
-    .menu-item{display:flex;align-items:center;justify-content:space-between;padding:12px 13px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.04);color:#d7e3fa;transition:.2s;font-size:14px}
-    .menu-item:hover,.menu-item.active{background:rgba(31,211,122,.10);border-color:rgba(31,211,122,.22)}
+    .menu-item{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 13px;border-radius:14px;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.04);color:#d7e3fa;transition:.2s;font-size:14px
+    }
+    .menu-item:hover,.menu-item.active{
+      background:rgba(31,211,122,.10);
+      border-color:rgba(31,211,122,.22)
+    }
     .menu-left{display:flex;align-items:center;gap:10px}
-    .menu-count{font-size:12px;color:var(--muted);padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.05)}
+    .menu-count{
+      font-size:12px;color:var(--muted);padding:4px 8px;
+      border-radius:999px;background:rgba(255,255,255,.05)
+    }
 
     .content{display:grid;gap:18px}
 
-    .hero{overflow:hidden;padding:22px;position:relative;background:
+    .hero{
+      overflow:hidden;padding:22px;position:relative;background:
       radial-gradient(circle at right top, rgba(45,124,255,.22), transparent 26%),
       radial-gradient(circle at left bottom, rgba(255,79,224,.12), transparent 22%),
       linear-gradient(135deg,#11233d,#0f1b2e 45%,#132543);
     }
-    .hero::after{content:"";position:absolute;right:-50px;top:-30px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle, rgba(31,211,122,.18), transparent 66%)}
-    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:center;position:relative;z-index:1}
+
+    .hero::after{
+      content:"";position:absolute;right:-50px;top:-30px;width:220px;height:220px;
+      border-radius:50%;background:radial-gradient(circle, rgba(31,211,122,.18), transparent 66%)
+    }
+
+    .hero-grid{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:18px;
+      align-items:center;position:relative;z-index:1
+    }
+
     .hero-logo{
       width:110px;height:110px;border-radius:28px;overflow:hidden;margin-bottom:14px;
       border:1px solid rgba(255,255,255,.10);background:#0d1625;
@@ -113,77 +169,156 @@
     .hero h1{font-size:46px;line-height:1.02;margin-bottom:12px;letter-spacing:-1px}
     .hero p{color:#a7bbda;line-height:1.8;font-size:15px;max-width:680px}
     .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
-    .hero-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:12px;color:#dce6fa;margin-bottom:12px}
-    .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
-    .promo-box{border-radius:20px;padding:18px;background:linear-gradient(135deg,#0f96e6,#1c71ff 60%,#13c975);border:1px solid rgba(255,255,255,.08);min-height:132px;position:relative;overflow:hidden}
-    .promo-box::after{content:"";position:absolute;inset:auto -20px -24px auto;width:92px;height:92px;border-radius:50%;background:radial-gradient(circle, rgba(255,255,255,.28), transparent 64%)}
+    .hero-pill{
+      display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;
+      background:rgba(255,255,255,.06);border:1px solid var(--line);
+      font-size:12px;color:#dce6fa;margin-bottom:12px
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--green);box-shadow:0 0 10px var(--green)
+    }
+
+    .promo-box{
+      border-radius:20px;padding:18px;
+      background:linear-gradient(135deg,#0f96e6,#1c71ff 60%,#13c975);
+      border:1px solid rgba(255,255,255,.08);min-height:132px;position:relative;overflow:hidden
+    }
+    .promo-box::after{
+      content:"";position:absolute;inset:auto -20px -24px auto;width:92px;height:92px;
+      border-radius:50%;background:radial-gradient(circle, rgba(255,255,255,.28), transparent 64%)
+    }
     .promo-box small{display:block;font-size:11px;opacity:.92}
     .promo-box strong{display:block;font-size:34px;margin-top:6px;line-height:1}
     .promo-box span{display:block;font-size:14px;margin-top:6px}
+
     .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    .mini{padding:16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-weight:700}
+    .mini{
+      padding:16px;border-radius:18px;background:rgba(255,255,255,.06);
+      border:1px solid var(--line);font-weight:700
+    }
 
     .section{padding:18px}
-    .section-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+    .section-head{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:14px;flex-wrap:wrap;margin-bottom:16px
+    }
     .section-head h2{font-size:22px}
     .section-head p{font-size:14px;color:var(--muted)}
 
     .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .quick-card{overflow:hidden;border-radius:20px;background:#0d1524;border:1px solid var(--line);transition:.2s}
+    .quick-card{
+      overflow:hidden;border-radius:20px;background:#0d1524;
+      border:1px solid var(--line);transition:.2s
+    }
     .quick-card:hover{transform:translateY(-3px)}
     .quick-thumb{height:136px;position:relative;overflow:hidden}
     .quick-body{padding:14px}
     .quick-body h3{font-size:16px;margin-bottom:8px}
     .quick-body span{font-size:13px;color:var(--muted)}
 
-    .thumb-roulette{background:
+    .thumb-roulette{
+      background:
       radial-gradient(circle at center, #1b1b1b 0 18%, transparent 19%),
       conic-gradient(#cf0f2f 0 10%, #121212 10% 20%, #cf0f2f 20% 30%, #121212 30% 40%, #cf0f2f 40% 50%, #121212 50% 60%, #cf0f2f 60% 70%, #121212 70% 80%, #cf0f2f 80% 90%, #121212 90% 100%),
       radial-gradient(circle at center, #dfb056 0 52%, #7a4c00 53% 57%, transparent 58%),
       linear-gradient(135deg,#0e1b2f,#182136);
       background-size:120px 120px,120px 120px,120px 120px,auto;
-      background-repeat:no-repeat;background-position:center 12px,center 12px,center 12px,center}
-    .thumb-slots{background:
+      background-repeat:no-repeat;
+      background-position:center 12px,center 12px,center 12px,center
+    }
+
+    .thumb-slots{
+      background:
       linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0)),
       repeating-linear-gradient(90deg,#f5f7fb 0 28%, #dbe5f7 28% 32%),
-      linear-gradient(135deg,#0f2742,#16355f)}
-    .thumb-slots::after{content:"7  7  💎";position:absolute;left:16px;right:16px;bottom:16px;height:42px;border-radius:12px;background:#f8fbff;color:#10213a;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;letter-spacing:4px;box-shadow:0 8px 20px rgba(0,0,0,.2)}
-    .thumb-football{background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.28)),linear-gradient(180deg,#1a9f52,#11522d)}
-    .thumb-football::after{content:"";position:absolute;left:50%;top:52%;width:74px;height:74px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 40% 35%, #fff 0 60%, #dce3ef 61% 100%);box-shadow:0 14px 24px rgba(0,0,0,.2)}
+      linear-gradient(135deg,#0f2742,#16355f)
+    }
+
+    .thumb-slots::after{
+      content:"7  7  💎";
+      position:absolute;left:16px;right:16px;bottom:16px;height:42px;border-radius:12px;
+      background:#f8fbff;color:#10213a;display:flex;align-items:center;justify-content:center;
+      font-size:22px;font-weight:900;letter-spacing:4px;box-shadow:0 8px 20px rgba(0,0,0,.2)
+    }
+
+    .thumb-football{
+      background:
+      linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.28)),
+      linear-gradient(180deg,#1a9f52,#11522d)
+    }
+    .thumb-football::after{
+      content:"";position:absolute;left:50%;top:52%;width:74px;height:74px;
+      transform:translate(-50%,-50%);border-radius:50%;
+      background:radial-gradient(circle at 40% 35%, #fff 0 60%, #dce3ef 61% 100%);
+      box-shadow:0 14px 24px rgba(0,0,0,.2)
+    }
+
     .thumb-blackjack{background:linear-gradient(135deg,#0b1730,#13284a 55%,#101d36)}
-    .thumb-blackjack::after{content:"A♠  K♣";position:absolute;left:16px;bottom:16px;padding:12px 14px;border-radius:14px;background:#fff;color:#111;font-size:24px;font-weight:900;box-shadow:18px -10px 0 0 rgba(255,255,255,.9)}
+    .thumb-blackjack::after{
+      content:"A♠  K♣";position:absolute;left:16px;bottom:16px;padding:12px 14px;
+      border-radius:14px;background:#fff;color:#111;font-size:24px;font-weight:900;
+      box-shadow:18px -10px 0 0 rgba(255,255,255,.9)
+    }
 
     .sports-table{overflow:hidden}
-    .table-head,.match-row{display:grid;grid-template-columns:1.2fr 1fr 84px 84px 84px;gap:10px;align-items:center}
-    .table-head{padding:14px 16px;color:#9bb0d6;font-size:12px;letter-spacing:.6px;text-transform:uppercase;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+    .table-head,.match-row{
+      display:grid;grid-template-columns:1.2fr 1fr 84px 84px 84px;gap:10px;align-items:center
+    }
+    .table-head{
+      padding:14px 16px;color:#9bb0d6;font-size:12px;letter-spacing:.6px;
+      text-transform:uppercase;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)
+    }
     .match-row{padding:14px 16px;border-bottom:1px solid var(--line);transition:.2s}
     .match-row:last-child{border-bottom:none}
     .match-row:hover{background:rgba(255,255,255,.03)}
     .teams{display:flex;flex-direction:column;gap:8px}
     .team{display:flex;align-items:center;gap:10px;font-weight:800}
-    .crest{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:rgba(255,255,255,.08);border:1px solid var(--line)}
+    .crest{
+      width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;
+      background:rgba(255,255,255,.08);border:1px solid var(--line)
+    }
     .league,.time{color:var(--muted);font-size:13px}
-    .odd{text-align:center;padding:12px 8px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-weight:800;cursor:pointer;transition:.2s}
+    .odd{
+      text-align:center;padding:12px 8px;border-radius:12px;background:rgba(255,255,255,.04);
+      border:1px solid var(--line);font-weight:800;cursor:pointer;transition:.2s
+    }
     .odd:hover{background:rgba(31,211,122,.10);border-color:rgba(31,211,122,.22)}
 
     .casino-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .casino-card{overflow:hidden;border-radius:20px;background:#0d1524;border:1px solid var(--line);transition:.2s}
+    .casino-card{
+      overflow:hidden;border-radius:20px;background:#0d1524;
+      border:1px solid var(--line);transition:.2s
+    }
     .casino-card:hover{transform:translateY(-3px)}
     .casino-image{height:152px;position:relative}
     .casino-body{padding:14px}
     .casino-body h3{margin-bottom:8px}
     .casino-body p{font-size:13px;color:var(--muted);line-height:1.6}
     .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-    .small-tag{font-size:12px;color:#dce7ff;background:rgba(255,255,255,.05);border:1px solid var(--line);padding:6px 10px;border-radius:999px}
+    .small-tag{
+      font-size:12px;color:#dce7ff;background:rgba(255,255,255,.05);
+      border:1px solid var(--line);padding:6px 10px;border-radius:999px
+    }
 
     .panel-head{padding:16px 16px 0;display:flex;justify-content:space-between;align-items:center}
     .panel-head h3{font-size:18px}
     .panel-body{padding:16px}
-    .bet-slip-empty{display:grid;place-items:center;text-align:center;min-height:200px;color:var(--muted);border:1px dashed rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.02);padding:18px}
+    .bet-slip-empty{
+      display:grid;place-items:center;text-align:center;min-height:170px;color:var(--muted);
+      border:1px dashed rgba(255,255,255,.12);border-radius:16px;
+      background:rgba(255,255,255,.02);padding:18px
+    }
     .results-list{display:grid;gap:12px}
-    .result-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+    .result-item{
+      display:flex;justify-content:space-between;align-items:center;padding:12px 14px;
+      border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)
+    }
     .result-item small{display:block;color:var(--muted);margin-top:4px}
-    .score{padding:9px 12px;border-radius:12px;background:rgba(31,211,122,.12);color:#87f7bf;font-weight:900;border:1px solid rgba(31,211,122,.18)}
+    .score{
+      padding:9px 12px;border-radius:12px;background:rgba(31,211,122,.12);
+      color:#87f7bf;font-weight:900;border:1px solid rgba(31,211,122,.18)
+    }
 
     .mobile-search,.mobile-sections,.bottom-nav{display:none}
 
@@ -203,8 +338,13 @@
       .table-head,.match-row{grid-template-columns:1.2fr 1fr 74px 74px 74px}
       .nav{display:none}
       .mobile-search{display:block;padding:12px 0 0}
-      .search{display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)}
-      .search input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:14px}
+      .search{
+        display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;border-radius:16px;
+        background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)
+      }
+      .search input{
+        flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:14px
+      }
       .search input::placeholder{color:#8ea3c4}
     }
 
@@ -218,19 +358,59 @@
       .hero h1{font-size:32px}
       .hero p{font-size:13px}
       .quick-grid,.casino-grid{grid-template-columns:1fr 1fr}
-      .mobile-sections{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px 0 0}
-      .m-item{padding:12px 8px;border-radius:18px;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line)}
-      .m-icon{width:42px;height:42px;margin:0 auto 8px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(31,211,122,.24),rgba(45,124,255,.22));font-size:20px}
+      .mobile-sections{
+        display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px 0 0
+      }
+      .m-item{
+        padding:12px 8px;border-radius:18px;text-align:center;
+        background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
+        border:1px solid var(--line)
+      }
+      .m-icon{
+        width:42px;height:42px;margin:0 auto 8px;border-radius:14px;display:grid;place-items:center;
+        background:linear-gradient(135deg,rgba(31,211,122,.24),rgba(45,124,255,.22));font-size:20px
+      }
       .m-item span{display:block;font-size:12px;color:#dce7ff}
       .table-head{display:none}
       .match-row{grid-template-columns:1fr;gap:12px}
       .odd-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-      .bottom-nav{display:grid;position:fixed;left:0;right:0;bottom:0;z-index:200;background:rgba(8,16,28,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);grid-template-columns:repeat(5,1fr);padding:10px 8px calc(10px + env(safe-area-inset-bottom))}
+      .bottom-nav{
+        display:grid;position:fixed;left:0;right:0;bottom:0;z-index:200;
+        background:rgba(8,16,28,.92);backdrop-filter:blur(12px);
+        border-top:1px solid var(--line);grid-template-columns:repeat(5,1fr);
+        padding:10px 8px calc(10px + env(safe-area-inset-bottom))
+      }
       .nav-item{display:grid;place-items:center;gap:5px;color:#8fa5c8;font-size:11px}
       .nav-item.active{color:#fff}
       .ni{width:40px;height:40px;border-radius:14px;display:grid;place-items:center}
-      .nav-item.active .ni{background:linear-gradient(135deg,rgba(31,211,122,.18),rgba(45,124,255,.2));border:1px solid rgba(31,211,122,.22)}
+      .nav-item.active .ni{
+        background:linear-gradient(135deg,rgba(31,211,122,.18),rgba(45,124,255,.2));
+        border:1px solid rgba(31,211,122,.22)
+      }
       body{padding-bottom:82px}
+    }
+
+    .modal-overlay{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);
+      z-index:400;backdrop-filter:blur(4px)
+    }
+    .demo-modal{
+      display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+      width:min(92%,420px);z-index:500
+    }
+    .modal-close{
+      background:none;border:none;color:#fff;font-size:24px;cursor:pointer
+    }
+    .modal-form{display:grid;gap:12px}
+    .modal-input{
+      height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);color:#fff;padding:0 14px;outline:none
+    }
+    .toast{
+      display:none;position:fixed;left:50%;bottom:96px;transform:translateX(-50%);
+      z-index:600;background:linear-gradient(135deg,rgba(31,211,122,.95),rgba(45,124,255,.95));
+      color:#04110a;padding:12px 18px;border-radius:999px;font-weight:900;
+      box-shadow:0 12px 30px rgba(0,0,0,.25)
     }
   </style>
 </head>
@@ -243,8 +423,8 @@
             <img src="logo.png" alt="VIRO99 logo" />
           </div>
           <div class="brand-text">
-            <strong>VIRO99</strong>
-            <span>Premium Sports & Casino</span>
+            <strong>VIRO99 DEMO</strong>
+            <span>Sportsbook & Casino Demo</span>
           </div>
         </div>
 
@@ -257,8 +437,8 @@
         </nav>
 
         <div class="actions">
-          <button class="btn btn-login">Login</button>
-          <button class="btn btn-register">Register</button>
+          <button class="btn btn-login" onclick="openModal('loginModal')">Login</button>
+          <button class="btn btn-register" onclick="openModal('registerModal')">Register</button>
         </div>
       </div>
 
@@ -278,6 +458,7 @@
       <span class="ticker-item"><span class="badge live">LIVE</span> Inter vs Milan — 1 : 1</span>
       <span class="ticker-item"><span class="badge">HOT</span> New slot releases available now</span>
       <span class="ticker-item"><span class="badge">VIP</span> Premium VIRO99 interface</span>
+
       <span class="ticker-item"><span class="badge live">LIVE</span> Arsenal vs Chelsea — 2 : 1</span>
       <span class="ticker-item"><span class="badge">FT</span> Real Madrid vs Sevilla — 3 : 0</span>
       <span class="ticker-item"><span class="badge live">LIVE</span> Inter vs Milan — 1 : 1</span>
@@ -298,13 +479,34 @@
       <aside class="card sidebar">
         <div class="side-title">POPULAR</div>
         <div class="menu-list">
-          <a class="menu-item active" href="#sports"><div class="menu-left"><span>⚽</span><span>Football</span></div><span class="menu-count">128</span></a>
-          <a class="menu-item" href="#"><div class="menu-left"><span>🎾</span><span>Tennis</span></div><span class="menu-count">46</span></a>
-          <a class="menu-item" href="#"><div class="menu-left"><span>🏀</span><span>Basketball</span></div><span class="menu-count">32</span></a>
-          <a class="menu-item" href="#"><div class="menu-left"><span>🎮</span><span>Esports</span></div><span class="menu-count">19</span></a>
-          <a class="menu-item" href="#casino"><div class="menu-left"><span>🎲</span><span>Live Casino</span></div><span class="menu-count">58</span></a>
-          <a class="menu-item" href="#slots"><div class="menu-left"><span>🎰</span><span>Slots</span></div><span class="menu-count">210</span></a>
-          <a class="menu-item" href="#results"><div class="menu-left"><span>🏆</span><span>Results</span></div><span class="menu-count">Daily</span></a>
+          <a class="menu-item active" href="#sports">
+            <div class="menu-left"><span>⚽</span><span>Football</span></div>
+            <span class="menu-count">128</span>
+          </a>
+          <a class="menu-item" href="#">
+            <div class="menu-left"><span>🎾</span><span>Tennis</span></div>
+            <span class="menu-count">46</span>
+          </a>
+          <a class="menu-item" href="#">
+            <div class="menu-left"><span>🏀</span><span>Basketball</span></div>
+            <span class="menu-count">32</span>
+          </a>
+          <a class="menu-item" href="#">
+            <div class="menu-left"><span>🎮</span><span>Esports</span></div>
+            <span class="menu-count">19</span>
+          </a>
+          <a class="menu-item" href="#casino">
+            <div class="menu-left"><span>🎲</span><span>Live Casino</span></div>
+            <span class="menu-count">58</span>
+          </a>
+          <a class="menu-item" href="#slots">
+            <div class="menu-left"><span>🎰</span><span>Slots</span></div>
+            <span class="menu-count">210</span>
+          </a>
+          <a class="menu-item" href="#results">
+            <div class="menu-left"><span>🏆</span><span>Results</span></div>
+            <span class="menu-count">Daily</span>
+          </a>
         </div>
       </aside>
 
@@ -314,11 +516,15 @@
             <div>
               <div class="hero-logo"><img src="logo.png" alt="VIRO99 logo" /></div>
               <div class="hero-pill"><span class="dot"></span> ORIGINAL VIRO99 RESPONSIVE STYLE</div>
-              <h1>VIRO99 Premium Desktop & Mobile Style</h1>
-              <p>A clean responsive homepage for both desktop and mobile with your own logo, a stronger premium look, realistic-looking game cards, football matches, casino sections, and mobile bottom navigation.</p>
+              <h1>VIRO99 Sportsbook & Casino Demo</h1>
+              <p>
+                A responsive demo homepage inspired by a sportsbook and casino layout,
+                with football matches, casino sections, register and login modals,
+                and a demo wallet balance for presentation purposes.
+              </p>
               <div class="hero-actions">
-                <button class="btn btn-register">Join Now</button>
-                <button class="btn btn-login">Explore Games</button>
+                <button class="btn btn-register" onclick="openModal('registerModal')">Join Now</button>
+                <button class="btn btn-login" onclick="openModal('loginModal')">Explore Games</button>
               </div>
             </div>
 
@@ -347,19 +553,34 @@
           <div class="quick-grid">
             <div class="quick-card">
               <div class="quick-thumb thumb-football"></div>
-              <div class="quick-body"><h3>Football Live</h3><span>Top leagues and live match zones</span></div>
+              <div class="quick-body">
+                <h3>Football Live</h3>
+                <span>Top leagues and live match zones</span>
+              </div>
             </div>
+
             <div class="quick-card" id="slots">
               <div class="quick-thumb thumb-slots"></div>
-              <div class="quick-body"><h3>Slots</h3><span>Classic and modern slot lobby</span></div>
+              <div class="quick-body">
+                <h3>Slots</h3>
+                <span>Classic and modern slot lobby</span>
+              </div>
             </div>
+
             <div class="quick-card" id="casino">
               <div class="quick-thumb thumb-roulette"></div>
-              <div class="quick-body"><h3>Roulette</h3><span>Live table style presentation</span></div>
+              <div class="quick-body">
+                <h3>Roulette</h3>
+                <span>Live table style presentation</span>
+              </div>
             </div>
+
             <div class="quick-card">
               <div class="quick-thumb thumb-blackjack"></div>
-              <div class="quick-body"><h3>Blackjack</h3><span>Card table section preview</span></div>
+              <div class="quick-body">
+                <h3>Blackjack</h3>
+                <span>Card table section preview</span>
+              </div>
             </div>
           </div>
         </div>
@@ -373,7 +594,11 @@
           </div>
 
           <div class="table-head">
-            <div>Match</div><div>League / Time</div><div>1</div><div>X</div><div>2</div>
+            <div>Match</div>
+            <div>League / Time</div>
+            <div>1</div>
+            <div>X</div>
+            <div>2</div>
           </div>
 
           <div class="match-row">
@@ -381,8 +606,15 @@
               <div class="team"><span class="crest">A</span> Arsenal</div>
               <div class="team"><span class="crest">C</span> Chelsea</div>
             </div>
-            <div><div class="league">Premier League</div><div class="time">Today — 21:45</div></div>
-            <div class="odd-wrap"><div class="odd">2.05</div><div class="odd">3.25</div><div class="odd">3.50</div></div>
+            <div>
+              <div class="league">Premier League</div>
+              <div class="time">Today — 21:45</div>
+            </div>
+            <div class="odd-wrap">
+              <div class="odd">2.05</div>
+              <div class="odd">3.25</div>
+              <div class="odd">3.50</div>
+            </div>
           </div>
 
           <div class="match-row">
@@ -390,8 +622,15 @@
               <div class="team"><span class="crest">R</span> Real Madrid</div>
               <div class="team"><span class="crest">B</span> Barcelona</div>
             </div>
-            <div><div class="league">La Liga</div><div class="time">Tomorrow — 22:00</div></div>
-            <div class="odd-wrap"><div class="odd">2.30</div><div class="odd">3.10</div><div class="odd">2.85</div></div>
+            <div>
+              <div class="league">La Liga</div>
+              <div class="time">Tomorrow — 22:00</div>
+            </div>
+            <div class="odd-wrap">
+              <div class="odd">2.30</div>
+              <div class="odd">3.10</div>
+              <div class="odd">2.85</div>
+            </div>
           </div>
 
           <div class="match-row">
@@ -399,27 +638,61 @@
               <div class="team"><span class="crest">I</span> Inter</div>
               <div class="team"><span class="crest">M</span> Milan</div>
             </div>
-            <div><div class="league">Serie A</div><div class="time">Today — 20:30</div></div>
-            <div class="odd-wrap"><div class="odd">2.15</div><div class="odd">3.05</div><div class="odd">3.20</div></div>
+            <div>
+              <div class="league">Serie A</div>
+              <div class="time">Today — 20:30</div>
+            </div>
+            <div class="odd-wrap">
+              <div class="odd">2.15</div>
+              <div class="odd">3.05</div>
+              <div class="odd">3.20</div>
+            </div>
           </div>
         </div>
 
         <div class="card section">
           <div class="section-head">
-            <div><h2>Casino Zone</h2><p>Homepage cards styled for a premium gaming look.</p></div>
+            <div>
+              <h2>Casino Zone</h2>
+              <p>Homepage cards styled for a premium gaming look.</p>
+            </div>
           </div>
+
           <div class="casino-grid">
             <div class="casino-card">
               <div class="casino-image thumb-roulette"></div>
-              <div class="casino-body"><h3>Roulette Pro</h3><p>Gold wheel style with realistic visual depth and premium contrast.</p><div class="tag-row"><span class="small-tag">Live</span><span class="small-tag">Popular</span></div></div>
+              <div class="casino-body">
+                <h3>Roulette Pro</h3>
+                <p>Gold wheel style with realistic visual depth and premium contrast.</p>
+                <div class="tag-row">
+                  <span class="small-tag">Live</span>
+                  <span class="small-tag">Popular</span>
+                </div>
+              </div>
             </div>
+
             <div class="casino-card">
               <div class="casino-image thumb-slots"></div>
-              <div class="casino-body"><h3>Neon Slots</h3><p>Bright slot section card ready for custom game thumbnails and titles.</p><div class="tag-row"><span class="small-tag">New</span><span class="small-tag">Hot</span></div></div>
+              <div class="casino-body">
+                <h3>Neon Slots</h3>
+                <p>Bright slot section card ready for custom game thumbnails and titles.</p>
+                <div class="tag-row">
+                  <span class="small-tag">New</span>
+                  <span class="small-tag">Hot</span>
+                </div>
+              </div>
             </div>
+
             <div class="casino-card">
               <div class="casino-image thumb-blackjack"></div>
-              <div class="casino-body"><h3>Blackjack VIP</h3><p>Elegant card table section that matches desktop and mobile pages.</p><div class="tag-row"><span class="small-tag">VIP</span><span class="small-tag">Table</span></div></div>
+              <div class="casino-body">
+                <h3>Blackjack VIP</h3>
+                <p>Elegant card table section that matches desktop and mobile pages.</p>
+                <div class="tag-row">
+                  <span class="small-tag">VIP</span>
+                  <span class="small-tag">Table</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -427,9 +700,18 @@
 
       <aside class="rightbar">
         <div class="card">
-          <div class="panel-head"><h3>Bet Slip</h3></div>
+          <div class="panel-head"><h3>Demo Wallet</h3></div>
           <div class="panel-body">
-            <div class="bet-slip-empty"><div><strong style="display:block;color:#fff;margin-bottom:8px;">No selections yet</strong><span>Add your own selections later if you build your own system.</span></div></div>
+            <div class="bet-slip-empty">
+              <div>
+                <strong style="display:block;color:#fff;margin-bottom:8px;">Current Balance</strong>
+                <div id="walletBalance" style="font-size:28px;font-weight:900;color:#87f7bf;margin-bottom:10px;">$ 1250.00</div>
+                <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+                  <button class="btn btn-register" style="padding:10px 14px;" onclick="changeBalance(50)">+50</button>
+                  <button class="btn btn-login" style="padding:10px 14px;" onclick="changeBalance(-25)">-25</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -437,9 +719,29 @@
           <div class="panel-head"><h3>Latest Results</h3></div>
           <div class="panel-body">
             <div class="results-list">
-              <div class="result-item"><div><strong>Arsenal vs Chelsea</strong><small>Premier League</small></div><div class="score">2 : 1</div></div>
-              <div class="result-item"><div><strong>Real Madrid vs Sevilla</strong><small>La Liga</small></div><div class="score">3 : 0</div></div>
-              <div class="result-item"><div><strong>Inter vs Roma</strong><small>Serie A</small></div><div class="score">1 : 1</div></div>
+              <div class="result-item">
+                <div>
+                  <strong>Arsenal vs Chelsea</strong>
+                  <small>Premier League</small>
+                </div>
+                <div class="score">2 : 1</div>
+              </div>
+
+              <div class="result-item">
+                <div>
+                  <strong>Real Madrid vs Sevilla</strong>
+                  <small>La Liga</small>
+                </div>
+                <div class="score">3 : 0</div>
+              </div>
+
+              <div class="result-item">
+                <div>
+                  <strong>Inter vs Roma</strong>
+                  <small>Serie A</small>
+                </div>
+                <div class="score">1 : 1</div>
+              </div>
             </div>
           </div>
         </div>
@@ -449,6 +751,39 @@
     <div class="footer">© 2026 VIRO99 — Responsive Desktop & Mobile UI</div>
   </main>
 
+  <div id="overlay" class="modal-overlay"></div>
+
+  <div id="loginModal" class="demo-modal">
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-size:22px;">Login</h3>
+        <button onclick="closeModals()" class="modal-close">×</button>
+      </div>
+      <div class="modal-form">
+        <input id="loginUser" class="modal-input" placeholder="Username or email" />
+        <input id="loginPass" class="modal-input" type="password" placeholder="Password" />
+        <button class="btn btn-register" onclick="demoLogin()">Sign In</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="registerModal" class="demo-modal">
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-size:22px;">Register</h3>
+        <button onclick="closeModals()" class="modal-close">×</button>
+      </div>
+      <div class="modal-form">
+        <input id="regUser" class="modal-input" placeholder="Username" />
+        <input id="regEmail" class="modal-input" placeholder="Email" />
+        <input id="regPass" class="modal-input" type="password" placeholder="Password" />
+        <button class="btn btn-register" onclick="demoRegister()">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
   <nav class="bottom-nav">
     <a href="#" class="nav-item active"><div class="ni">🏠</div><div>Home</div></a>
     <a href="#sports" class="nav-item"><div class="ni">⚽</div><div>Sports</div></a>
@@ -456,5 +791,56 @@
     <a href="#slots" class="nav-item"><div class="ni">🎰</div><div>Slots</div></a>
     <a href="#results" class="nav-item"><div class="ni">👤</div><div>Profile</div></a>
   </nav>
+
+  <script>
+    let balance = 1250;
+
+    function openModal(id){
+      document.getElementById('overlay').style.display='block';
+      document.getElementById(id).style.display='block';
+    }
+
+    function closeModals(){
+      document.getElementById('overlay').style.display='none';
+      document.getElementById('loginModal').style.display='none';
+      document.getElementById('registerModal').style.display='none';
+    }
+
+    function showToast(message){
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 2200);
+    }
+
+    function demoLogin(){
+      const user = document.getElementById('loginUser').value.trim();
+      if(!user){
+        showToast('Enter your username first');
+        return;
+      }
+      closeModals();
+      showToast('Demo login successful');
+    }
+
+    function demoRegister(){
+      const user = document.getElementById('regUser').value.trim();
+      if(!user){
+        showToast('Enter a username first');
+        return;
+      }
+      closeModals();
+      showToast('Demo account created');
+    }
+
+    function changeBalance(amount){
+      balance += amount;
+      if(balance < 0) balance = 0;
+      document.getElementById('walletBalance').textContent = '$ ' + balance.toFixed(2);
+      showToast('Demo balance updated');
+    }
+
+    document.getElementById('overlay').addEventListener('click', closeModals);
+  </script>
 </body>
 </html>
