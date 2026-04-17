@@ -45,6 +45,11 @@
       gap: 10px;
     }
 
+    .nav-link {
+      text-decoration: none;
+      width: 100%;
+    }
+
     .btn {
       background: #ffd700;
       color: #000;
@@ -55,6 +60,8 @@
       font-weight: bold;
       font-size: 15px;
       width: 100%;
+      display: block;
+      text-align: center;
     }
 
     .btn-dark {
@@ -275,8 +282,8 @@
   <header>
     <div class="logo">VIRO GAME</div>
     <nav>
-      <button class="btn">تۆمارکردن</button>
-      <button class="btn btn-dark">چوونە ژوورەوە</button>
+      <a class="nav-link" href="register.html">تۆمارکردن</a>
+      <a class="nav-link btn btn-dark" href="login.html">چوونە ژوورەوە</a>
     </nav>
   </header>
 
@@ -322,7 +329,7 @@
           <h3>PUBG Mobile Squad</h3>
           <p>کاتی دەستپێک: 8:00 PM</p>
           <p>ژمارەی بەشداربووان: 64</p>
-          <button class="btn" style="margin-top:10px;">بینینی زیاتر</button>
+          <a class="btn" href="#" style="margin-top:10px; text-decoration:none;">بینینی زیاتر</a>
         </div>
 
         <div class="card">
@@ -330,7 +337,7 @@
           <h3>PUBG Room Match</h3>
           <p>کاتی دەستپێک: 10:00 PM</p>
           <p>ژمارەی بەشداربووان: 100</p>
-          <button class="btn" style="margin-top:10px;">بینینی زیاتر</button>
+          <a class="btn" href="#" style="margin-top:10px; text-decoration:none;">بینینی زیاتر</a>
         </div>
       </div>
     </section>
@@ -353,7 +360,7 @@
             <h3>1000 Point</h3>
             <p>پاکێجی سەرەتایی</p>
           </div>
-          <button class="btn">5$ کڕین</button>
+          <a class="btn" href="#" style="text-decoration:none;">5$ کڕین</a>
         </div>
 
         <div class="point-package">
@@ -361,7 +368,7 @@
             <h3>5000 Point</h3>
             <p>پاکێجی تایبەت</p>
           </div>
-          <button class="btn">20$ کڕین</button>
+          <a class="btn" href="#" style="text-decoration:none;">20$ کڕین</a>
         </div>
       </div>
     </section>
