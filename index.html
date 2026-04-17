@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VIRO GAME</title>
+
   <style>
     * {
       margin: 0;
@@ -45,11 +46,6 @@
       gap: 10px;
     }
 
-    .nav-link {
-      text-decoration: none;
-      width: 100%;
-    }
-
     .btn {
       background: #ffd700;
       color: #000;
@@ -60,8 +56,6 @@
       font-weight: bold;
       font-size: 15px;
       width: 100%;
-      display: block;
-      text-align: center;
     }
 
     .btn-dark {
@@ -107,16 +101,6 @@
       padding-right: 10px;
     }
 
-    .card,
-    .dashboard-box,
-    .point-package,
-    .offer-item,
-    .player-list li {
-      background: #131c31;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
     .dashboard-grid,
     .grid,
     .point-box {
@@ -127,7 +111,9 @@
 
     .dashboard-box,
     .card {
+      background: #131c31;
       padding: 14px;
+      border-radius: 16px;
     }
 
     .promo-banner {
@@ -135,249 +121,115 @@
       height: 170px;
       object-fit: cover;
       border-radius: 14px;
-      display: block;
       margin-bottom: 10px;
-    }
-
-    .dashboard-box p,
-    .card p,
-    .offer-item p {
-      color: #cbd5e1;
-      font-size: 14px;
     }
 
     .offer-item {
-      padding: 14px;
-      margin-bottom: 10px;
       background: #1b2540;
-    }
-
-    .offer-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .offer-item h4 {
-      font-size: 16px;
-      margin-bottom: 6px;
-      color: #fff;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
     }
 
     .live-badge {
+      background: red;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 12px;
       display: inline-block;
-      background: #ff2b2b;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    .card h3 {
-      font-size: 18px;
       margin-bottom: 8px;
     }
 
-    .player-list {
-      list-style: none;
-      display: grid;
-      gap: 10px;
-    }
-
     .player-list li {
-      padding: 12px 14px;
       background: #1b2540;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-    }
-
-    .status {
-      color: #00ff99;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .point-package {
-      padding: 14px;
-      background: #1b2540;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: stretch;
-    }
-
-    .point-package h3 {
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
-
-    .point-package p {
-      color: #cbd5e1;
-      font-size: 14px;
     }
 
     footer {
-      margin-top: 20px;
       text-align: center;
-      padding: 18px 12px;
+      padding: 15px;
       background: #11182d;
-      color: #94a3b8;
-      font-size: 13px;
-    }
-
-    @media (min-width: 768px) {
-      header {
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 16px 24px;
-      }
-
-      nav {
-        width: auto;
-        display: flex;
-      }
-
-      .container {
-        max-width: 1100px;
-        padding: 24px;
-      }
-
-      .dashboard-grid,
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .point-box {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .hero {
-        padding: 50px 20px 35px;
-      }
-
-      .hero h1 {
-        font-size: 38px;
-      }
-
-      .hero p {
-        font-size: 17px;
-      }
-
-      .section-title {
-        font-size: 26px;
-      }
-
-      .point-package {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
+      margin-top: 20px;
     }
   </style>
 </head>
+
 <body>
 
-  <header>
-    <div class="logo">VIRO GAME</div>
-    <nav>
-      <a class="nav-link" href="register.html">تۆمارکردن</a>
-      <a class="nav-link btn btn-dark" href="login.html">چوونە ژوورەوە</a>
-    </nav>
-  </header>
+<header>
+  <div class="logo">VIRO GAME</div>
 
-  <section class="hero">
-    <h1>VIRO GAME PUBG</h1>
-    <p>پلاتفۆرمی PUBG بۆ تۆڕنۆمێنت، یاریزانان، پۆینت و ئۆفەرە تایبەتەکان</p>
+  <nav>
+    <a href="register.html">
+      <button class="btn">تۆمارکردن</button>
+    </a>
+
+    <a href="login.html">
+      <button class="btn btn-dark">چوونە ژوورەوە</button>
+    </a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>VIRO GAME PUBG</h1>
+  <p>پلاتفۆرمی PUBG بۆ تۆڕنۆمێنت و پۆینت</p>
+</section>
+
+<div class="container">
+
+  <section>
+    <h2 class="section-title">داشبۆرد</h2>
+    <div class="dashboard-grid">
+
+      <div class="dashboard-box">
+        <img class="promo-banner" src="https://images.unsplash.com/photo-1542751371-adc38448a05e">
+        <p>ڕێکلام / تیم</p>
+      </div>
+
+      <div class="dashboard-box">
+        <div class="offer-item">ئۆفەر 1</div>
+        <div class="offer-item">ئۆفەر 2</div>
+      </div>
+
+    </div>
   </section>
 
-  <div class="container">
+  <section>
+    <h2 class="section-title">PUBG</h2>
+    <div class="card">
+      <span class="live-badge">LIVE</span>
+      <h3>PUBG Match</h3>
+      <p>64 Player</p>
+    </div>
+  </section>
 
-    <section>
-      <h2 class="section-title">داشبۆردی سەرەوە</h2>
-      <div class="dashboard-grid">
+  <section>
+    <h2 class="section-title">Players</h2>
+    <ul class="player-list">
+      <li>Player 1 <span>Online</span></li>
+      <li>Player 2 <span>Online</span></li>
+    </ul>
+  </section>
 
-        <div class="dashboard-box">
-          <img
-            class="promo-banner"
-            src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80"
-            alt="banner"
-          />
-          <p>شوێنی دانانی وێنەی تیم، ڕێکلام یان بانەری تایبەت</p>
-        </div>
-
-        <div class="dashboard-box">
-          <div class="offer-item">
-            <h4>ئۆفەری ئەمڕۆ</h4>
-            <p>زیادە پۆینت لە کڕینی پاکێجەکان</p>
-          </div>
-          <div class="offer-item">
-            <h4>ڕاگەیاندنی نوێ</h4>
-            <p>شوێنی دانانی داش، ئۆفەر و زانیاری نوێ</p>
-          </div>
-        </div>
-
+  <section>
+    <h2 class="section-title">Points</h2>
+    <div class="point-box">
+      <div class="offer-item">
+        1000 Point
+        <button class="btn">Buy</button>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <h2 class="section-title">تۆڕنۆمێنتی PUBG</h2>
-      <div class="grid">
-        <div class="card">
-          <span class="live-badge">LIVE</span>
-          <h3>PUBG Mobile Squad</h3>
-          <p>کاتی دەستپێک: 8:00 PM</p>
-          <p>ژمارەی بەشداربووان: 64</p>
-          <a class="btn" href="#" style="margin-top:10px; text-decoration:none;">بینینی زیاتر</a>
-        </div>
+</div>
 
-        <div class="card">
-          <span class="live-badge">LIVE</span>
-          <h3>PUBG Room Match</h3>
-          <p>کاتی دەستپێک: 10:00 PM</p>
-          <p>ژمارەی بەشداربووان: 100</p>
-          <a class="btn" href="#" style="margin-top:10px; text-decoration:none;">بینینی زیاتر</a>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="section-title">یاریزانانی ئامادەبوو</h2>
-      <ul class="player-list">
-        <li><span>Player_One</span><span class="status">ئامادە</span></li>
-        <li><span>Sniper_X</span><span class="status">ئامادە</span></li>
-        <li><span>Shadow_77</span><span class="status">ئامادە</span></li>
-        <li><span>King_Fire</span><span class="status">ئامادە</span></li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="section-title">کڕینی پۆینت</h2>
-      <div class="point-box">
-        <div class="point-package">
-          <div>
-            <h3>1000 Point</h3>
-            <p>پاکێجی سەرەتایی</p>
-          </div>
-          <a class="btn" href="#" style="text-decoration:none;">5$ کڕین</a>
-        </div>
-
-        <div class="point-package">
-          <div>
-            <h3>5000 Point</h3>
-            <p>پاکێجی تایبەت</p>
-          </div>
-          <a class="btn" href="#" style="text-decoration:none;">20$ کڕین</a>
-        </div>
-      </div>
-    </section>
-
-  </div>
-
-  <footer>
-    VIRO GAME © 2026
-  </footer>
+<footer>
+VIRO GAME © 2026
+</footer>
 
 </body>
 </html>
