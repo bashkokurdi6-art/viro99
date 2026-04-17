@@ -1,130 +1,407 @@
 <!DOCTYPE html>
-<html>
+<html lang="ku" dir="rtl">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIRO99</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tournament Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  background: radial-gradient(circle at top, #1a1a2e, #09090d);
-  color:white;
-  text-align:center;
-}
+    body {
+      background: #0b1020;
+      color: white;
+      line-height: 1.6;
+    }
 
-.header{
-  padding:20px;
-  font-size:28px;
-  font-weight:bold;
-  color:gold;
-  letter-spacing:2px;
-}
+    header {
+      background: #11182d;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
 
-.hero{
-  padding:100px 20px;
-}
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffd700;
+    }
 
-h1{
-  font-size:48px;
-  margin-bottom:15px;
-  background: linear-gradient(90deg, gold, #fff, gold);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-p{
-  color:#bbb;
-  font-size:18px;
-  margin-bottom:30px;
-}
+    .btn {
+      background: #ffd700;
+      color: black;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
 
-.btn{
-  padding:15px 30px;
-  margin:10px;
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:bold;
-  display:inline-block;
-  transition:0.3s;
-}
+    .btn:hover {
+      opacity: 0.85;
+    }
 
-.btn1{
-  background:gold;
-  color:black;
-  box-shadow:0 0 20px gold;
-}
+    .btn-dark {
+      background: #1d2742;
+      color: white;
+    }
 
-.btn1:hover{
-  transform:scale(1.05);
-}
+    .hero {
+      padding: 50px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+    }
 
-.btn2{
-  border:1px solid gold;
-  color:gold;
-}
+    .hero h1 {
+      font-size: 38px;
+      margin-bottom: 15px;
+      color: #ffd700;
+    }
 
-.btn2:hover{
-  background:gold;
-  color:black;
-}
+    .hero p {
+      max-width: 800px;
+      margin: auto;
+      color: #d1d5db;
+      font-size: 18px;
+    }
 
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
-  padding:30px;
-}
+    .container {
+      width: 92%;
+      max-width: 1300px;
+      margin: 30px auto;
+    }
 
-.card{
-  background:rgba(255,255,255,0.05);
-  border-radius:20px;
-  padding:25px;
-  backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,0.1);
-  transition:0.3s;
-}
+    .section-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #ffd700;
+      border-right: 5px solid #ffd700;
+      padding-right: 12px;
+    }
 
-.card:hover{
-  transform:translateY(-10px);
-  box-shadow:0 10px 30px rgba(255,215,0,0.2);
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 20px;
+    }
 
-.card h3{
-  color:gold;
-  margin-bottom:10px;
-}
-</style>
+    .card {
+      background: #131c31;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .card p {
+      color: #cbd5e1;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .live-badge {
+      display: inline-block;
+      background: red;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .player-list {
+      list-style: none;
+      margin-top: 10px;
+    }
+
+    .player-list li {
+      padding: 10px 12px;
+      background: #1b2540;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status {
+      color: #00ff99;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .point-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .point-package {
+      background: #1b2540;
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-box {
+      background: #131c31;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .chat-messages {
+      height: 250px;
+      overflow-y: auto;
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .message {
+      background: #1e293b;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chat-input input {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: #0f172a;
+      color: white;
+    }
+
+    .ads-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-box {
+      background: #131c31;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .stat-box h2 {
+      color: #ffd700;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .stat-box p {
+      color: #cbd5e1;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      padding: 20px;
+      background: #11182d;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      header {
+        padding: 15px;
+      }
+
+      .btn {
+        padding: 9px 14px;
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">VIRO99</div>
+  <header>
+    <div class="logo">GAME ZONE</div>
+    <nav>
+      <button class="btn">تۆمارکردن</button>
+      <button class="btn btn-dark">چوونە ژوورەوە</button>
+    </nav>
+  </header>
 
-<div class="hero">
-  <h1>🔥 LIVE TOURNAMENTS</h1>
-  <p>Watch PUBG matches, join competitions, and win rewards</p>
+  <section class="hero">
+    <h1>پلاتفۆرمی تۆڕنۆمێنت و یاریزانان</h1>
+    <p>لێرە دەتوانیت تۆمار بکەیت، تۆڕنۆمێنتی لایڤ ببینیت، پۆینت بکڕیت، لەگەڵ بەکارهێنەران چات بکەیت و ڕیکلامەکانت بەڕێوەببەیت.</p>
+  </section>
 
-  <a href="#" class="btn btn1">Watch Live</a>
-  <a href="#" class="btn btn2">Join Tournament</a>
-</div>
+  <div class="container">
 
-<div class="cards">
-  <div class="card">
-    <h3>🏆 Leaderboard</h3>
-    <p>Top players ranking</p>
+    <section>
+      <h2 class="section-title">تۆڕنۆمێنتی لایڤ</h2>
+      <div class="grid">
+        <div class="card">
+          <span class="live-badge">LIVE</span>
+          <h3>PUBG Mobile Tournament</h3>
+          <p>کاتی دەستپێک: 8:00 PM</p>
+          <p>ژمارەی بەشداربووان: 64</p>
+          <button class="btn">بینینی زیاتر</button>
+        </div>
+
+        <div class="card">
+          <span class="live-badge">LIVE</span>
+          <h3>Free Fire Clash</h3>
+          <p>کاتی دەستپێک: 9:30 PM</p>
+          <p>ژمارەی بەشداربووان: 48</p>
+          <button class="btn">بینینی زیاتر</button>
+        </div>
+
+        <div class="card">
+          <span class="live-badge">LIVE</span>
+          <h3>eFootball Cup</h3>
+          <p>کاتی دەستپێک: 10:00 PM</p>
+          <p>ژمارەی بەشداربووان: 32</p>
+          <button class="btn">بینینی زیاتر</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:40px;">
+      <h2 class="section-title">یاریزانانی ئامادەبوو</h2>
+      <div class="card">
+        <ul class="player-list">
+          <li><span>Player_One</span><span class="status">ئامادە</span></li>
+          <li><span>Player_Kurd</span><span class="status">ئامادە</span></li>
+          <li><span>Sniper_X</span><span class="status">ئامادە</span></li>
+          <li><span>King_Fire</span><span class="status">ئامادە</span></li>
+          <li><span>Shadow_77</span><span class="status">ئامادە</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section style="margin-top:40px;">
+      <h2 class="section-title">کڕینی پۆینت</h2>
+      <div class="card point-box">
+        <div class="point-package">
+          <div>
+            <h3>1000 Point</h3>
+            <p>بەکارهێنان بۆ تۆڕنۆمێنت و خزمەتگوزاری</p>
+          </div>
+          <button class="btn">5$ کڕین</button>
+        </div>
+
+        <div class="point-package">
+          <div>
+            <h3>2500 Point</h3>
+            <p>پاکێجی ناوەڕاست</p>
+          </div>
+          <button class="btn">10$ کڕین</button>
+        </div>
+
+        <div class="point-package">
+          <div>
+            <h3>5000 Point</h3>
+            <p>پاکێجی گەورە</p>
+          </div>
+          <button class="btn">20$ کڕین</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:40px;">
+      <h2 class="section-title">چاتی ڕاستەوخۆ</h2>
+      <div class="chat-box">
+        <div class="chat-messages" id="chatMessages">
+          <div class="message">بەخێربێیت بۆ چات</div>
+          <div class="message">یارییەکە دەست پێ کردووە</div>
+          <div class="message">Player_One چووە ژوورەوە</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="نامەکەت بنووسە..." />
+          <button class="btn" onclick="sendMessage()">ناردن</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:40px; margin-bottom:40px;">
+      <h2 class="section-title">داشبۆردی ڕیکلام</h2>
+      <div class="ads-dashboard">
+        <div class="stat-box">
+          <h2>120</h2>
+          <p>کۆی ڕیکلامەکان</p>
+        </div>
+        <div class="stat-box">
+          <h2>5400</h2>
+          <p>کۆی بینین</p>
+        </div>
+        <div class="stat-box">
+          <h2>230</h2>
+          <p>کڵیک</p>
+        </div>
+        <div class="stat-box">
+          <h2>$320</h2>
+          <p>داهات</p>
+        </div>
+      </div>
+    </section>
+
   </div>
 
-  <div class="card">
-    <h3>🎮 Live Matches</h3>
-    <p>Watch matches in real-time</p>
-  </div>
+  <footer>
+    © 2026 GAME ZONE - All Rights Reserved
+  </footer>
 
-  <div class="card">
-    <h3>🎟 Tickets</h3>
-    <p>Access premium tournaments</p>
-  </div>
-</div>
+  <script>
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const chatMessages = document.getElementById('chatMessages');
+
+      if (input.value.trim() !== '') {
+        const newMessage = document.createElement('div');
+        newMessage.classList.add('message');
+        newMessage.textContent = input.value;
+        chatMessages.appendChild(newMessage);
+        input.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    }
+  </script>
 
 </body>
 </html>
