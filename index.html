@@ -1,2 +1,130 @@
-<h1>viro99 is live 🔥</h1>
-<p>coming soon...</p>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIRO99</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background: radial-gradient(circle at top, #1a1a2e, #09090d);
+  color:white;
+  text-align:center;
+}
+
+.header{
+  padding:20px;
+  font-size:28px;
+  font-weight:bold;
+  color:gold;
+  letter-spacing:2px;
+}
+
+.hero{
+  padding:100px 20px;
+}
+
+h1{
+  font-size:48px;
+  margin-bottom:15px;
+  background: linear-gradient(90deg, gold, #fff, gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+p{
+  color:#bbb;
+  font-size:18px;
+  margin-bottom:30px;
+}
+
+.btn{
+  padding:15px 30px;
+  margin:10px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:bold;
+  display:inline-block;
+  transition:0.3s;
+}
+
+.btn1{
+  background:gold;
+  color:black;
+  box-shadow:0 0 20px gold;
+}
+
+.btn1:hover{
+  transform:scale(1.05);
+}
+
+.btn2{
+  border:1px solid gold;
+  color:gold;
+}
+
+.btn2:hover{
+  background:gold;
+  color:black;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  padding:30px;
+}
+
+.card{
+  background:rgba(255,255,255,0.05);
+  border-radius:20px;
+  padding:25px;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.1);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 10px 30px rgba(255,215,0,0.2);
+}
+
+.card h3{
+  color:gold;
+  margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">VIRO99</div>
+
+<div class="hero">
+  <h1>🔥 LIVE TOURNAMENTS</h1>
+  <p>Watch PUBG matches, join competitions, and win rewards</p>
+
+  <a href="#" class="btn btn1">Watch Live</a>
+  <a href="#" class="btn btn2">Join Tournament</a>
+</div>
+
+<div class="cards">
+  <div class="card">
+    <h3>🏆 Leaderboard</h3>
+    <p>Top players ranking</p>
+  </div>
+
+  <div class="card">
+    <h3>🎮 Live Matches</h3>
+    <p>Watch matches in real-time</p>
+  </div>
+
+  <div class="card">
+    <h3>🎟 Tickets</h3>
+    <p>Access premium tournaments</p>
+  </div>
+</div>
+
+</body>
+</html>
