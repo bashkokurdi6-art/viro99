@@ -19,11 +19,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .box {
-      width: 90%;
+      width: 100%;
       max-width: 400px;
       background: #131c31;
       padding: 20px;
@@ -43,8 +44,10 @@
       margin-bottom: 12px;
       border-radius: 10px;
       border: none;
+      outline: none;
       background: #1b2540;
       color: white;
+      font-size: 15px;
     }
 
     input::placeholder {
@@ -60,6 +63,12 @@
       border-radius: 12px;
       font-weight: bold;
       cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
     }
 
     .link {
@@ -72,24 +81,107 @@
       color: #ffd700;
       text-decoration: none;
     }
+
+    .msg {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
+      min-height: 22px;
+    }
+
+    .success {
+      color: #00e676;
+    }
+
+    .error {
+      color: #ff6b6b;
+    }
   </style>
 </head>
-
 <body>
 
   <div class="box">
     <h2>تۆمارکردن</h2>
 
-    <input type="text" placeholder="ناو">
-    <input type="text" placeholder="ژمارەی مۆبایل">
-    <input type="password" placeholder="وشەی نهێنی">
+    <input type="text" id="name" placeholder="ناو">
+    <input type="text" id="phone" placeholder="ژمارەی مۆبایل">
+    <input type="password" id="password" placeholder="وشەی نهێنی">
 
-    <button class="btn">تۆمارکردن</button>
+    <button class="btn" id="registerBtn" onclick="registerUser()">تۆمارکردن</button>
+
+    <div id="message" class="msg"></div>
 
     <div class="link">
       هەژمارت هەیە؟ <a href="login.html">چوونە ژوورەوە</a>
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://hqxndpyllgkifhzffsma.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_wbD4aaN5Dn5tpekvEZkF1g_PCF9Ra2z";
+
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function showMessage(text, type) {
+      const msg = document.getElementById("message");
+      msg.textContent = text;
+      msg.className = "msg " + type;
+    }
+
+    async function registerUser() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const btn = document.getElementById("registerBtn");
+
+      if (!name || !phone || !password) {
+        showMessage("تکایە هەموو خانەکان پڕ بکەوە", "error");
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage("وشەی نهێنی دەبێت لانیکەم 6 پیت بێت", "error");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "چاوەڕوان بە...";
+
+      const fakeEmail = phone.replace(/\s+/g, "") + "@virogame.com";
+
+      try {
+        const { data, error } = await client.auth.signUp({
+          email: fakeEmail,
+          password: password,
+          options: {
+            data: {
+              full_name: name,
+              phone: phone
+            }
+          }
+        });
+
+        if (error) {
+          showMessage(error.message, "error");
+          btn.disabled = false;
+          btn.textContent = "تۆمارکردن";
+          return;
+        }
+
+        showMessage("تۆمارکردن سەرکەوتوو بوو", "success");
+
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+
+      } catch (err) {
+        showMessage("هەڵەیەک ڕوویدا", "error");
+        btn.disabled = false;
+        btn.textContent = "تۆمارکردن";
+      }
+    }
+  </script>
 
 </body>
 </html>
