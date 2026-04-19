@@ -1,45 +1,58 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>تۆمارکردن</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
     body {
       background: #0b1020;
       color: white;
-      font-family: Arial;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .box {
-      width: 90%;
+      width: 100%;
       max-width: 400px;
       background: #131c31;
-      padding: 20px;
+      padding: 22px;
       border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     h2 {
       text-align: center;
       color: #ffd700;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     input {
       width: 100%;
       padding: 12px;
       margin-bottom: 12px;
-      border-radius: 10px;
       border: none;
+      border-radius: 10px;
       background: #1b2540;
       color: white;
-      box-sizing: border-box;
+      outline: none;
+      font-size: 16px;
+    }
+
+    input::placeholder {
+      color: #aaa;
     }
 
     button {
@@ -50,6 +63,7 @@
       background: #ffd700;
       color: black;
       font-weight: bold;
+      font-size: 17px;
       cursor: pointer;
     }
 
@@ -58,65 +72,97 @@
       text-align: center;
       min-height: 24px;
       color: #ff6b6b;
+      font-size: 14px;
+    }
+
+    .link {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #ffd700;
+      text-decoration: none;
     }
   </style>
 </head>
-
 <body>
 
   <div class="box">
     <h2>تۆمارکردن</h2>
 
+    <input type="text" id="name" placeholder="ناو">
     <input type="email" id="email" placeholder="ئیمەیڵ">
     <input type="password" id="password" placeholder="وشەی نهێنی">
 
-    <button onclick="register()">تۆمارکردن</button>
+    <button type="button" onclick="registerUser()">تۆمارکردن</button>
 
     <div id="msg"></div>
+
+    <div class="link">
+      هەژمارت هەیە؟ <a href="login.html">چوونە ژوورەوە</a>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
     const supabaseUrl = 'https://ukwucohcasssslcdvzds.supabase.co';
     const supabaseKey = 'sb_publishable_WPa170xGe956IfF9qeIxPQ_Wl6uEbnk';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    function show(text, color = '#ff6b6b') {
-      const msg = document.getElementById("msg");
+    function showMsg(text, color = '#ff6b6b') {
+      const msg = document.getElementById('msg');
       msg.style.color = color;
       msg.textContent = text;
     }
 
-    async function register() {
-      show("تاقیکردنەوە...");
+    async function registerUser() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
 
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+      showMsg('');
 
-      if (!email || !password) {
-        show("تکایە هەموو خانەکان پڕ بکە");
+      if (!name || !email || !password) {
+        showMsg('تکایە هەموو خانەکان پڕ بکە');
         return;
       }
+
+      if (password.length < 6) {
+        showMsg('وشەی نهێنی دەبێت لانیکەم 6 پیت بێت');
+        return;
+      }
+
+      showMsg('تاقیکردنەوە...','#ffd700');
 
       try {
         const { data, error } = await supabase.auth.signUp({
           email: email,
-          password: password
+          password: password,
+          options: {
+            data: {
+              name: name
+            }
+          }
         });
 
         if (error) {
-          show("هەڵە: " + error.message);
+          showMsg('هەڵە: ' + error.message);
           console.log(error);
           return;
         }
 
-        show("تۆمارکردن سەرکەوتوو بوو", "#00ff99");
+        showMsg('تۆمارکردن سەرکەوتوو بوو', '#00ff99');
         console.log(data);
+
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1200);
 
       } catch (err) {
         console.log(err);
-        show("کێشەیەکی سیستەم هەیە");
+        showMsg('هەڵەیەکی نەناسراو ڕوویدا');
       }
     }
   </script>
