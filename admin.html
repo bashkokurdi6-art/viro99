@@ -216,13 +216,6 @@
       padding:14px;
     }
 
-    .join-card{
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:14px;
-    }
-
     .deposit-top{
       display:flex;
       justify-content:space-between;
@@ -269,24 +262,6 @@
       background:rgba(255,92,92,.14);
       color:#ff9a9a;
       border:1px solid rgba(255,92,92,.25);
-    }
-
-    .status.completed{
-      background:rgba(41,209,127,.14);
-      color:#7affb3;
-      border:1px solid rgba(41,209,127,.25);
-    }
-
-    .status.success{
-      background:rgba(41,209,127,.14);
-      color:#7affb3;
-      border:1px solid rgba(41,209,127,.25);
-    }
-
-    .status.joined{
-      background:rgba(41,209,127,.14);
-      color:#7affb3;
-      border:1px solid rgba(41,209,127,.25);
     }
 
     .info-grid{
@@ -507,39 +482,6 @@
       <div class="empty" id="withdrawEmptyBox" style="display:none;">هیچ داواکاری ڕاکێشانێک نەدۆزرایەوە</div>
     </div>
 
-    <div class="section-card">
-      <div class="section-title">PUBG Join Requests</div>
-
-      <div class="summary-grid">
-        <div class="summary-box">
-          <div class="summary-label">کۆی گشتی</div>
-          <div class="summary-value" id="joinTotalCount">0</div>
-        </div>
-        <div class="summary-box">
-          <div class="summary-label">Pending</div>
-          <div class="summary-value" id="joinPendingCount">0</div>
-        </div>
-        <div class="summary-box">
-          <div class="summary-label">Completed</div>
-          <div class="summary-value" id="joinCompletedCount">0</div>
-        </div>
-        <div class="summary-box">
-          <div class="summary-label">Rejected</div>
-          <div class="summary-value" id="joinRejectedCount">0</div>
-        </div>
-      </div>
-
-      <div class="filters">
-        <button class="filter-btn active" onclick="setJoinFilter('all', this)">هەموو</button>
-        <button class="filter-btn" onclick="setJoinFilter('pending', this)">Pending</button>
-        <button class="filter-btn" onclick="setJoinFilter('completed', this)">Completed</button>
-        <button class="filter-btn" onclick="setJoinFilter('rejected', this)">Rejected</button>
-      </div>
-
-      <div class="list" id="joinList"></div>
-      <div class="empty" id="joinEmptyBox" style="display:none;">هیچ PUBG Join Request ـێک نەدۆزرایەوە</div>
-    </div>
-
   </div>
 
   <script type="module">
@@ -585,22 +527,11 @@
     const withdrawApprovedCount = document.getElementById("withdrawApprovedCount");
     const withdrawRejectedCount = document.getElementById("withdrawRejectedCount");
 
-    const joinList = document.getElementById("joinList");
-    const joinEmptyBox = document.getElementById("joinEmptyBox");
-
-    const joinTotalCount = document.getElementById("joinTotalCount");
-    const joinPendingCount = document.getElementById("joinPendingCount");
-    const joinCompletedCount = document.getElementById("joinCompletedCount");
-    const joinRejectedCount = document.getElementById("joinRejectedCount");
-
     let allDeposits = [];
     let currentFilter = "all";
 
     let allWithdraws = [];
     let currentWithdrawFilter = "all";
-
-    let allJoins = [];
-    let currentJoinFilter = "all";
 
     function showMessage(text, type = "success") {
       msgBox.textContent = text;
@@ -624,10 +555,6 @@
       return data.userUid || data.userId || data.uid || data.userDocId || "";
     }
 
-    function getJoinStatus(data) {
-      return data.status || "completed";
-    }
-
     window.goHome = function() {
       window.location.href = "index.html";
     };
@@ -636,7 +563,6 @@
       loadSettings();
       loadDeposits();
       loadWithdraws();
-      loadJoinRequests();
     };
 
     async function loadSettings() {
@@ -1040,137 +966,9 @@
       }
     };
 
-    function updateJoinSummary(items) {
-      joinTotalCount.textContent = items.length;
-      joinPendingCount.textContent = items.filter(x => getJoinStatus(x.data) === "pending").length;
-      joinCompletedCount.textContent = items.filter(x => ["completed", "success", "joined", "approved"].includes(getJoinStatus(x.data))).length;
-      joinRejectedCount.textContent = items.filter(x => ["rejected", "failed", "cancelled"].includes(getJoinStatus(x.data))).length;
-    }
-
-    function getFilteredJoins() {
-      if (currentJoinFilter === "all") return allJoins;
-
-      if (currentJoinFilter === "completed") {
-        return allJoins.filter(item => ["completed", "success", "joined", "approved"].includes(getJoinStatus(item.data)));
-      }
-
-      if (currentJoinFilter === "rejected") {
-        return allJoins.filter(item => ["rejected", "failed", "cancelled"].includes(getJoinStatus(item.data)));
-      }
-
-      return allJoins.filter(item => getJoinStatus(item.data) === currentJoinFilter);
-    }
-
-    function renderJoinRequests() {
-      joinList.innerHTML = "";
-
-      const items = getFilteredJoins();
-
-      if (items.length === 0) {
-        joinEmptyBox.style.display = "block";
-        return;
-      }
-
-      joinEmptyBox.style.display = "none";
-
-      items.forEach((item) => {
-        const data = item.data;
-        const status = getJoinStatus(data);
-        const userUid = getAnyUserId(data);
-        const amount = Number(data.amount || data.entryPrice || data.price || 0);
-        const pubgId = data.pubgId || data.pubg_id || data.gameUserId || "N/A";
-        const beforeBalance = data.balanceBefore ?? data.previousBalance ?? "N/A";
-        const afterBalance = data.balanceAfter ?? data.newBalance ?? "N/A";
-
-        const div = document.createElement("div");
-        div.className = "join-card";
-
-        div.innerHTML = `
-          <div class="deposit-top">
-            <div>
-              <div class="deposit-name">${data.username || data.name || "User"}</div>
-              <div class="value">${data.email || ""}</div>
-              <div class="status ${status}">${String(status).toUpperCase()}</div>
-            </div>
-            <div class="deposit-amount">$${amount}</div>
-          </div>
-
-          <div class="info-grid">
-            <div class="info-box">
-              <div class="label">User UID</div>
-              <div class="value">${userUid || "N/A"}</div>
-            </div>
-
-            <div class="info-box">
-              <div class="label">PUBG ID</div>
-              <div class="value">${pubgId}</div>
-            </div>
-
-            <div class="info-box">
-              <div class="label">Balance Before</div>
-              <div class="value">${beforeBalance}</div>
-            </div>
-
-            <div class="info-box">
-              <div class="label">Balance After</div>
-              <div class="value">${afterBalance}</div>
-            </div>
-
-            <div class="info-box">
-              <div class="label">Created At</div>
-              <div class="value">${formatDate(data.createdAt)}</div>
-            </div>
-
-            <div class="info-box">
-              <div class="label">Note</div>
-              <div class="value">${data.note || "هیچ تێبینییەک نیە"}</div>
-            </div>
-          </div>
-        `;
-
-        joinList.appendChild(div);
-      });
-    }
-
-    async function loadJoinRequests() {
-      try {
-        joinList.innerHTML = "Loading...";
-        joinEmptyBox.style.display = "none";
-
-        const snap = await getDocs(collection(db, "room_join_requests"));
-
-        allJoins = snap.docs.map(d => ({
-          id: d.id,
-          data: d.data()
-        }));
-
-        allJoins.sort((a, b) => {
-          const aTime = a.data.createdAt?.seconds || 0;
-          const bTime = b.data.createdAt?.seconds || 0;
-          return bTime - aTime;
-        });
-
-        updateJoinSummary(allJoins);
-        renderJoinRequests();
-      } catch (error) {
-        console.error(error);
-        allJoins = [];
-        updateJoinSummary(allJoins);
-        renderJoinRequests();
-      }
-    }
-
-    window.setJoinFilter = function(filter, btn) {
-      currentJoinFilter = filter;
-      document.querySelectorAll(".section-card:nth-of-type(5) .filter-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      renderJoinRequests();
-    };
-
     loadSettings();
     loadDeposits();
     loadWithdraws();
-    loadJoinRequests();
   </script>
 </body>
 </html>
