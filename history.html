@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deposit History</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    :root{
+      --bg1:#0a0f1f;
+      --bg2:#121a31;
+      --card:#151f38;
+      --card2:#1a2747;
+      --gold:#ffd54a;
+      --gold2:#ffb800;
+      --text:#ffffff;
+      --muted:#b9c4de;
+      --line:rgba(255,255,255,.08);
+      --success:#29d17f;
+      --danger:#ff5c5c;
+      --pending:#ffb800;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at top right, rgba(255,184,0,.10), transparent 25%),
+        linear-gradient(180deg, #08101f, #0b1326 35%, #101a31 100%);
+      color:var(--text);
+      min-height:100vh;
+      padding:16px;
+    }
+
+    .container{
+      width:100%;
+      max-width:560px;
+      margin:0 auto;
+      padding-bottom:24px;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .back-btn,
+    .home-btn{
+      flex:1;
+      border:none;
+      border-radius:14px;
+      padding:14px 12px;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .back-btn{
+      background:var(--card2);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .home-btn{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+    }
+
+    .page-head{
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      margin-bottom:16px;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+    }
+
+    .title{
+      font-size:24px;
+      color:var(--gold);
+      margin-bottom:8px;
+      text-align:center;
+    }
+
+    .sub{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+    }
+
+    .summary-box{
+      margin-top:14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      text-align:center;
+      color:#fff;
+      font-size:14px;
+    }
+
+    .history-list{
+      display:grid;
+      gap:14px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+    }
+
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .amount{
+      font-size:22px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .method{
+      color:#fff;
+      font-size:14px;
+      margin-top:4px;
+    }
+
+    .status{
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:bold;
+      white-space:nowrap;
+    }
+
+    .status.pending{
+      background:rgba(255,184,0,.15);
+      color:#ffd54a;
+      border:1px solid rgba(255,184,0,.28);
+    }
+
+    .status.approved{
+      background:rgba(41,209,127,.14);
+      color:#7affb3;
+      border:1px solid rgba(41,209,127,.25);
+    }
+
+    .status.rejected{
+      background:rgba(255,92,92,.14);
+      color:#ff9a9a;
+      border:1px solid rgba(255,92,92,.25);
+    }
+
+    .row{
+      margin-bottom:10px;
+      color:#dfe7fb;
+      font-size:14px;
+      line-height:1.7;
+      word-break:break-word;
+    }
+
+    .row:last-child{
+      margin-bottom:0;
+    }
+
+    .label{
+      color:var(--muted);
+      font-size:12px;
+      display:block;
+      margin-bottom:3px;
+    }
+
+    .shot-link{
+      display:inline-block;
+      margin-top:8px;
+      text-decoration:none;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      font-weight:bold;
+      font-size:13px;
+      padding:10px 14px;
+      border-radius:12px;
+    }
+
+    .empty-box{
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:24px 18px;
+      text-align:center;
+      color:var(--muted);
+      line-height:1.8;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+    }
+
+    .loading{
+      text-align:center;
+      color:var(--gold);
+      padding:20px 10px;
+      font-size:15px;
+    }
+
+    .error{
+      text-align:center;
+      color:#ff9a9a;
+      padding:20px 10px;
+      font-size:15px;
+    }
+
+    @media (max-width:420px){
+      .top-actions{
+        flex-direction:column;
+      }
+
+      .card-top{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="top-actions">
+      <button class="back-btn" onclick="goBack()">گەڕانەوە</button>
+      <button class="home-btn" onclick="goHome()">Home</button>
+    </div>
+
+    <div class="page-head">
+      <h1 class="title">مێژووی Deposit</h1>
+      <p class="sub">هەموو داواکارییەکانی پارەدانت لێرە دەردەکەون</p>
+      <div class="summary-box" id="summaryBox">چاوەڕوانبە...</div>
+    </div>
+
+    <div id="loadingBox" class="loading">زانیارییەکان بار دەکرێن...</div>
+    <div id="errorBox" class="error" style="display:none;"></div>
+    <div id="emptyBox" class="empty-box" style="display:none;">
+      هێشتا هیچ deposit ـێکت نیە
+    </div>
+
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      orderBy,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
+      authDomain: "viro-bdcc2.firebaseapp.com",
+      projectId: "viro-bdcc2",
+      storageBucket: "viro-bdcc2.firebasestorage.app",
+      messagingSenderId: "532562452622",
+      appId: "1:532562452622:web:e1adc471a9a78b0d3169df",
+      measurementId: "G-BW8WK8BGLH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const historyList = document.getElementById("historyList");
+    const loadingBox = document.getElementById("loadingBox");
+    const emptyBox = document.getElementById("emptyBox");
+    const errorBox = document.getElementById("errorBox");
+    const summaryBox = document.getElementById("summaryBox");
+
+    window.goBack = function() {
+      window.history.back();
+    }
+
+    window.goHome = function() {
+      window.location.href = "index.html";
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return "N/A";
+      try {
+        const date = timestamp.toDate();
+        return date.toLocaleString("en-US");
+      } catch {
+        return "N/A";
+      }
+    }
+
+    function getStatusClass(status) {
+      if (status === "approved") return "approved";
+      if (status === "rejected") return "rejected";
+      return "pending";
+    }
+
+    function getStatusText(status) {
+      if (status === "approved") return "Approved";
+      if (status === "rejected") return "Rejected";
+      return "Pending";
+    }
+
+    function renderDeposits(items) {
+      historyList.innerHTML = "";
+
+      let approvedCount = 0;
+      let pendingCount = 0;
+      let rejectedCount = 0;
+
+      items.forEach(item => {
+        const data = item.data();
+
+        if (data.status === "approved") approvedCount++;
+        else if (data.status === "rejected") rejectedCount++;
+        else pendingCount++;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <div class="amount">$${data.amount ?? 0}</div>
+              <div class="method">${data.method || "N/A"}</div>
+            </div>
+            <div class="status ${getStatusClass(data.status)}">${getStatusText(data.status)}</div>
+          </div>
+
+          <div class="row">
+            <span class="label">بەروار</span>
+            ${formatDate(data.createdAt)}
+          </div>
+
+          <div class="row">
+            <span class="label">تێبینی</span>
+            ${data.note ? data.note : "هیچ تێبینییەک نیە"}
+          </div>
+
+          <div class="row">
+            <span class="label">Screenshot</span>
+            ${data.imageUrl ? `<a class="shot-link" href="${data.imageUrl}" target="_blank">کردنەوەی وێنە</a>` : "وێنە نیە"}
+          </div>
+        `;
+
+        historyList.appendChild(card);
+      });
+
+      summaryBox.textContent =
+        `کۆی گشتی: ${items.length} | Pending: ${pendingCount} | Approved: ${approvedCount} | Rejected: ${rejectedCount}`;
+    }
+
+    async function loadHistory(user) {
+      loadingBox.style.display = "block";
+      emptyBox.style.display = "none";
+      errorBox.style.display = "none";
+      historyList.innerHTML = "";
+      summaryBox.textContent = "چاوەڕوانبە...";
+
+      try {
+        const q = query(
+          collection(db, "deposits"),
+          where("userUid", "==", user.uid),
+          orderBy("createdAt", "desc")
+        );
+
+        const snap = await getDocs(q);
+
+        loadingBox.style.display = "none";
+
+        if (snap.empty) {
+          emptyBox.style.display = "block";
+          summaryBox.textContent = "هیچ deposit ـێک نەدۆزرایەوە";
+          return;
+        }
+
+        renderDeposits(snap.docs);
+
+      } catch (error) {
+        console.error(error);
+        loadingBox.style.display = "none";
+        errorBox.style.display = "block";
+        errorBox.textContent = "هەڵەیەک ڕوویدا لە هێنانی history";
+        summaryBox.textContent = "هەڵە لە هێنانی زانیاری";
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      await loadHistory(user);
+    });
+  </script>
+</body>
+</html>
