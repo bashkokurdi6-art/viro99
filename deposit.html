@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
@@ -124,7 +123,6 @@
 
     .input,
     .select,
-    .file-input,
     .textarea{
       width:100%;
       border:none;
@@ -133,11 +131,6 @@
       padding:14px;
       font-size:15px;
       margin-bottom:14px;
-    }
-
-    .input,
-    .select,
-    .textarea{
       background:#eef3ff;
       color:#111;
     }
@@ -151,10 +144,9 @@
     }
 
     .file-input{
-      background:transparent;
+      width:100%;
       color:#fff;
       margin-bottom:8px;
-      padding:0;
     }
 
     .file-note{
@@ -208,11 +200,12 @@
     }
 
     .msg{
-      min-height:22px;
+      min-height:24px;
       margin-top:14px;
-      font-size:14px;
+      font-size:15px;
       text-align:center;
-      line-height:1.7;
+      line-height:1.8;
+      font-weight:bold;
     }
 
     .success{
@@ -241,7 +234,7 @@
     <div class="card">
       <h1 class="title">پارەدان / Deposit</h1>
       <p class="sub">
-        تکایە بڕ، شێوازی پارەدان، وێنەی پسووڵەی پارەدان بنێرە،  
+        تکایە بڕ، شێوازی پارەدان، وێنەی پسووڵەی پارەدان بنێرە،
         پاشان داواکارییەکەت دەنێردرێت بۆ پشکنین
       </p>
 
@@ -277,11 +270,10 @@
         <div class="file-note">تکایە وێنەی ڕوون هەڵبژێرە (jpg, png, webp)</div>
       </div>
 
-      <button class="submit-btn" id="submitBtn">ناردنی Deposit</button>
+      <button class="submit-btn" id="submitBtn" onclick="sendDeposit()">ناردنی Deposit</button>
 
       <div class="msg" id="msgBox"></div>
     </div>
-
   </div>
 
   <script type="module">
@@ -335,18 +327,18 @@
     let currentUser = null;
     let currentUserData = null;
 
-    function setMessage(text, type = "") {
-      msgBox.textContent = text;
-      msgBox.className = "msg";
-      if (type) msgBox.classList.add(type);
-    }
-
     window.goBack = function() {
       window.history.back();
-    }
+    };
 
     window.goHome = function() {
       window.location.href = "index.html";
+    };
+
+    function showMessage(text, type = "") {
+      msgBox.textContent = text;
+      msgBox.className = "msg";
+      if (type) msgBox.classList.add(type);
     }
 
     async function loadPaymentNumbers() {
@@ -370,7 +362,7 @@
       const snap = await getDoc(userRef);
 
       if (!snap.exists()) {
-        setMessage("داتای یوزەر نەدۆزرایەوە", "error");
+        showMessage("داتای یوزەر نەدۆزرایەوە", "error");
         return;
       }
 
@@ -392,31 +384,33 @@
     });
 
     async function sendDeposit() {
-      setMessage("");
-
-      const amount = Number(amountInput.value);
-      const method = methodInput.value;
-      const note = noteInput.value.trim();
-      const file = imageInput.files[0];
-
-      if (!currentUser) {
-        setMessage("تکایە سەرەتا بچۆ ژوورەوە", "error");
-        return;
-      }
-
-      if (!amount || amount <= 0) {
-        setMessage("تکایە بڕی دروست بنووسە", "error");
-        return;
-      }
-
-      if (!file) {
-        setMessage("تکایە وێنەی پسووڵە هەڵبژێرە", "error");
-        return;
-      }
+      showMessage("چاوەڕوانبە...", "");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "چاوەڕوانبە...";
 
       try {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "چاوەڕوانبە...";
+        const amount = Number(amountInput.value);
+        const method = methodInput.value;
+        const note = noteInput.value.trim();
+        const file = imageInput.files[0];
+
+        if (!currentUser) {
+          showMessage("تکایە سەرەتا بچۆ ژوورەوە", "error");
+          alert("تکایە سەرەتا بچۆ ژوورەوە");
+          return;
+        }
+
+        if (!amount || amount <= 0) {
+          showMessage("تکایە بڕی دروست بنووسە", "error");
+          alert("تکایە بڕی دروست بنووسە");
+          return;
+        }
+
+        if (!file) {
+          showMessage("تکایە وێنەی پسووڵە هەڵبژێرە", "error");
+          alert("تکایە وێنەی پسووڵە هەڵبژێرە");
+          return;
+        }
 
         const fileName = `deposits/${currentUser.uid}_${Date.now()}_${file.name}`;
         const storageRef = ref(storage, fileName);
@@ -442,17 +436,19 @@
         noteInput.value = "";
         imageInput.value = "";
 
-        setMessage("داواکارییەکەت بە سەرکەوتوویی نێردرا", "success");
+        showMessage("داواکاریەکەت بە سەرکەوتوویی نێردرا ✅", "success");
+        alert("داواکاریەکەت بە سەرکەوتوویی نێردرا ✅");
       } catch (error) {
         console.error(error);
-        setMessage("هەڵەیەک ڕوویدا لە ناردندا", "error");
+        showMessage("هەڵەیەک ڕوویدا لە ناردندا", "error");
+        alert("هەڵەیەک ڕوویدا لە ناردندا");
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "ناردنی Deposit";
       }
     }
 
-    submitBtn.addEventListener("click", sendDeposit);
+    window.sendDeposit = sendDeposit;
   </script>
 </body>
 </html>
