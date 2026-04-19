@@ -122,6 +122,10 @@
     <div class="sub">تۆمارکردن بۆ دروستکردنی هەژمار</div>
 
     <div class="input-box">
+      <input id="username" type="text" placeholder="ناوی یوزەر" />
+    </div>
+
+    <div class="input-box">
       <input id="email" type="email" placeholder="ئیمەیڵ" />
     </div>
 
@@ -141,6 +145,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
@@ -154,19 +159,25 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     const btn = document.getElementById("registerBtn");
     const msg = document.getElementById("msg");
 
+    function makeUserId() {
+      return "VIRO-" + Math.floor(100000 + Math.random() * 900000);
+    }
+
     btn.addEventListener("click", async () => {
+      const username = document.getElementById("username").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
       msg.style.color = "#ff8e8e";
       msg.textContent = "";
 
-      if (!email || !password) {
-        msg.textContent = "تکایە ئیمەیڵ و وشەی نهێنی پڕ بکە";
+      if (!username || !email || !password) {
+        msg.textContent = "تکایە هەموو خانەکان پڕ بکە";
         return;
       }
 
@@ -180,16 +191,32 @@
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        localStorage.setItem("userEmail", userCredential.user.email);
+        const user = userCredential.user;
+        const userId = makeUserId();
+
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          username: username,
+          email: email,
+          userId: userId,
+          balance: 0,
+          points: 0,
+          createdAt: serverTimestamp()
+        });
+
+        localStorage.setItem("userEmail", email);
+
         msg.style.color = "#7dffb3";
         msg.textContent = "تۆمارکردن سەرکەوتوو بوو";
 
         setTimeout(() => {
           window.location.href = "index.html";
         }, 1000);
+
       } catch (error) {
         msg.style.color = "#ff8e8e";
         msg.textContent = "هەڵە: " + error.code;
+        console.log(error);
       }
     });
   </script>
