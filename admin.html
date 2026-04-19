@@ -376,6 +376,9 @@
       <input class="input" id="bannerImage" placeholder="Banner Image URL" />
       <input class="input" id="bannerTitle" placeholder="Banner Title" />
       <textarea class="textarea" id="bannerText" placeholder="Banner Text"></textarea>
+      <input class="input" id="fibNumberInput" placeholder="FIB Number" />
+      <input class="input" id="fastpayNumberInput" placeholder="FastPay Number" />
+      <input class="input" id="qicardNumberInput" placeholder="Qi Card Number" />
     </div>
 
     <div class="section-card">
@@ -569,6 +572,9 @@
         document.getElementById("bannerImage").value = data.bannerImage || "";
         document.getElementById("bannerTitle").value = data.bannerTitle || "";
         document.getElementById("bannerText").value = data.bannerText || "";
+        document.getElementById("fibNumberInput").value = data.fib_number || "";
+        document.getElementById("fastpayNumberInput").value = data.fastpay_number || "";
+        document.getElementById("qicardNumberInput").value = data.qicard_number || "";
 
         document.getElementById("offer1Title").value = data.offer1Title || "";
         document.getElementById("offer1Desc").value = data.offer1Desc || "";
@@ -597,6 +603,9 @@
           bannerImage: document.getElementById("bannerImage").value.trim(),
           bannerTitle: document.getElementById("bannerTitle").value.trim(),
           bannerText: document.getElementById("bannerText").value.trim(),
+          fib_number: document.getElementById("fibNumberInput").value.trim(),
+          fastpay_number: document.getElementById("fastpayNumberInput").value.trim(),
+          qicard_number: document.getElementById("qicardNumberInput").value.trim(),
 
           offer1Title: document.getElementById("offer1Title").value.trim(),
           offer1Desc: document.getElementById("offer1Desc").value.trim(),
