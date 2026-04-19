@@ -1,369 +1,174 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel</title>
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial,sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
 
-    :root{
-      --card:#151f38;
-      --card2:#1a2747;
-      --gold:#ffd54a;
-      --gold2:#ffb800;
-      --text:#ffffff;
-      --muted:#b9c4de;
-      --line:rgba(255,255,255,.08);
-      --success:#29d17f;
-      --danger:#ff5c5c;
-      --blue:#33c3ff;
-    }
+<style>
+body{
+  background:#0b1326;
+  color:white;
+  font-family:Arial;
+  padding:10px;
+}
 
-    body{
-      background:
-        radial-gradient(circle at top right, rgba(255,184,0,.10), transparent 25%),
-        linear-gradient(180deg, #08101f, #0b1326 35%, #101a31 100%);
-      color:var(--text);
-      min-height:100vh;
-      padding:16px;
-    }
+h2{
+  color:#ffd54a;
+}
 
-    .container{
-      width:100%;
-      max-width:950px;
-      margin:0 auto;
-      padding-bottom:24px;
-    }
+.top{
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+}
 
-    .title{
-      font-size:28px;
-      color:var(--gold);
-      font-weight:bold;
-      margin-bottom:16px;
-    }
+button{
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
 
-    .card{
-      background:linear-gradient(180deg, var(--card), #11192f);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:16px;
-      margin-bottom:16px;
-    }
+.refresh{background:#1a2747;color:white;}
+.filter{background:#ffd54a;color:#111;}
 
-    .card h3{
-      color:var(--gold);
-      margin-bottom:12px;
-      font-size:20px;
-    }
+.card{
+  background:#151f38;
+  padding:12px;
+  border-radius:15px;
+  margin-bottom:10px;
+  border:1px solid rgba(255,255,255,.1);
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
+img{
+  width:120px;
+  border-radius:10px;
+  margin-top:5px;
+}
 
-    .input, .textarea{
-      width:100%;
-      border:none;
-      outline:none;
-      border-radius:14px;
-      padding:14px;
-      font-size:15px;
-      background:#eef3ff;
-      color:#111;
-      margin-bottom:12px;
-    }
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+}
 
-    .textarea{
-      min-height:100px;
-      resize:vertical;
-    }
+.approve{background:green;color:white;flex:1;}
+.reject{background:red;color:white;flex:1;}
 
-    .btn{
-      border:none;
-      border-radius:14px;
-      padding:13px 16px;
-      font-size:14px;
-      font-weight:bold;
-      cursor:pointer;
-    }
+.status{
+  font-size:12px;
+  margin-top:5px;
+}
 
-    .save-btn{
-      background:linear-gradient(90deg,var(--gold),var(--gold2));
-      color:#111;
-      width:100%;
-      margin-top:6px;
-    }
-
-    .list{
-      display:grid;
-      gap:12px;
-    }
-
-    .deposit-card{
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:14px;
-    }
-
-    .row{
-      margin-bottom:8px;
-      line-height:1.7;
-      word-break:break-word;
-    }
-
-    .shot{
-      width:100%;
-      max-width:220px;
-      border-radius:14px;
-      margin-top:8px;
-      border:1px solid var(--line);
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .approve{
-      background:#1dbf73;
-      color:#fff;
-      flex:1;
-    }
-
-    .reject{
-      background:#ff4d4d;
-      color:#fff;
-      flex:1;
-    }
-
-    .msg{
-      margin-bottom:16px;
-      text-align:center;
-      font-weight:bold;
-    }
-
-    @media (max-width:700px){
-      .grid{
-        grid-template-columns:1fr;
-      }
-    }
-  </style>
+.pending{color:orange;}
+.approved{color:#7affb3;}
+.rejected{color:#ff8c8c;}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="title">Admin Panel</div>
 
-    <div class="msg" id="msgBox"></div>
+<h2>Admin Panel</h2>
 
-    <div class="card">
-      <h3>Banner Settings</h3>
-      <input class="input" id="bannerImage" placeholder="Banner Image URL" />
-      <input class="input" id="bannerTitle" placeholder="Banner Title" />
-      <textarea class="textarea" id="bannerText" placeholder="Banner Text"></textarea>
-    </div>
+<div class="top">
+  <button class="refresh" onclick="loadDeposits()">Refresh</button>
+  <button class="filter" onclick="filterMode='all';loadDeposits()">All</button>
+  <button class="filter" onclick="filterMode='pending';loadDeposits()">Pending</button>
+</div>
 
-    <div class="card">
-      <h3>Offers Settings</h3>
-      <div class="grid">
-        <div>
-          <input class="input" id="offer1Title" placeholder="Offer 1 Title" />
-          <input class="input" id="offer1Desc" placeholder="Offer 1 Description" />
-          <input class="input" id="offer1Tag" placeholder="Offer 1 Tag" />
-        </div>
-        <div>
-          <input class="input" id="offer2Title" placeholder="Offer 2 Title" />
-          <input class="input" id="offer2Desc" placeholder="Offer 2 Description" />
-          <input class="input" id="offer2Tag" placeholder="Offer 2 Tag" />
-        </div>
+<div id="list"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
+  authDomain: "viro-bdcc2.firebaseapp.com",
+  projectId: "viro-bdcc2",
+  storageBucket: "viro-bdcc2.firebasestorage.app",
+  messagingSenderId: "532562452622",
+  appId: "1:532562452622:web:e1adc471a9a78b0d3169df"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const list = document.getElementById("list");
+
+let filterMode = "all";
+
+async function loadDeposits(){
+  list.innerHTML = "Loading...";
+
+  const snap = await getDocs(collection(db,"deposits"));
+
+  list.innerHTML = "";
+
+  snap.forEach(d=>{
+    const data = d.data();
+    const status = data.status || "pending";
+
+    if(filterMode==="pending" && status!=="pending") return;
+
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <b>${data.username || "User"}</b><br>
+      $${data.amount || 0}<br>
+      ${data.method || ""}<br>
+
+      <div class="status ${status}">
+        Status: ${status}
       </div>
-      <div class="grid">
-        <div>
-          <input class="input" id="offer3Title" placeholder="Offer 3 Title" />
-          <input class="input" id="offer3Desc" placeholder="Offer 3 Description" />
-          <input class="input" id="offer3Tag" placeholder="Offer 3 Tag" />
-        </div>
-        <div>
-          <input class="input" id="readyPlayers" type="number" placeholder="Ready Players" />
-          <input class="input" id="totalPlayers" type="number" placeholder="Total Players" />
-          <input class="input" id="roomStatus" placeholder="Room Status" />
-        </div>
+
+      ${data.imageUrl ? `<img src="${data.imageUrl}">` : ""}
+
+      <div class="actions">
+        <button class="approve" onclick="approve('${d.id}','${data.userUid}',${data.amount})">Approve</button>
+        <button class="reject" onclick="reject('${d.id}')">Reject</button>
       </div>
+    `;
 
-      <button class="btn save-btn" onclick="saveSettings()">Save Settings</button>
-    </div>
+    list.appendChild(div);
+  });
+}
 
-    <div class="card">
-      <h3>Deposits</h3>
-      <div class="list" id="depositList"></div>
-    </div>
-  </div>
+window.approve = async (id,userUid,amount)=>{
+  await updateDoc(doc(db,"deposits",id),{
+    status:"approved"
+  });
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      collection,
-      getDocs,
-      updateDoc,
-      increment
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  await updateDoc(doc(db,"users",userUid),{
+    balance: increment(Number(amount))
+  });
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
-      authDomain: "viro-bdcc2.firebaseapp.com",
-      projectId: "viro-bdcc2",
-      storageBucket: "viro-bdcc2.firebasestorage.app",
-      messagingSenderId: "532562452622",
-      appId: "1:532562452622:web:e1adc471a9a78b0d3169df",
-      measurementId: "G-BW8WK8BGLH"
-    };
+  alert("Approved ✅");
+  loadDeposits();
+};
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+window.reject = async (id)=>{
+  await updateDoc(doc(db,"deposits",id),{
+    status:"rejected"
+  });
 
-    const msgBox = document.getElementById("msgBox");
-    const depositList = document.getElementById("depositList");
+  alert("Rejected ❌");
+  loadDeposits();
+};
 
-    function showMessage(text, color = "#7affb3") {
-      msgBox.textContent = text;
-      msgBox.style.color = color;
-      setTimeout(() => {
-        msgBox.textContent = "";
-      }, 3000);
-    }
+loadDeposits();
 
-    async function loadSettings() {
-      const ref = doc(db, "app_settings", "main");
-      const snap = await getDoc(ref);
+</script>
 
-      if (!snap.exists()) return;
-
-      const data = snap.data();
-
-      document.getElementById("bannerImage").value = data.bannerImage || "";
-      document.getElementById("bannerTitle").value = data.bannerTitle || "";
-      document.getElementById("bannerText").value = data.bannerText || "";
-
-      document.getElementById("offer1Title").value = data.offer1Title || "";
-      document.getElementById("offer1Desc").value = data.offer1Desc || "";
-      document.getElementById("offer1Tag").value = data.offer1Tag || "";
-
-      document.getElementById("offer2Title").value = data.offer2Title || "";
-      document.getElementById("offer2Desc").value = data.offer2Desc || "";
-      document.getElementById("offer2Tag").value = data.offer2Tag || "";
-
-      document.getElementById("offer3Title").value = data.offer3Title || "";
-      document.getElementById("offer3Desc").value = data.offer3Desc || "";
-      document.getElementById("offer3Tag").value = data.offer3Tag || "";
-
-      document.getElementById("readyPlayers").value = data.readyPlayers || 64;
-      document.getElementById("totalPlayers").value = data.totalPlayers || 100;
-      document.getElementById("roomStatus").value = data.roomStatus || "Open";
-    }
-
-    window.saveSettings = async function() {
-      try {
-        await setDoc(doc(db, "app_settings", "main"), {
-          bannerImage: document.getElementById("bannerImage").value.trim(),
-          bannerTitle: document.getElementById("bannerTitle").value.trim(),
-          bannerText: document.getElementById("bannerText").value.trim(),
-
-          offer1Title: document.getElementById("offer1Title").value.trim(),
-          offer1Desc: document.getElementById("offer1Desc").value.trim(),
-          offer1Tag: document.getElementById("offer1Tag").value.trim(),
-
-          offer2Title: document.getElementById("offer2Title").value.trim(),
-          offer2Desc: document.getElementById("offer2Desc").value.trim(),
-          offer2Tag: document.getElementById("offer2Tag").value.trim(),
-
-          offer3Title: document.getElementById("offer3Title").value.trim(),
-          offer3Desc: document.getElementById("offer3Desc").value.trim(),
-          offer3Tag: document.getElementById("offer3Tag").value.trim(),
-
-          readyPlayers: Number(document.getElementById("readyPlayers").value || 0),
-          totalPlayers: Number(document.getElementById("totalPlayers").value || 0),
-          roomStatus: document.getElementById("roomStatus").value.trim() || "Open"
-        }, { merge: true });
-
-        showMessage("Settings saved successfully ✅");
-      } catch (e) {
-        console.error(e);
-        showMessage("Error saving settings ❌", "#ff9a9a");
-      }
-    };
-
-    async function loadDeposits() {
-      depositList.innerHTML = "";
-      const snap = await getDocs(collection(db, "deposits"));
-
-      snap.forEach((d) => {
-        const data = d.data();
-
-        const item = document.createElement("div");
-        item.className = "deposit-card";
-        item.innerHTML = `
-          <div class="row"><b>${data.username || "User"}</b></div>
-          <div class="row">Amount: $${data.amount || 0}</div>
-          <div class="row">Method: ${data.method || "N/A"}</div>
-          <div class="row">Status: ${data.status || "pending"}</div>
-          <div class="row">User UID: ${data.userUid || ""}</div>
-          ${data.imageUrl ? `<img src="${data.imageUrl}" class="shot" />` : ""}
-          <div class="actions">
-            <button class="btn approve" onclick="approveDeposit('${d.id}', '${data.userUid}', ${Number(data.amount || 0)})">Approve</button>
-            <button class="btn reject" onclick="rejectDeposit('${d.id}')">Reject</button>
-          </div>
-        `;
-        depositList.appendChild(item);
-      });
-    }
-
-    window.approveDeposit = async function(depositId, userUid, amount) {
-      try {
-        await updateDoc(doc(db, "deposits", depositId), {
-          status: "approved"
-        });
-
-        await updateDoc(doc(db, "users", userUid), {
-          balance: increment(Number(amount))
-        });
-
-        showMessage("Deposit approved ✅");
-        loadDeposits();
-      } catch (e) {
-        console.error(e);
-        showMessage("Approve failed ❌", "#ff9a9a");
-      }
-    };
-
-    window.rejectDeposit = async function(depositId) {
-      try {
-        await updateDoc(doc(db, "deposits", depositId), {
-          status: "rejected"
-        });
-
-        showMessage("Deposit rejected ❌", "#ff9a9a");
-        loadDeposits();
-      } catch (e) {
-        console.error(e);
-        showMessage("Reject failed ❌", "#ff9a9a");
-      }
-    };
-
-    loadSettings();
-    loadDeposits();
-  </script>
 </body>
 </html>
