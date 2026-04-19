@@ -45,6 +45,7 @@
       border: none;
       background: #1b2540;
       color: white;
+      outline: none;
     }
 
     input::placeholder {
@@ -60,6 +61,11 @@
       border-radius: 12px;
       font-weight: bold;
       cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
     }
 
     .link {
@@ -72,6 +78,14 @@
       color: #ffd700;
       text-decoration: none;
     }
+
+    .message {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
+      color: #ffb703;
+      min-height: 20px;
+    }
   </style>
 </head>
 
@@ -80,15 +94,55 @@
   <div class="box">
     <h2>چوونە ژوورەوە</h2>
 
-    <input type="text" placeholder="ژمارەی مۆبایل یان ناو">
-    <input type="password" placeholder="وشەی نهێنی">
+    <input type="text" id="email" placeholder="ئیمەیڵ بنووسە">
+    <input type="password" id="password" placeholder="وشەی نهێنی">
 
-    <button class="btn">چوونە ژوورەوە</button>
+    <button class="btn" onclick="login()">چوونە ژوورەوە</button>
+
+    <div class="message" id="message"></div>
 
     <div class="link">
       هەژمار نیە؟ <a href="register.html">تۆمارکردن</a>
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = 'https://ukwucohcasssslcdvzds.supabase.co';
+    const supabaseKey = 'sb_publishable_WPa170xGe956IfF9qeIxPQ_Wl6uEbnk';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const message = document.getElementById("message");
+
+      message.textContent = "";
+
+      if (!email || !password) {
+        message.textContent = "تکایە ئیمەیڵ و وشەی نهێنی پڕ بکە";
+        return;
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        message.textContent = "هەڵە: " + error.message;
+        console.log(error);
+      } else {
+        message.style.color = "#00ff99";
+        message.textContent = "بە سەرکەوتوویی چوویتە ژوورەوە";
+        console.log(data);
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      }
+    }
+  </script>
 
 </body>
 </html>
