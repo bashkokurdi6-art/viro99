@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    :root{
+      --bg1:#0a0f1f;
+      --bg2:#121a31;
+      --card:#151f38;
+      --card2:#1a2747;
+      --gold:#ffd54a;
+      --gold2:#ffb800;
+      --text:#ffffff;
+      --muted:#b9c4de;
+      --line:rgba(255,255,255,.08);
+      --success:#29d17f;
+      --danger:#ff5c5c;
+      --pending:#ffb800;
+      --blue:#33c3ff;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at top right, rgba(255,184,0,.10), transparent 25%),
+        linear-gradient(180deg, #08101f, #0b1326 35%, #101a31 100%);
+      color:var(--text);
+      min-height:100vh;
+      padding:16px;
+    }
+
+    .container{
+      width:100%;
+      max-width:900px;
+      margin:0 auto;
+      padding-bottom:24px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+
+    .title{
+      font-size:28px;
+      color:var(--gold);
+      font-weight:bold;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font-size:14px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .btn-home{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+    }
+
+    .btn-refresh{
+      background:var(--card2);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .summary-box{
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+    }
+
+    .summary-label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .summary-value{
+      font-size:24px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .filters{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .filter-btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:14px;
+      font-weight:bold;
+      cursor:pointer;
+      background:var(--card2);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .filter-btn.active{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      border:none;
+    }
+
+    .loading,
+    .empty,
+    .msg{
+      text-align:center;
+      padding:18px;
+      margin-bottom:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+    }
+
+    .loading{ color:var(--gold); }
+    .empty{ color:var(--muted); }
+    .msg.success{ color:#7affb3; }
+    .msg.error{ color:#ff9a9a; }
+
+    .list{
+      display:grid;
+      gap:14px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+    }
+
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+
+    .user-name{
+      font-size:20px;
+      font-weight:bold;
+      color:#fff;
+      margin-bottom:4px;
+    }
+
+    .amount{
+      font-size:22px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .status{
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:bold;
+      white-space:nowrap;
+    }
+
+    .status.pending{
+      background:rgba(255,184,0,.15);
+      color:#ffd54a;
+      border:1px solid rgba(255,184,0,.28);
+    }
+
+    .status.approved{
+      background:rgba(41,209,127,.14);
+      color:#7affb3;
+      border:1px solid rgba(41,209,127,.25);
+    }
+
+    .status.rejected{
+      background:rgba(255,92,92,.14);
+      color:#ff9a9a;
+      border:1px solid rgba(255,92,92,.25);
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .info-box{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+    }
+
+    .label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .value{
+      font-size:14px;
+      color:#fff;
+      word-break:break-word;
+      line-height:1.7;
+    }
+
+    .shot{
+      display:block;
+      width:100%;
+      max-width:260px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      margin-top:8px;
+    }
+
+    .shot-link{
+      display:inline-block;
+      margin-top:10px;
+      text-decoration:none;
+      background:linear-gradient(90deg,var(--blue),#7ddcff);
+      color:#08101f;
+      font-weight:bold;
+      font-size:13px;
+      padding:10px 14px;
+      border-radius:12px;
+    }
+
+    .action-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .approve-btn,
+    .reject-btn{
+      flex:1;
+      min-width:120px;
+      border:none;
+      border-radius:14px;
+      padding:13px;
+      font-size:14px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .approve-btn{
+      background:linear-gradient(90deg,#1dbf73,#29d17f);
+      color:#fff;
+    }
+
+    .reject-btn{
+      background:linear-gradient(90deg,#ff4d4d,#ff6b6b);
+      color:#fff;
+    }
+
+    .approve-btn:disabled,
+    .reject-btn:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+    }
+
+    @media (max-width:700px){
+      .summary-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .info-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:420px){
+      .summary-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="topbar">
+      <div class="title">Admin Panel</div>
+      <div class="top-actions">
+        <button class="btn btn-home" onclick="goHome()">Home</button>
+        <button class="btn btn-refresh" onclick="refreshPage()">Refresh</button>
+      </div>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-box">
+        <div class="summary-label">کۆی گشتی</div>
+        <div class="summary-value" id="totalCount">0</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Pending</div>
+        <div class="summary-value" id="pendingCount">0</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Approved</div>
+        <div class="summary-value" id="approvedCount">0</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Rejected</div>
+        <div class="summary-value" id="rejectedCount">0</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all', this)">هەموو</button>
+      <button class="filter-btn" onclick="setFilter('pending', this)">Pending</button>
+      <button class="filter-btn" onclick="setFilter('approved', this)">Approved</button>
+      <button class="filter-btn" onclick="setFilter('rejected', this)">Rejected</button>
+    </div>
+
+    <div id="msgBox"></div>
+    <div id="loadingBox" class="loading">زانیارییەکان بار دەکرێن...</div>
+    <div id="emptyBox" class="empty" style="display:none;">هیچ داواکارییەک نەدۆزرایەوە</div>
+    <div id="list" class="list"></div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      updateDoc,
+      increment,
+      orderBy,
+      query
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
+      authDomain: "viro-bdcc2.firebaseapp.com",
+      projectId: "viro-bdcc2",
+      storageBucket: "viro-bdcc2.firebasestorage.app",
+      messagingSenderId: "532562452622",
+      appId: "1:532562452622:web:e1adc471a9a78b0d3169df",
+      measurementId: "G-BW8WK8BGLH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const list = document.getElementById("list");
+    const loadingBox = document.getElementById("loadingBox");
+    const emptyBox = document.getElementById("emptyBox");
+    const msgBox = document.getElementById("msgBox");
+
+    const totalCount = document.getElementById("totalCount");
+    const pendingCount = document.getElementById("pendingCount");
+    const approvedCount = document.getElementById("approvedCount");
+    const rejectedCount = document.getElementById("rejectedCount");
+
+    let allDeposits = [];
+    let currentFilter = "all";
+
+    window.goHome = function() {
+      window.location.href = "index.html";
+    };
+
+    window.refreshPage = function() {
+      loadDeposits();
+    };
+
+    function showMessage(text, type = "") {
+      if (!text) {
+        msgBox.innerHTML = "";
+        return;
+      }
+      msgBox.innerHTML = `<div class="msg ${type}">${text}</div>`;
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return "N/A";
+      try {
+        return timestamp.toDate().toLocaleString("en-US");
+      } catch {
+        return "N/A";
+      }
+    }
+
+    function updateSummary(items) {
+      const total = items.length;
+      const pending = items.filter(x => (x.data.status || "pending") === "pending").length;
+      const approved = items.filter(x => x.data.status === "approved").length;
+      const rejected = items.filter(x => x.data.status === "rejected").length;
+
+      totalCount.textContent = total;
+      pendingCount.textContent = pending;
+      approvedCount.textContent = approved;
+      rejectedCount.textContent = rejected;
+    }
+
+    function filteredDeposits() {
+      if (currentFilter === "all") return allDeposits;
+      return allDeposits.filter(item => (item.data.status || "pending") === currentFilter);
+    }
+
+    function renderDeposits() {
+      list.innerHTML = "";
+      const items = filteredDeposits();
+
+      if (items.length === 0) {
+        emptyBox.style.display = "block";
+        return;
+      }
+
+      emptyBox.style.display = "none";
+
+      items.forEach(item => {
+        const data = item.data;
+        const status = data.status || "pending";
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <div class="user-name">${data.username || "User"}</div>
+              <div class="value">${data.email || ""}</div>
+            </div>
+            <div>
+              <div class="amount">$${data.amount ?? 0}</div>
+              <div class="status ${status}">${status.toUpperCase()}</div>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="label">User ID</div>
+              <div class="value">${data.userId || data.userUid || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Payment Method</div>
+              <div class="value">${data.method || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Created At</div>
+              <div class="value">${formatDate(data.createdAt)}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Note</div>
+              <div class="value">${data.note ? data.note : "هیچ تێبینییەک نیە"}</div>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <div class="label">Screenshot</div>
+            ${
+              data.imageUrl
+              ? `
+                <img src="${data.imageUrl}" class="shot" alt="deposit screenshot">
+                <a class="shot-link" href="${data.imageUrl}" target="_blank">کردنەوەی وێنە</a>
+              `
+              : `<div class="value">وێنە نیە</div>`
+            }
+          </div>
+
+          <div class="action-row">
+            <button class="approve-btn" onclick="approveDeposit('${item.id}', '${data.userUid}', ${Number(data.amount || 0)})" ${status === "approved" ? "disabled" : ""}>Approve</button>
+            <button class="reject-btn" onclick="rejectDeposit('${item.id}')" ${status === "rejected" ? "disabled" : ""}>Reject</button>
+          </div>
+        `;
+
+        list.appendChild(card);
+      });
+    }
+
+    async function loadDeposits() {
+      showMessage("");
+      loadingBox.style.display = "block";
+      emptyBox.style.display = "none";
+      list.innerHTML = "";
+
+      try {
+        const q = query(collection(db, "deposits"), orderBy("createdAt", "desc"));
+        const snap = await getDocs(q);
+
+        allDeposits = snap.docs.map(d => ({
+          id: d.id,
+          data: d.data()
+        }));
+
+        updateSummary(allDeposits);
+        renderDeposits();
+      } catch (error) {
+        console.error(error);
+        showMessage("هەڵەیەک ڕوویدا لە هێنانی deposits", "error");
+      } finally {
+        loadingBox.style.display = "none";
+      }
+    }
+
+    window.setFilter = function(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderDeposits();
+    };
+
+    window.approveDeposit = async function(depositId, userUid, amount) {
+      try {
+        showMessage("چاوەڕوانبە... approve دەکرێت");
+        await updateDoc(doc(db, "deposits", depositId), {
+          status: "approved"
+        });
+
+        await updateDoc(doc(db, "users", userUid), {
+          balance: increment(Number(amount))
+        });
+
+        showMessage("داواکاریەکە approve کرا و balance زیاد کرا ✅", "success");
+        await loadDeposits();
+      } catch (error) {
+        console.error(error);
+        showMessage("هەڵەیەک ڕوویدا لە approve کردن", "error");
+      }
+    };
+
+    window.rejectDeposit = async function(depositId) {
+      try {
+        showMessage("چاوەڕوانبە... reject دەکرێت");
+        await updateDoc(doc(db, "deposits", depositId), {
+          status: "rejected"
+        });
+
+        showMessage("داواکاریەکە reject کرا ❌", "success");
+        await loadDeposits();
+      } catch (error) {
+        console.error(error);
+        showMessage("هەڵەیەک ڕوویدا لە reject کردن", "error");
+      }
+    };
+
+    loadDeposits();
+  </script>
+</body>
+</html>
