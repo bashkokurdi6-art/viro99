@@ -24,6 +24,7 @@
       --green:#29d17f;
       --red:#ff5c5c;
       --line:rgba(255,255,255,.08);
+      --blue:#33c3ff;
     }
 
     body{
@@ -519,6 +520,11 @@
       border:1px solid var(--line);
     }
 
+    .drawer-menu-btn.history{
+      background:linear-gradient(90deg,var(--blue),#7ddcff);
+      color:#08101f;
+    }
+
     .logout-btn{
       width:100%;
       border:none;
@@ -806,6 +812,7 @@
         <div class="drawer-menu-buttons">
           <button class="drawer-menu-btn deposit" onclick="goToDeposit()">پارەدان / Deposit</button>
           <button class="drawer-menu-btn exchange" onclick="goToExchange()">ئاڵوگۆڕ / Exchange</button>
+          <button class="drawer-menu-btn history" onclick="goToHistory()">مێژوو / History</button>
         </div>
       </div>
     </div>
@@ -838,12 +845,12 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      updateDoc,
-      increment
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      updateDoc, 
+      increment 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -1013,6 +1020,10 @@
       hideDrawer();
       document.getElementById("exchangeSection").scrollIntoView({ behavior: "smooth", block: "start" });
       document.querySelectorAll(".bottom-btn").forEach(b => b.classList.remove("active"));
+    }
+
+    window.goToHistory = function() {
+      window.location.href = "history.html";
     }
 
     document.getElementById("pointConvertBtn").addEventListener("click", convertPointToBalance);
