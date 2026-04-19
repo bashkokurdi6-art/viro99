@@ -644,12 +644,12 @@
 
         <div class="stat-box">
           <div class="stat-label">Rank</div>
-          <div class="stat-value">Elite</div>
+          <div class="stat-value" id="rankText">Elite</div>
         </div>
 
         <div class="stat-box">
           <div class="stat-label">Status</div>
-          <div class="stat-value" style="color:#7affb3">Online</div>
+          <div class="stat-value" id="statusText" style="color:#7affb3">Online</div>
         </div>
       </div>
     </section>
@@ -657,14 +657,14 @@
     <section class="section" id="homeSection">
       <div class="section-title">
         <h2>بانەر</h2>
-        <span>Admin later can change image</span>
+        <span>Admin can change</span>
       </div>
 
-      <div class="card banner">
+      <div class="card banner" id="bannerCard">
         <div class="banner-content">
           <span class="live">LIVE</span>
-          <h3>PUBG MATCH NIGHT</h3>
-          <p>تۆڕنۆمێنتی تایبەت بۆ یاریزانانی VIRO GAME</p>
+          <h3 id="bannerTitle">PUBG MATCH NIGHT</h3>
+          <p id="bannerText">تۆڕنۆمێنتی تایبەت بۆ یاریزانانی VIRO GAME</p>
         </div>
       </div>
     </section>
@@ -679,26 +679,26 @@
         <div class="offers-grid">
           <div class="offer-item">
             <div class="offer-left">
-              <h4>ئۆفەری 1</h4>
-              <p>1000 Point + Bonus 100</p>
+              <h4 id="offer1Title">ئۆفەری 1</h4>
+              <p id="offer1Desc">1000 Point + Bonus 100</p>
             </div>
-            <div class="offer-tag">Buy Now</div>
+            <div class="offer-tag" id="offer1Tag">Buy Now</div>
           </div>
 
           <div class="offer-item">
             <div class="offer-left">
-              <h4>ئۆفەری 2</h4>
-              <p>5000 Point + VIP Access</p>
+              <h4 id="offer2Title">ئۆفەری 2</h4>
+              <p id="offer2Desc">5000 Point + VIP Access</p>
             </div>
-            <div class="offer-tag">Hot</div>
+            <div class="offer-tag" id="offer2Tag">Hot</div>
           </div>
 
           <div class="offer-item">
             <div class="offer-left">
-              <h4>ئۆفەری 3</h4>
-              <p>Weekly Tournament Pass</p>
+              <h4 id="offer3Title">ئۆفەری 3</h4>
+              <p id="offer3Desc">Weekly Tournament Pass</p>
             </div>
-            <div class="offer-tag">New</div>
+            <div class="offer-tag" id="offer3Tag">New</div>
           </div>
         </div>
       </div>
@@ -729,9 +729,9 @@
           </div>
 
           <div class="ready-status">
-            <span>Ready: 64</span>
-            <span>Waiting: 36</span>
-            <span>Room: Open</span>
+            <span id="readyText">Ready: 64</span>
+            <span id="waitingText">Waiting: 36</span>
+            <span id="roomText">Room: Open</span>
           </div>
         </div>
       </div>
@@ -845,12 +845,13 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { 
-      getFirestore, 
-      doc, 
-      getDoc, 
-      updateDoc, 
-      increment 
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      increment,
+      onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -925,6 +926,48 @@
       }
     }
 
+    function loadAppSettingsLive() {
+      const settingsRef = doc(db, "app_settings", "main");
+
+      onSnapshot(settingsRef, (snap) => {
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        if (data.bannerImage) {
+          document.getElementById("bannerCard").style.background =
+            `linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.45)), url('${data.bannerImage}') center/cover`;
+        }
+
+        document.getElementById("bannerTitle").textContent = data.bannerTitle || "PUBG MATCH NIGHT";
+        document.getElementById("bannerText").textContent = data.bannerText || "تۆڕنۆمێنتی تایبەت بۆ یاریزانانی VIRO GAME";
+
+        document.getElementById("offer1Title").textContent = data.offer1Title || "ئۆفەری 1";
+        document.getElementById("offer1Desc").textContent = data.offer1Desc || "1000 Point + Bonus 100";
+        document.getElementById("offer1Tag").textContent = data.offer1Tag || "Buy Now";
+
+        document.getElementById("offer2Title").textContent = data.offer2Title || "ئۆفەری 2";
+        document.getElementById("offer2Desc").textContent = data.offer2Desc || "5000 Point + VIP Access";
+        document.getElementById("offer2Tag").textContent = data.offer2Tag || "Hot";
+
+        document.getElementById("offer3Title").textContent = data.offer3Title || "ئۆفەری 3";
+        document.getElementById("offer3Desc").textContent = data.offer3Desc || "Weekly Tournament Pass";
+        document.getElementById("offer3Tag").textContent = data.offer3Tag || "New";
+
+        const ready = Number(data.readyPlayers || 64);
+        const total = Number(data.totalPlayers || 100);
+        const percent = total > 0 ? Math.round((ready / total) * 100) : 0;
+        const waiting = total - ready;
+
+        document.getElementById("readyPercent").textContent = percent + "%";
+        document.getElementById("readyPlayers").textContent = ready + " / " + total;
+        document.getElementById("progressBar").style.width = percent + "%";
+        document.getElementById("readyText").textContent = "Ready: " + ready;
+        document.getElementById("waitingText").textContent = "Waiting: " + waiting;
+        document.getElementById("roomText").textContent = "Room: " + (data.roomStatus || "Open");
+      });
+    }
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "login.html";
@@ -933,6 +976,7 @@
 
       currentUser = user;
       await loadUserData(user);
+      loadAppSettingsLive();
     });
 
     async function convertPointToBalance() {
@@ -1014,17 +1058,17 @@
 
     window.goToDeposit = function() {
       window.location.href = "deposit.html";
-    }
+    };
 
     window.goToExchange = function() {
       hideDrawer();
       document.getElementById("exchangeSection").scrollIntoView({ behavior: "smooth", block: "start" });
       document.querySelectorAll(".bottom-btn").forEach(b => b.classList.remove("active"));
-    }
+    };
 
     window.goToHistory = function() {
       window.location.href = "history.html";
-    }
+    };
 
     document.getElementById("pointConvertBtn").addEventListener("click", convertPointToBalance);
     document.getElementById("balanceConvertBtn").addEventListener("click", convertBalanceToPoint);
@@ -1035,7 +1079,7 @@
       document.getElementById(sectionId).scrollIntoView({ behavior: "smooth", block: "start" });
       document.querySelectorAll(".bottom-btn").forEach(b => b.classList.remove("active"));
       if (btn) btn.classList.add("active");
-    }
+    };
   </script>
 </body>
 </html>
