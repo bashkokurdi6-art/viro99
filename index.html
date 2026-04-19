@@ -365,6 +365,60 @@
       flex-wrap:wrap;
     }
 
+    .join-room-box{
+      background:rgba(8,14,28,.55);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      margin-top:4px;
+    }
+
+    .join-room-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    .join-room-title{
+      font-size:16px;
+      font-weight:bold;
+      color:#fff;
+    }
+
+    .join-room-price{
+      font-size:14px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .join-room-note{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:10px;
+      line-height:1.8;
+    }
+
+    .join-btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:13px;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      font-weight:bold;
+      font-size:15px;
+      cursor:pointer;
+    }
+
+    .join-msg{
+      margin-top:10px;
+      font-size:13px;
+      min-height:18px;
+    }
+
     .exchange-grid{
       display:grid;
       gap:12px;
@@ -592,7 +646,8 @@
       color:var(--gold);
     }
 
-    .withdraw-modal{
+    .withdraw-modal,
+    .join-modal{
       position:fixed;
       inset:0;
       background:rgba(0,0,0,.6);
@@ -603,7 +658,8 @@
       padding:16px;
     }
 
-    .withdraw-modal-box{
+    .withdraw-modal-box,
+    .join-modal-box{
       width:100%;
       max-width:420px;
       background:linear-gradient(180deg,#111827,#0f172a);
@@ -613,7 +669,8 @@
       box-shadow:0 20px 50px rgba(0,0,0,.45);
     }
 
-    .withdraw-title{
+    .withdraw-title,
+    .join-title{
       color:var(--gold);
       font-size:20px;
       font-weight:bold;
@@ -621,7 +678,8 @@
     }
 
     .withdraw-input,
-    .withdraw-select{
+    .withdraw-select,
+    .join-input{
       width:100%;
       border:none;
       outline:none;
@@ -633,7 +691,8 @@
       margin-bottom:10px;
     }
 
-    .withdraw-send-btn{
+    .withdraw-send-btn,
+    .join-send-btn{
       width:100%;
       border:none;
       border-radius:14px;
@@ -645,7 +704,13 @@
       cursor:pointer;
     }
 
-    .withdraw-cancel-btn{
+    .join-send-btn{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+    }
+
+    .withdraw-cancel-btn,
+    .join-cancel-btn{
       width:100%;
       border:none;
       border-radius:14px;
@@ -658,10 +723,21 @@
       cursor:pointer;
     }
 
-    .withdraw-msg{
+    .withdraw-msg,
+    .join-modal-msg{
       margin-top:10px;
       font-size:13px;
       min-height:18px;
+    }
+
+    .join-price-box{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:10px;
+      color:#fff;
+      font-size:14px;
     }
 
     @media (min-width:700px){
@@ -746,6 +822,54 @@
       </div>
     </section>
 
+    <section class="section" id="readySection">
+      <div class="section-title">
+        <h2>ئامادەبوونی یاریزانان</h2>
+        <span>Ready players</span>
+      </div>
+
+      <div class="card">
+        <div class="ready-box">
+          <div class="ready-top">
+            <div>
+              <div style="font-size:13px;color:var(--muted);margin-bottom:5px;">ڕێژەی ئامادەبوون</div>
+              <div class="ready-num" id="readyPercent">64%</div>
+            </div>
+
+            <div style="text-align:left">
+              <div style="font-size:13px;color:var(--muted);margin-bottom:5px;">Players</div>
+              <div class="ready-num" style="font-size:20px;" id="readyPlayers">64 / 100</div>
+            </div>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+
+          <div class="ready-status">
+            <span id="readyText">Ready: 64</span>
+            <span id="waitingText">Waiting: 36</span>
+            <span id="roomText">Room: Open</span>
+          </div>
+
+          <div class="join-room-box">
+            <div class="join-room-head">
+              <div class="join-room-title">Join Room</div>
+              <div class="join-room-price" id="roomEntryPriceText">$0</div>
+            </div>
+
+            <div class="join-room-note">
+              بۆ چوونە ژوورەوە، PUBG ID ـەکەت بنووسە. هەمانکات بڕی دیاریکراوی ئەدمین لە باڵانسەکەت کەم دەبێتەوە.
+            </div>
+
+            <input type="text" class="input" id="pubgIdInput" placeholder="PUBG ID" />
+            <button class="join-btn" id="joinRoomBtn">چوونە ژوورەوە / Join Room</button>
+            <div class="join-msg" id="joinMsg"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="offersSection">
       <div class="section-title">
         <h2>ئۆفەرەکان</h2>
@@ -776,39 +900,6 @@
               <p id="offer3Desc">Weekly Tournament Pass</p>
             </div>
             <div class="offer-tag" id="offer3Tag">New</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="readySection">
-      <div class="section-title">
-        <h2>ئامادەبوونی یاریزانان</h2>
-        <span>Ready players</span>
-      </div>
-
-      <div class="card">
-        <div class="ready-box">
-          <div class="ready-top">
-            <div>
-              <div style="font-size:13px;color:var(--muted);margin-bottom:5px;">ڕێژەی ئامادەبوون</div>
-              <div class="ready-num" id="readyPercent">64%</div>
-            </div>
-
-            <div style="text-align:left">
-              <div style="font-size:13px;color:var(--muted);margin-bottom:5px;">Players</div>
-              <div class="ready-num" style="font-size:20px;" id="readyPlayers">64 / 100</div>
-            </div>
-          </div>
-
-          <div class="progress-wrap">
-            <div class="progress-bar" id="progressBar"></div>
-          </div>
-
-          <div class="ready-status">
-            <span id="readyText">Ready: 64</span>
-            <span id="waitingText">Waiting: 36</span>
-            <span id="roomText">Room: Open</span>
           </div>
         </div>
       </div>
@@ -973,6 +1064,7 @@
 
     let currentUser = null;
     let currentUserData = null;
+    let currentRoomEntryPrice = 0;
 
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
@@ -1060,7 +1152,9 @@
         const ready = Number(data.readyPlayers || 64);
         const total = Number(data.totalPlayers || 100);
         const percent = total > 0 ? Math.round((ready / total) * 100) : 0;
-        const waiting = total - ready;
+        const waiting = Math.max(total - ready, 0);
+
+        currentRoomEntryPrice = Number(data.roomEntryPrice || 0);
 
         document.getElementById("readyPercent").textContent = percent + "%";
         document.getElementById("readyPlayers").textContent = ready + " / " + total;
@@ -1068,6 +1162,7 @@
         document.getElementById("readyText").textContent = "Ready: " + ready;
         document.getElementById("waitingText").textContent = "Waiting: " + waiting;
         document.getElementById("roomText").textContent = "Room: " + (data.roomStatus || "Open");
+        document.getElementById("roomEntryPriceText").textContent = "$" + currentRoomEntryPrice;
       });
     }
 
@@ -1152,6 +1247,83 @@
       msg.textContent = "$" + amount + " گۆڕدرا بۆ " + addedPoints + " point";
       input.value = "";
       await refreshUserData();
+    }
+
+    async function joinRoomNow() {
+      const pubgIdInput = document.getElementById("pubgIdInput");
+      const joinMsg = document.getElementById("joinMsg");
+      const joinBtn = document.getElementById("joinRoomBtn");
+      const pubgId = pubgIdInput.value.trim();
+
+      joinMsg.style.color = "#7affb3";
+      joinMsg.textContent = "";
+
+      if (!pubgId) {
+        joinMsg.style.color = "#ff8c8c";
+        joinMsg.textContent = "تکایە PUBG ID بنووسە";
+        return;
+      }
+
+      if (!currentUser || !currentUserData) {
+        joinMsg.style.color = "#ff8c8c";
+        joinMsg.textContent = "User data not loaded";
+        return;
+      }
+
+      const entryPrice = Number(currentRoomEntryPrice || 0);
+      const currentBalance = Number(currentUserData.balance || 0);
+
+      if (entryPrice <= 0) {
+        joinMsg.style.color = "#ff8c8c";
+        joinMsg.textContent = "نرخی Join لەلایەن ئەدمین دانەنراوە";
+        return;
+      }
+
+      if (currentBalance < entryPrice) {
+        joinMsg.style.color = "#ff8c8c";
+        joinMsg.textContent = "باڵانسی تەواوت نیە";
+        return;
+      }
+
+      try {
+        joinBtn.disabled = true;
+
+        const userRef = doc(db, "users", currentUser.uid);
+        const beforeBalance = currentBalance;
+        const afterBalance = Number((beforeBalance - entryPrice).toFixed(2));
+
+        await updateDoc(userRef, {
+          balance: increment(-entryPrice)
+        });
+
+        await addDoc(collection(db, "room_join_requests"), {
+          userId: currentUser.uid,
+          userUid: currentUser.uid,
+          userDocId: currentUser.uid,
+          username: currentUserData.username || "",
+          email: currentUser.email || "",
+          gameUserId: currentUserData.userId || "",
+          pubgId: pubgId,
+          amount: entryPrice,
+          entryPrice: entryPrice,
+          balanceBefore: beforeBalance,
+          balanceAfter: afterBalance,
+          status: "completed",
+          createdAt: serverTimestamp()
+        });
+
+        joinMsg.style.color = "#7affb3";
+        joinMsg.textContent = "بە سەرکەوتوویی چوویتە ژوورەوە ✔";
+        pubgIdInput.value = "";
+
+        await refreshUserData();
+      } catch (error) {
+        console.error(error);
+        joinMsg.style.color = "#ff8c8c";
+        joinMsg.textContent = "هەڵەیەک ڕوویدا";
+      } finally {
+        joinBtn.disabled = false;
+      }
     }
 
     async function logout() {
@@ -1250,6 +1422,7 @@
 
     document.getElementById("pointConvertBtn").addEventListener("click", convertPointToBalance);
     document.getElementById("balanceConvertBtn").addEventListener("click", convertBalanceToPoint);
+    document.getElementById("joinRoomBtn").addEventListener("click", joinRoomNow);
     logoutBtn.addEventListener("click", logout);
     bottomLogoutBtn.addEventListener("click", logout);
 
