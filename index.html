@@ -211,6 +211,33 @@
       color:var(--gold);
     }
 
+    .action-buttons{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .action-btn{
+      width:100%;
+      border:none;
+      border-radius:18px;
+      padding:16px 14px;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(255,184,0,.20);
+    }
+
+    .action-btn.secondary{
+      background:var(--card2);
+      color:#fff;
+      border:1px solid var(--line);
+      box-shadow:none;
+    }
+
     .section{
       margin-bottom:16px;
     }
@@ -564,6 +591,10 @@
       .exchange-grid{
         grid-template-columns:1fr 1fr;
       }
+
+      .action-buttons{
+        grid-template-columns:1fr 1fr;
+      }
     }
   </style>
 </head>
@@ -617,6 +648,11 @@
           <div class="stat-value" style="color:#7affb3">Online</div>
         </div>
       </div>
+    </section>
+
+    <section class="action-buttons">
+      <button class="action-btn" onclick="goToDeposit()">پارەدان / Deposit</button>
+      <button class="action-btn secondary" onclick="scrollToSection('exchangeSection', this)">ئاڵوگۆڕ</button>
     </section>
 
     <section class="section" id="homeSection">
@@ -799,12 +835,12 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { 
-      getFirestore, 
-      doc, 
-      getDoc, 
-      updateDoc, 
-      increment 
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      increment
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -964,6 +1000,10 @@
     async function logout() {
       await signOut(auth);
       window.location.href = "login.html";
+    }
+
+    window.goToDeposit = function() {
+      window.location.href = "deposit.html";
     }
 
     document.getElementById("pointConvertBtn").addEventListener("click", convertPointToBalance);
