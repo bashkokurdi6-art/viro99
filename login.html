@@ -140,7 +140,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
@@ -157,6 +157,13 @@
 
     const btn = document.getElementById("loginBtn");
     const msg = document.getElementById("msg");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        localStorage.setItem("userUid", user.uid);
+        localStorage.setItem("userEmail", user.email || "");
+      }
+    });
 
     btn.addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
@@ -175,16 +182,22 @@
 
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        localStorage.setItem("userEmail", userCredential.user.email);
+        const user = userCredential.user;
+
+        localStorage.setItem("userUid", user.uid);
+        localStorage.setItem("userEmail", user.email || "");
+
         msg.style.color = "#7dffb3";
         msg.textContent = "چوونە ژوورەوە سەرکەوتوو بوو";
 
         setTimeout(() => {
           window.location.href = "index.html";
         }, 900);
+
       } catch (error) {
         msg.style.color = "#ff8e8e";
         msg.textContent = "هەڵە: " + error.code;
+        console.log(error);
       }
     });
   </script>
