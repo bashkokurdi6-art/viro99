@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تۆمارکردن - VIRO GAME</title>
+  <title>چوونە ژوورەوە - VIRO GAME</title>
 
   <style>
     * {
@@ -19,182 +19,127 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 20px;
+      height: 100vh;
     }
 
     .box {
-      width: 100%;
-      max-width: 420px;
+      width: 90%;
+      max-width: 400px;
       background: #131c31;
-      padding: 22px;
-      border-radius: 18px;
+      padding: 20px;
+      border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.05);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
 
     h2 {
       text-align: center;
       color: #ffd700;
       margin-bottom: 20px;
-      font-size: 22px;
     }
 
     input {
       width: 100%;
-      padding: 14px;
+      padding: 12px;
       margin-bottom: 12px;
-      border-radius: 12px;
+      border-radius: 10px;
       border: none;
+      background: #1b2540;
+      color: white;
       outline: none;
-      background: #f4f6fb;
-      color: #111827;
-      font-size: 16px;
     }
 
     input::placeholder {
-      color: #6b7280;
+      color: #aaa;
     }
 
     .btn {
       width: 100%;
-      padding: 14px;
+      padding: 12px;
       background: #ffd700;
-      color: #111;
+      color: black;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 17px;
       transition: 0.2s;
     }
 
     .btn:hover {
-      opacity: 0.92;
-    }
-
-    .btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .msg {
-      margin-top: 12px;
-      text-align: center;
-      font-size: 15px;
-      min-height: 24px;
-      font-weight: bold;
-    }
-
-    .success {
-      color: #22c55e;
-    }
-
-    .error {
-      color: #ff6b6b;
+      opacity: 0.9;
     }
 
     .link {
       text-align: center;
-      margin-top: 14px;
-      font-size: 15px;
+      margin-top: 12px;
+      font-size: 14px;
     }
 
     .link a {
       color: #ffd700;
       text-decoration: none;
-      font-weight: bold;
+    }
+
+    .message {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
+      color: #ffb703;
+      min-height: 20px;
     }
   </style>
 </head>
+
 <body>
 
   <div class="box">
-    <h2>تۆمارکردن</h2>
+    <h2>چوونە ژوورەوە</h2>
 
-    <input type="text" id="name" placeholder="ناو">
-    <input type="text" id="phone" placeholder="ژمارەی مۆبایل">
+    <input type="text" id="email" placeholder="ئیمەیڵ بنووسە">
     <input type="password" id="password" placeholder="وشەی نهێنی">
 
-    <button class="btn" id="registerBtn" onclick="registerUser()">تۆمارکردن</button>
+    <button class="btn" onclick="login()">چوونە ژوورەوە</button>
 
-    <div id="message" class="msg"></div>
+    <div class="message" id="message"></div>
 
     <div class="link">
-      هەژمارت هەیە؟ <a href="login.html">چوونە ژوورەوە</a>
+      هەژمار نیە؟ <a href="register.html">تۆمارکردن</a>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = "https://ukwucohcasssslcdvzds.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_WPa170xGe956IfF9qeIxPQ_Wl6uEbnk";
+    const supabaseUrl = 'https://ukwucohcasssslcdvzds.supabase.co';
+    const supabaseKey = 'sb_publishable_WPa170xGe956IfF9qeIxPQ_Wl6uEbnk';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    function showMessage(text, type) {
-      const msg = document.getElementById("message");
-      msg.textContent = text;
-      msg.className = "msg " + type;
-    }
-
-    async function registerUser() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
+    async function login() {
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
-      const btn = document.getElementById("registerBtn");
+      const message = document.getElementById("message");
 
-      if (!name || !phone || !password) {
-        showMessage("تکایە هەموو خانەکان پڕ بکەوە", "error");
+      message.textContent = "";
+
+      if (!email || !password) {
+        message.textContent = "تکایە ئیمەیڵ و وشەی نهێنی پڕ بکە";
         return;
       }
 
-      if (password.length < 6) {
-        showMessage("وشەی نهێنی دەبێت لانیکەم 6 پیت بێت", "error");
-        return;
-      }
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
 
-      const cleanPhone = phone.replace(/[^0-9]/g, "");
-
-      if (cleanPhone.length < 8) {
-        showMessage("ژمارەی مۆبایل دروست نیە", "error");
-        return;
-      }
-
-      const fakeEmail = cleanPhone + "@virogame.com";
-
-      btn.disabled = true;
-      btn.textContent = "چاوەڕوان بە...";
-
-      try {
-        const { data, error } = await client.auth.signUp({
-          email: fakeEmail,
-          password: password,
-          options: {
-            data: {
-              full_name: name,
-              phone: cleanPhone
-            }
-          }
-        });
-
-        if (error) {
-          showMessage(error.message, "error");
-          btn.disabled = false;
-          btn.textContent = "تۆمارکردن";
-          return;
-        }
-
-        showMessage("تۆمارکردن سەرکەوتوو بوو", "success");
+      if (error) {
+        message.textContent = "هەڵە: " + error.message;
+        console.log(error);
+      } else {
+        message.style.color = "#00ff99";
+        message.textContent = "بە سەرکەوتوویی چوویتە ژوورەوە";
+        console.log(data);
 
         setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1500);
-
-      } catch (err) {
-        showMessage("هەڵەیەک ڕوویدا", "error");
-        btn.disabled = false;
-        btn.textContent = "تۆمارکردن";
+          window.location.href = "index.html";
+        }, 1000);
       }
     }
   </script>
