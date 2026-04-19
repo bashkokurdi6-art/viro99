@@ -1,65 +1,198 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register</title>
-<style>
-body{background:#0b1020;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif}
-.card{width:320px;padding:20px;background:#111;border-radius:15px;text-align:center}
-input{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none}
-button{width:100%;padding:10px;background:gold;border:none;border-radius:8px;font-weight:bold}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تۆمارکردن - VIRO</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#081120,#0f1b35,#13264d);
+      color:#fff;
+      padding:20px;
+    }
+
+    .card{
+      width:100%;
+      max-width:420px;
+      background:rgba(9,16,33,0.92);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:24px;
+      padding:28px 22px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.45);
+      backdrop-filter:blur(10px);
+    }
+
+    .logo{
+      text-align:center;
+      font-size:34px;
+      font-weight:bold;
+      color:#ffd700;
+      margin-bottom:10px;
+      letter-spacing:1px;
+    }
+
+    .sub{
+      text-align:center;
+      color:#cdd6f4;
+      font-size:14px;
+      margin-bottom:24px;
+    }
+
+    .input-box{
+      margin-bottom:14px;
+    }
+
+    .input-box input{
+      width:100%;
+      padding:14px 16px;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      background:#eef2ff;
+      color:#111;
+      font-size:16px;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:14px;
+      background:linear-gradient(90deg,#ffd700,#f5c400);
+      color:#111;
+      font-size:18px;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:6px;
+    }
+
+    .msg{
+      min-height:24px;
+      text-align:center;
+      font-size:14px;
+      margin-top:14px;
+      color:#ff8e8e;
+      word-break:break-word;
+    }
+
+    .bottom{
+      margin-top:18px;
+      text-align:center;
+      font-size:14px;
+      color:#cdd6f4;
+    }
+
+    .bottom a{
+      color:#ffd700;
+      text-decoration:none;
+      font-weight:bold;
+    }
+
+    @media (max-width:480px){
+      .card{
+        padding:22px 16px;
+        border-radius:20px;
+      }
+
+      .logo{
+        font-size:28px;
+      }
+
+      .btn{
+        font-size:16px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="card">
-<h2>REGISTER</h2>
-<input id="name" placeholder="Name">
-<input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="register()">Register</button>
-<p id="msg"></p>
-</div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <div class="card">
+    <div class="logo">VIRO</div>
+    <div class="sub">تۆمارکردن بۆ دروستکردنی هەژمار</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
-  authDomain: "viro-bdcc2.firebaseapp.com",
-  projectId: "viro-bdcc2",
-};
+    <div class="input-box">
+      <input id="email" type="email" placeholder="ئیمەیڵ" />
+    </div>
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+    <div class="input-box">
+      <input id="password" type="password" placeholder="وشەی نهێنی" />
+    </div>
 
-window.register = async () => {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("pass").value;
-  const msg = document.getElementById("msg");
+    <button class="btn" id="registerBtn">تۆمارکردن</button>
 
-  try {
-    const user = await createUserWithEmailAndPassword(auth, email, pass);
+    <div class="msg" id="msg"></div>
 
-    await setDoc(doc(db, "users", user.user.uid), {
-      username: name,
-      userId: "VIRO-" + Math.floor(1000 + Math.random()*9000),
-      balance: 100,
-      points: 1000
+    <div class="bottom">
+      هەژمارت هەیە؟ <a href="login.html">چوونە ژوورەوە</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
+      authDomain: "viro-bdcc2.firebaseapp.com",
+      projectId: "viro-bdcc2",
+      storageBucket: "viro-bdcc2.firebasestorage.app",
+      messagingSenderId: "532562452622",
+      appId: "1:532562452622:web:e1adc471a9a78b0d3169df",
+      measurementId: "G-BW8WK8BGLH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const btn = document.getElementById("registerBtn");
+    const msg = document.getElementById("msg");
+
+    btn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      msg.style.color = "#ff8e8e";
+      msg.textContent = "";
+
+      if (!email || !password) {
+        msg.textContent = "تکایە ئیمەیڵ و وشەی نهێنی پڕ بکە";
+        return;
+      }
+
+      if (password.length < 6) {
+        msg.textContent = "وشەی نهێنی دەبێت لانیکەم 6 پیت بێت";
+        return;
+      }
+
+      msg.style.color = "#ffd700";
+      msg.textContent = "تاقیکردنەوە...";
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        localStorage.setItem("userEmail", userCredential.user.email);
+        msg.style.color = "#7dffb3";
+        msg.textContent = "تۆمارکردن سەرکەوتوو بوو";
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      } catch (error) {
+        msg.style.color = "#ff8e8e";
+        msg.textContent = "هەڵە: " + error.code;
+      }
     });
+  </script>
 
-    msg.innerText = "Success ✅";
-    setTimeout(()=>location.href="login.html",1000);
-
-  } catch(e){
-    msg.innerText = e.code;
-  }
-}
-</script>
 </body>
 </html>
