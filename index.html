@@ -6,154 +6,82 @@
   <title>VIRO GAME</title>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+    body{background:#0b1020;color:#fff}
+
+    header{
+      background:#11182d;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:999;
     }
 
-    body {
-      background: #0b1020;
-      color: #ffffff;
-      line-height: 1.6;
+    .logo{font-size:24px;color:#ffd700;font-weight:bold}
+
+    nav{
+      width:100%;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
     }
 
-    header {
-      background: #11182d;
-      padding: 14px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      position: sticky;
-      top: 0;
-      z-index: 999;
+    .btn{
+      background:#ffd700;
+      border:none;
+      border-radius:12px;
+      padding:12px;
+      font-weight:bold;
+      cursor:pointer;
     }
 
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ffd700;
-      text-align: center;
+    .btn-dark{
+      background:#1d2742;
+      color:#fff;
     }
 
-    nav {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .user-box{
+      background:#1b2540;
+      padding:10px 14px;
+      border-radius:12px;
+      font-size:14px;
+      text-align:center;
+      width:100%;
     }
 
-    .btn {
-      background: #ffd700;
-      color: #000;
-      padding: 12px 10px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 15px;
-      width: 100%;
+    .hero{text-align:center;padding:20px}
+    .hero h1{color:#ffd700}
+
+    .container{padding:14px;max-width:500px;margin:auto}
+
+    .section-title{
+      color:#ffd700;
+      margin-bottom:10px;
     }
 
-    .btn-dark {
-      background: #1d2742;
-      color: #fff;
+    .dashboard-box,.card{
+      background:#131c31;
+      padding:14px;
+      border-radius:14px;
+      margin-bottom:10px;
     }
 
-    .hero {
-      padding: 24px 14px 18px;
-      text-align: center;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+    .promo-banner{
+      width:100%;
+      height:150px;
+      object-fit:cover;
+      border-radius:10px;
     }
 
-    .hero h1 {
-      font-size: 28px;
-      color: #ffd700;
-      margin-bottom: 8px;
-    }
-
-    .hero p {
-      font-size: 14px;
-      color: #d1d5db;
-      max-width: 500px;
-      margin: auto;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 14px;
-    }
-
-    section {
-      margin-bottom: 18px;
-    }
-
-    .section-title {
-      font-size: 20px;
-      margin-bottom: 12px;
-      color: #ffd700;
-      border-right: 4px solid #ffd700;
-      padding-right: 10px;
-    }
-
-    .dashboard-grid,
-    .grid,
-    .point-box {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-
-    .dashboard-box,
-    .card {
-      background: #131c31;
-      padding: 14px;
-      border-radius: 16px;
-    }
-
-    .promo-banner {
-      width: 100%;
-      height: 170px;
-      object-fit: cover;
-      border-radius: 14px;
-      margin-bottom: 10px;
-    }
-
-    .offer-item {
-      background: #1b2540;
-      padding: 14px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-    }
-
-    .live-badge {
-      background: red;
-      padding: 4px 8px;
-      border-radius: 10px;
-      font-size: 12px;
-      display: inline-block;
-      margin-bottom: 8px;
-    }
-
-    .player-list li {
-      background: #1b2540;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      background: #11182d;
-      margin-top: 20px;
+    footer{
+      text-align:center;
+      padding:15px;
+      background:#11182d;
+      margin-top:20px;
     }
   </style>
 </head>
@@ -163,15 +91,16 @@
 <header>
   <div class="logo">VIRO GAME</div>
 
-  <nav>
-    <a href="register.html">
-      <button class="btn">تۆمارکردن</button>
-    </a>
+  <!-- 👇 user info -->
+  <div class="user-box" id="userBox">میوان</div>
 
-    <a href="login.html">
-      <button class="btn btn-dark">چوونە ژوورەوە</button>
-    </a>
+  <nav id="navButtons">
+    <a href="register.html"><button class="btn">تۆمارکردن</button></a>
+    <a href="login.html"><button class="btn btn-dark">چوونە ژوورەوە</button></a>
   </nav>
+
+  <!-- 👇 logout -->
+  <button class="btn btn-dark" id="logoutBtn" style="display:none">چوونە دەرەوە</button>
 </header>
 
 <section class="hero">
@@ -181,55 +110,54 @@
 
 <div class="container">
 
-  <section>
-    <h2 class="section-title">داشبۆرد</h2>
-    <div class="dashboard-grid">
+  <h2 class="section-title">داشبۆرد</h2>
 
-      <div class="dashboard-box">
-        <img class="promo-banner" src="https://images.unsplash.com/photo-1542751371-adc38448a05e">
-        <p>ڕێکلام / تیم</p>
-      </div>
+  <div class="dashboard-box">
+    <img class="promo-banner" src="https://images.unsplash.com/photo-1542751371-adc38448a05e">
+    <p>ڕێکلام / تیم</p>
+  </div>
 
-      <div class="dashboard-box">
-        <div class="offer-item">ئۆفەر 1</div>
-        <div class="offer-item">ئۆفەر 2</div>
-      </div>
+  <div class="dashboard-box">
+    <p>ئۆفەر 1</p>
+    <p>ئۆفەر 2</p>
+  </div>
 
-    </div>
-  </section>
+  <h2 class="section-title">PUBG</h2>
 
-  <section>
-    <h2 class="section-title">PUBG</h2>
-    <div class="card">
-      <span class="live-badge">LIVE</span>
-      <h3>PUBG Match</h3>
-      <p>64 Player</p>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="section-title">Players</h2>
-    <ul class="player-list">
-      <li>Player 1 <span>Online</span></li>
-      <li>Player 2 <span>Online</span></li>
-    </ul>
-  </section>
-
-  <section>
-    <h2 class="section-title">Points</h2>
-    <div class="point-box">
-      <div class="offer-item">
-        1000 Point
-        <button class="btn">Buy</button>
-      </div>
-    </div>
-  </section>
+  <div class="card">
+    <h3>PUBG Match</h3>
+    <p>64 Player</p>
+  </div>
 
 </div>
 
 <footer>
 VIRO GAME © 2026
 </footer>
+
+<script>
+  const userEmail = localStorage.getItem("userEmail");
+  const userBox = document.getElementById("userBox");
+  const nav = document.getElementById("navButtons");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (userEmail) {
+    userBox.textContent = userEmail;
+
+    // hide login/register
+    nav.style.display = "none";
+
+    // show logout
+    logoutBtn.style.display = "block";
+  } else {
+    userBox.textContent = "میوان";
+  }
+
+  logoutBtn.onclick = () => {
+    localStorage.removeItem("userEmail");
+    window.location.href = "login.html";
+  };
+</script>
 
 </body>
 </html>
