@@ -211,33 +211,6 @@
       color:var(--gold);
     }
 
-    .action-buttons{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
-      margin-bottom:16px;
-    }
-
-    .action-btn{
-      width:100%;
-      border:none;
-      border-radius:18px;
-      padding:16px 14px;
-      background:linear-gradient(90deg,var(--gold),var(--gold2));
-      color:#111;
-      font-size:16px;
-      font-weight:bold;
-      cursor:pointer;
-      box-shadow:0 10px 24px rgba(255,184,0,.20);
-    }
-
-    .action-btn.secondary{
-      background:var(--card2);
-      color:#fff;
-      border:1px solid var(--line);
-      box-shadow:none;
-    }
-
     .section{
       margin-bottom:16px;
     }
@@ -458,6 +431,7 @@
       transition:.28s ease;
       padding:18px;
       box-shadow:-16px 0 40px rgba(0,0,0,.35);
+      overflow-y:auto;
     }
 
     .drawer.open{
@@ -515,6 +489,34 @@
       color:white;
       font-weight:bold;
       word-break:break-word;
+    }
+
+    .drawer-menu-buttons{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .drawer-menu-btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:14px 12px;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+      text-align:center;
+    }
+
+    .drawer-menu-btn.deposit{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+    }
+
+    .drawer-menu-btn.exchange{
+      background:var(--card2);
+      color:#fff;
+      border:1px solid var(--line);
     }
 
     .logout-btn{
@@ -591,10 +593,6 @@
       .exchange-grid{
         grid-template-columns:1fr 1fr;
       }
-
-      .action-buttons{
-        grid-template-columns:1fr 1fr;
-      }
     }
   </style>
 </head>
@@ -648,11 +646,6 @@
           <div class="stat-value" style="color:#7affb3">Online</div>
         </div>
       </div>
-    </section>
-
-    <section class="action-buttons">
-      <button class="action-btn" onclick="goToDeposit()">پارەدان / Deposit</button>
-      <button class="action-btn secondary" onclick="scrollToSection('exchangeSection', this)">ئاڵوگۆڕ</button>
     </section>
 
     <section class="section" id="homeSection">
@@ -804,6 +797,16 @@
       <div class="drawer-item">
         <div class="drawer-label">بەشەکان</div>
         <div class="drawer-value">Profile / Exchange / Offers / Ready Players</div>
+      </div>
+    </div>
+
+    <div class="drawer-card">
+      <div class="drawer-item">
+        <div class="drawer-label">کردارە سەرەکییەکان</div>
+        <div class="drawer-menu-buttons">
+          <button class="drawer-menu-btn deposit" onclick="goToDeposit()">پارەدان / Deposit</button>
+          <button class="drawer-menu-btn exchange" onclick="goToExchange()">ئاڵوگۆڕ / Exchange</button>
+        </div>
       </div>
     </div>
 
@@ -1004,6 +1007,12 @@
 
     window.goToDeposit = function() {
       window.location.href = "deposit.html";
+    }
+
+    window.goToExchange = function() {
+      hideDrawer();
+      document.getElementById("exchangeSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      document.querySelectorAll(".bottom-btn").forEach(b => b.classList.remove("active"));
     }
 
     document.getElementById("pointConvertBtn").addEventListener("click", convertPointToBalance);
