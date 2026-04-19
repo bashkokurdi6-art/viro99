@@ -1,59 +1,948 @@
 <!DOCTYPE html>
-<html lang="ku">
+<html lang="ku" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIRO GAME - PUBG Dashboard</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    :root{
+      --bg1:#0a0f1f;
+      --bg2:#121a31;
+      --card:#151f38;
+      --card2:#1a2747;
+      --gold:#ffd54a;
+      --gold2:#ffb800;
+      --text:#ffffff;
+      --muted:#b9c4de;
+      --green:#29d17f;
+      --red:#ff5c5c;
+      --line:rgba(255,255,255,.08);
+    }
+
+    body{
+      background:
+        radial-gradient(circle at top right, rgba(255,184,0,.10), transparent 25%),
+        linear-gradient(180deg, #08101f, #0b1326 35%, #101a31 100%);
+      color:var(--text);
+      min-height:100vh;
+      padding-bottom:90px;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:999;
+      backdrop-filter:blur(10px);
+      background:rgba(10,15,31,.92);
+      border-bottom:1px solid var(--line);
+      padding:14px;
+    }
+
+    .topbar-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brand-badge{
+      width:42px;
+      height:42px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#111;
+      font-weight:bold;
+      font-size:18px;
+      box-shadow:0 8px 20px rgba(255,184,0,.28);
+    }
+
+    .brand-text{
+      min-width:0;
+    }
+
+    .brand-text h1{
+      font-size:20px;
+      color:var(--gold);
+      white-space:nowrap;
+    }
+
+    .brand-text p{
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .menu-btn{
+      border:none;
+      background:var(--card2);
+      color:#fff;
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      font-size:20px;
+      cursor:pointer;
+      border:1px solid var(--line);
+      flex-shrink:0;
+    }
+
+    .container{
+      width:100%;
+      max-width:540px;
+      margin:0 auto;
+      padding:16px;
+    }
+
+    .profile-card{
+      background:linear-gradient(135deg, rgba(255,213,74,.15), rgba(255,255,255,.03));
+      border:1px solid rgba(255,213,74,.20);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:0 14px 34px rgba(0,0,0,.30);
+      margin-bottom:16px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .profile-card::after{
+      content:"";
+      position:absolute;
+      left:-50px;
+      top:-50px;
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:rgba(255,213,74,.08);
+    }
+
+    .profile-top{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:16px;
+    }
+
+    .avatar{
+      width:60px;
+      height:60px;
+      border-radius:18px;
+      background:linear-gradient(135deg,var(--gold),#ff8c00);
+      color:#111;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      font-weight:bold;
+      flex-shrink:0;
+      box-shadow:0 10px 24px rgba(255,184,0,.25);
+    }
+
+    .user-meta{
+      min-width:0;
+      flex:1;
+    }
+
+    .user-name{
+      font-size:18px;
+      font-weight:bold;
+      color:#fff;
+      margin-bottom:4px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .user-id{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+
+    .user-email{
+      font-size:12px;
+      color:#dbe6ff;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .stats-grid{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .stat-box{
+      background:rgba(8,14,28,.55);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 12px;
+    }
+
+    .stat-label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .stat-value{
+      font-size:20px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .section{
+      margin-bottom:16px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:10px;
+    }
+
+    .section-title h2{
+      font-size:18px;
+      color:var(--gold);
+    }
+
+    .section-title span{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .card{
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:14px;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+    }
+
+    .banner{
+      position:relative;
+      overflow:hidden;
+      min-height:200px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.45)),
+        url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80') center/cover;
+      display:flex;
+      align-items:flex-end;
+      padding:16px;
+    }
+
+    .banner-content{
+      width:100%;
+      background:rgba(7,10,20,.45);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:14px;
+      backdrop-filter:blur(6px);
+    }
+
+    .live{
+      display:inline-block;
+      background:#ff3131;
+      color:#fff;
+      padding:4px 9px;
+      border-radius:999px;
+      font-size:11px;
+      margin-bottom:10px;
+      font-weight:bold;
+    }
+
+    .banner h3{
+      font-size:22px;
+      color:#fff;
+      margin-bottom:6px;
+    }
+
+    .banner p{
+      font-size:13px;
+      color:#e8efff;
+    }
+
+    .offers-grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .offer-item{
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .offer-left h4{
+      color:#fff;
+      font-size:16px;
+      margin-bottom:4px;
+    }
+
+    .offer-left p{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .offer-tag{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      font-weight:bold;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .ready-box{
+      display:grid;
+      gap:14px;
+    }
+
+    .ready-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .ready-num{
+      font-size:24px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .progress-wrap{
+      width:100%;
+      height:14px;
+      background:#0d1427;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid var(--line);
+    }
+
+    .progress-bar{
+      height:100%;
+      width:64%;
+      background:linear-gradient(90deg,#22c55e,#84cc16,#ffd54a);
+      border-radius:999px;
+    }
+
+    .ready-status{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:13px;
+      color:var(--muted);
+      flex-wrap:wrap;
+    }
+
+    .exchange-grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .exchange-box{
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .exchange-box h4{
+      margin-bottom:10px;
+      color:#fff;
+      font-size:15px;
+    }
+
+    .input{
+      width:100%;
+      border:none;
+      outline:none;
+      background:#eef3ff;
+      color:#111;
+      border-radius:14px;
+      padding:14px;
+      font-size:15px;
+      margin-bottom:10px;
+    }
+
+    .convert-btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:13px;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      font-weight:bold;
+      font-size:15px;
+      cursor:pointer;
+    }
+
+    .small-note{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .msg{
+      margin-top:10px;
+      font-size:13px;
+      color:#7affb3;
+      min-height:18px;
+    }
+
+    .drawer{
+      position:fixed;
+      top:0;
+      right:-100%;
+      width:min(85%,340px);
+      height:100vh;
+      background:linear-gradient(180deg,#121c34,#0d1426);
+      border-left:1px solid var(--line);
+      z-index:1001;
+      transition:.28s ease;
+      padding:18px;
+      box-shadow:-16px 0 40px rgba(0,0,0,.35);
+    }
+
+    .drawer.open{
+      right:0;
+    }
+
+    .drawer-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .drawer-title{
+      color:var(--gold);
+      font-size:20px;
+      font-weight:bold;
+    }
+
+    .close-btn{
+      border:none;
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:#1e2b4d;
+      color:white;
+      font-size:18px;
+      cursor:pointer;
+    }
+
+    .drawer-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+
+    .drawer-item{
+      margin-bottom:10px;
+    }
+
+    .drawer-item:last-child{
+      margin-bottom:0;
+    }
+
+    .drawer-label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:5px;
+    }
+
+    .drawer-value{
+      font-size:15px;
+      color:white;
+      font-weight:bold;
+      word-break:break-word;
+    }
+
+    .logout-btn{
+      width:100%;
+      border:none;
+      border-radius:16px;
+      padding:14px;
+      background:#ff4343;
+      color:#fff;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:8px;
+    }
+
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      opacity:0;
+      visibility:hidden;
+      transition:.25s ease;
+      z-index:1000;
+    }
+
+    .overlay.show{
+      opacity:1;
+      visibility:visible;
+    }
+
+    .bottom-nav{
+      position:fixed;
+      bottom:0;
+      left:0;
+      width:100%;
+      background:rgba(10,15,31,.96);
+      backdrop-filter:blur(12px);
+      border-top:1px solid var(--line);
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      z-index:999;
+    }
+
+    .bottom-btn{
+      border:none;
+      background:transparent;
+      color:#d8e1fb;
+      padding:12px 6px 14px;
+      font-size:12px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:5px;
+    }
+
+    .bottom-btn span:first-child{
+      font-size:18px;
+    }
+
+    .bottom-btn.active{
+      color:var(--gold);
+    }
+
+    @media (min-width:700px){
+      .container{
+        max-width:620px;
+      }
+
+      .stats-grid{
+        grid-template-columns:repeat(4,1fr);
+      }
+
+      .exchange-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+  </style>
 </head>
+<body>
 
-<body style="background:#0b1020;color:white;text-align:center">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <div class="brand-badge">V</div>
+        <div class="brand-text">
+          <h1>VIRO GAME</h1>
+          <p>PUBG Tournament Dashboard</p>
+        </div>
+      </div>
 
-<h1 id="name">Loading...</h1>
-<p id="id"></p>
-<p id="balance"></p>
-<p id="points"></p>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+  </div>
 
-<button onclick="logout()">Logout</button>
+  <div class="container">
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    <section class="profile-card" id="profileSection">
+      <div class="profile-top">
+        <div class="avatar" id="avatarBox">U</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
-  authDomain: "viro-bdcc2.firebaseapp.com",
-  projectId: "viro-bdcc2",
-};
+        <div class="user-meta">
+          <div class="user-name" id="userName">User</div>
+          <div class="user-id" id="userId">ID: VIRO-0000</div>
+          <div class="user-email" id="userEmailText">example@email.com</div>
+        </div>
+      </div>
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">باڵانس</div>
+          <div class="stat-value" id="balanceText">$120</div>
+        </div>
 
-onAuthStateChanged(auth, async (user) => {
+        <div class="stat-box">
+          <div class="stat-label">پۆینت</div>
+          <div class="stat-value" id="pointsText">5400</div>
+        </div>
 
-  if (!user) {
-    location.href = "login.html";
-    return;
-  }
+        <div class="stat-box">
+          <div class="stat-label">Rank</div>
+          <div class="stat-value">Elite</div>
+        </div>
 
-  const snap = await getDoc(doc(db, "users", user.uid));
+        <div class="stat-box">
+          <div class="stat-label">Status</div>
+          <div class="stat-value" style="color:#7affb3">Online</div>
+        </div>
+      </div>
+    </section>
 
-  if (snap.exists()) {
-    const data = snap.data();
+    <section class="section" id="homeSection">
+      <div class="section-title">
+        <h2>بانەر</h2>
+        <span>Admin later can change image</span>
+      </div>
 
-    document.getElementById("name").innerText = data.username;
-    document.getElementById("id").innerText = data.userId;
-    document.getElementById("balance").innerText = "Balance: $" + data.balance;
-    document.getElementById("points").innerText = "Points: " + data.points;
-  }
+      <div class="card banner">
+        <div class="banner-content">
+          <span class="live">LIVE</span>
+          <h3>PUBG MATCH NIGHT</h3>
+          <p>تۆڕنۆمێنتی تایبەت بۆ یاریزانانی VIRO GAME</p>
+        </div>
+      </div>
+    </section>
 
-});
+    <section class="section" id="offersSection">
+      <div class="section-title">
+        <h2>ئۆفەرەکان</h2>
+        <span>Special offers</span>
+      </div>
 
-window.logout = () => {
-  signOut(auth);
-  location.href="login.html";
-}
-</script>
+      <div class="card">
+        <div class="offers-grid">
+          <div class="offer-item">
+            <div class="offer-left">
+              <h4>ئۆفەری 1</h4>
+              <p>1000 Point + Bonus 100</p>
+            </div>
+            <div class="offer-tag">Buy Now</div>
+          </div>
+
+          <div class="offer-item">
+            <div class="offer-left">
+              <h4>ئۆفەری 2</h4>
+              <p>5000 Point + VIP Access</p>
+            </div>
+            <div class="offer-tag">Hot</div>
+          </div>
+
+          <div class="offer-item">
+            <div class="offer-left">
+              <h4>ئۆفەری 3</h4>
+              <p>Weekly Tournament Pass</p>
+            </div>
+            <div class="offer-tag">New</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="readySection">
+      <div class="section-title">
+        <h2>ئامادەبوونی یاریزانان</h2>
+        <span>Ready players</span>
+      </div>
+
+      <div class="card">
+        <div class="ready-box">
+          <div class="ready-top">
+            <div>
+              <div style="font-size:13px;color:var(--muted);margin-bottom:5px;">ڕێژەی ئامادەبوون</div>
+              <div class="ready-num" id="readyPercent">64%</div>
+            </div>
+
+            <div style="text-align:left">
+              <div style="font-size:13px;color:var(--muted);margin-bottom:5px;">Players</div>
+              <div class="ready-num" style="font-size:20px;" id="readyPlayers">64 / 100</div>
+            </div>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+
+          <div class="ready-status">
+            <span>Ready: 64</span>
+            <span>Waiting: 36</span>
+            <span>Room: Open</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="exchangeSection">
+      <div class="section-title">
+        <h2>ئاڵوگۆڕ</h2>
+        <span>Points & Balance</span>
+      </div>
+
+      <div class="exchange-grid">
+        <div class="exchange-box">
+          <h4>Point ➜ Balance</h4>
+          <input type="number" class="input" id="pointInput" placeholder="چەند پۆینت؟">
+          <button class="convert-btn" onclick="convertPointToBalance()">گۆڕینی Point بۆ Balance</button>
+          <div class="small-note">هەر 100 point = $1</div>
+          <div class="msg" id="pointMsg"></div>
+        </div>
+
+        <div class="exchange-box">
+          <h4>Balance ➜ Point</h4>
+          <input type="number" class="input" id="balanceInput" placeholder="چەند دۆلار؟">
+          <button class="convert-btn" onclick="convertBalanceToPoint()">گۆڕینی Balance بۆ Point</button>
+          <div class="small-note">هەر $1 = 100 point</div>
+          <div class="msg" id="balanceMsg"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="drawer" id="drawer">
+    <div class="drawer-top">
+      <div class="drawer-title">Menu</div>
+      <button class="close-btn" id="closeDrawer">✕</button>
+    </div>
+
+    <div class="drawer-card">
+      <div class="drawer-item">
+        <div class="drawer-label">Profile</div>
+        <div class="drawer-value" id="drawerName">User</div>
+      </div>
+
+      <div class="drawer-item">
+        <div class="drawer-label">User ID</div>
+        <div class="drawer-value" id="drawerId">VIRO-0000</div>
+      </div>
+
+      <div class="drawer-item">
+        <div class="drawer-label">Email</div>
+        <div class="drawer-value" id="drawerEmail">example@email.com</div>
+      </div>
+
+      <div class="drawer-item">
+        <div class="drawer-label">Balance</div>
+        <div class="drawer-value" id="drawerBalance">$120</div>
+      </div>
+
+      <div class="drawer-item">
+        <div class="drawer-label">Points</div>
+        <div class="drawer-value" id="drawerPoints">5400</div>
+      </div>
+    </div>
+
+    <div class="drawer-card">
+      <div class="drawer-item">
+        <div class="drawer-label">بەشەکان</div>
+        <div class="drawer-value">Profile / Exchange / Offers / Ready Players</div>
+      </div>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">چوونە دەرەوە</button>
+  </aside>
+
+  <nav class="bottom-nav">
+    <button class="bottom-btn active" onclick="scrollToSection('homeSection', this)">
+      <span>🏠</span>
+      <span>Home</span>
+    </button>
+
+    <button class="bottom-btn" onclick="scrollToSection('profileSection', this)">
+      <span>👤</span>
+      <span>Profile</span>
+    </button>
+
+    <button class="bottom-btn" onclick="scrollToSection('exchangeSection', this)">
+      <span>💱</span>
+      <span>Exchange</span>
+    </button>
+
+    <button class="bottom-btn" onclick="logout()">
+      <span>🚪</span>
+      <span>Logout</span>
+    </button>
+  </nav>
+
+  <script>
+    const userEmail = localStorage.getItem("userEmail");
+
+    if (!userEmail) {
+      window.location.href = "login.html";
+    }
+
+    function getStoredValue(key, fallback) {
+      const v = localStorage.getItem(key);
+      return v !== null ? v : fallback;
+    }
+
+    function setStoredValue(key, value) {
+      localStorage.setItem(key, value);
+    }
+
+    const username = getStoredValue("username", userEmail ? userEmail.split("@")[0] : "Player");
+    const userId = getStoredValue("userId", "VIRO-" + Math.floor(1000 + Math.random() * 9000));
+    const balance = parseFloat(getStoredValue("balance", "120"));
+    const points = parseInt(getStoredValue("points", "5400"));
+
+    setStoredValue("username", username);
+    setStoredValue("userId", userId);
+    setStoredValue("balance", balance);
+    setStoredValue("points", points);
+
+    document.getElementById("userName").textContent = username;
+    document.getElementById("userId").textContent = "ID: " + userId;
+    document.getElementById("userEmailText").textContent = userEmail;
+    document.getElementById("avatarBox").textContent = username.charAt(0).toUpperCase();
+
+    function renderStats() {
+      const currentBalance = parseFloat(getStoredValue("balance", "120"));
+      const currentPoints = parseInt(getStoredValue("points", "5400"));
+
+      document.getElementById("balanceText").textContent = "$" + currentBalance;
+      document.getElementById("pointsText").textContent = currentPoints;
+
+      document.getElementById("drawerName").textContent = username;
+      document.getElementById("drawerId").textContent = userId;
+      document.getElementById("drawerEmail").textContent = userEmail;
+      document.getElementById("drawerBalance").textContent = "$" + currentBalance;
+      document.getElementById("drawerPoints").textContent = currentPoints;
+    }
+
+    renderStats();
+
+    function convertPointToBalance() {
+      const input = document.getElementById("pointInput");
+      const msg = document.getElementById("pointMsg");
+      const amount = parseInt(input.value);
+
+      msg.style.color = "#7affb3";
+      msg.textContent = "";
+
+      if (!amount || amount <= 0) {
+        msg.style.color = "#ff8c8c";
+        msg.textContent = "ژمارەی دروست بنووسە";
+        return;
+      }
+
+      let currentPoints = parseInt(getStoredValue("points", "5400"));
+      let currentBalance = parseFloat(getStoredValue("balance", "120"));
+
+      if (amount > currentPoints) {
+        msg.style.color = "#ff8c8c";
+        msg.textContent = "پۆینتی تەواوت نیە";
+        return;
+      }
+
+      const addedBalance = amount / 100;
+      currentPoints -= amount;
+      currentBalance += addedBalance;
+
+      setStoredValue("points", currentPoints);
+      setStoredValue("balance", currentBalance.toFixed(2));
+
+      renderStats();
+      msg.textContent = amount + " point گۆڕدرا بۆ $" + addedBalance.toFixed(2);
+      input.value = "";
+    }
+
+    function convertBalanceToPoint() {
+      const input = document.getElementById("balanceInput");
+      const msg = document.getElementById("balanceMsg");
+      const amount = parseFloat(input.value);
+
+      msg.style.color = "#7affb3";
+      msg.textContent = "";
+
+      if (!amount || amount <= 0) {
+        msg.style.color = "#ff8c8c";
+        msg.textContent = "ژمارەی دروست بنووسە";
+        return;
+      }
+
+      let currentPoints = parseInt(getStoredValue("points", "5400"));
+      let currentBalance = parseFloat(getStoredValue("balance", "120"));
+
+      if (amount > currentBalance) {
+        msg.style.color = "#ff8c8c";
+        msg.textContent = "باڵانسی تەواوت نیە";
+        return;
+      }
+
+      const addedPoints = Math.floor(amount * 100);
+      currentBalance -= amount;
+      currentPoints += addedPoints;
+
+      setStoredValue("points", currentPoints);
+      setStoredValue("balance", currentBalance.toFixed(2));
+
+      renderStats();
+      msg.textContent = "$" + amount + " گۆڕدرا بۆ " + addedPoints + " point";
+      input.value = "";
+    }
+
+    function logout() {
+      localStorage.removeItem("userEmail");
+      window.location.href = "login.html";
+    }
+
+    const drawer = document.getElementById("drawer");
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeDrawer = document.getElementById("closeDrawer");
+
+    function openDrawer() {
+      drawer.classList.add("open");
+      overlay.classList.add("show");
+    }
+
+    function hideDrawer() {
+      drawer.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    menuBtn.addEventListener("click", openDrawer);
+    closeDrawer.addEventListener("click", hideDrawer);
+    overlay.addEventListener("click", hideDrawer);
+
+    function scrollToSection(sectionId, btn) {
+      document.getElementById(sectionId).scrollIntoView({ behavior: "smooth", block: "start" });
+
+      document.querySelectorAll(".bottom-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+    }
+  </script>
 </body>
 </html>
