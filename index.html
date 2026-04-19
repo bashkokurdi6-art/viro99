@@ -712,7 +712,7 @@
         <div class="exchange-box">
           <h4>Point ➜ Balance</h4>
           <input type="number" class="input" id="pointInput" placeholder="چەند پۆینت؟">
-          <button class="convert-btn" onclick="convertPointToBalance()">گۆڕینی Point بۆ Balance</button>
+          <button class="convert-btn" id="pointConvertBtn">گۆڕینی Point بۆ Balance</button>
           <div class="small-note">هەر 100 point = $1</div>
           <div class="msg" id="pointMsg"></div>
         </div>
@@ -720,7 +720,7 @@
         <div class="exchange-box">
           <h4>Balance ➜ Point</h4>
           <input type="number" class="input" id="balanceInput" placeholder="چەند دۆلار؟">
-          <button class="convert-btn" onclick="convertBalanceToPoint()">گۆڕینی Balance بۆ Point</button>
+          <button class="convert-btn" id="balanceConvertBtn">گۆڕینی Balance بۆ Point</button>
           <div class="small-note">هەر $1 = 100 point</div>
           <div class="msg" id="balanceMsg"></div>
         </div>
@@ -771,7 +771,7 @@
       </div>
     </div>
 
-    <button class="logout-btn" onclick="logout()">چوونە دەرەوە</button>
+    <button class="logout-btn" id="logoutBtn">چوونە دەرەوە</button>
   </aside>
 
   <nav class="bottom-nav">
@@ -790,138 +790,46 @@
       <span>Exchange</span>
     </button>
 
-    <button class="bottom-btn" onclick="logout()">
+    <button class="bottom-btn" id="bottomLogoutBtn">
       <span>🚪</span>
       <span>Logout</span>
     </button>
   </nav>
 
-  <script>
-    const userEmail = localStorage.getItem("userEmail");
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      updateDoc, 
+      increment 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    if (!userEmail) {
-      window.location.href = "login.html";
-    }
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
+      authDomain: "viro-bdcc2.firebaseapp.com",
+      projectId: "viro-bdcc2",
+      storageBucket: "viro-bdcc2.firebasestorage.app",
+      messagingSenderId: "532562452622",
+      appId: "1:532562452622:web:e1adc471a9a78b0d3169df",
+      measurementId: "G-BW8WK8BGLH"
+    };
 
-    function getStoredValue(key, fallback) {
-      const v = localStorage.getItem(key);
-      return v !== null ? v : fallback;
-    }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    function setStoredValue(key, value) {
-      localStorage.setItem(key, value);
-    }
-
-    const username = getStoredValue("username", userEmail ? userEmail.split("@")[0] : "Player");
-    const userId = getStoredValue("userId", "VIRO-" + Math.floor(1000 + Math.random() * 9000));
-    const balance = parseFloat(getStoredValue("balance", "120"));
-    const points = parseInt(getStoredValue("points", "5400"));
-
-    setStoredValue("username", username);
-    setStoredValue("userId", userId);
-    setStoredValue("balance", balance);
-    setStoredValue("points", points);
-
-    document.getElementById("userName").textContent = username;
-    document.getElementById("userId").textContent = "ID: " + userId;
-    document.getElementById("userEmailText").textContent = userEmail;
-    document.getElementById("avatarBox").textContent = username.charAt(0).toUpperCase();
-
-    function renderStats() {
-      const currentBalance = parseFloat(getStoredValue("balance", "120"));
-      const currentPoints = parseInt(getStoredValue("points", "5400"));
-
-      document.getElementById("balanceText").textContent = "$" + currentBalance;
-      document.getElementById("pointsText").textContent = currentPoints;
-
-      document.getElementById("drawerName").textContent = username;
-      document.getElementById("drawerId").textContent = userId;
-      document.getElementById("drawerEmail").textContent = userEmail;
-      document.getElementById("drawerBalance").textContent = "$" + currentBalance;
-      document.getElementById("drawerPoints").textContent = currentPoints;
-    }
-
-    renderStats();
-
-    function convertPointToBalance() {
-      const input = document.getElementById("pointInput");
-      const msg = document.getElementById("pointMsg");
-      const amount = parseInt(input.value);
-
-      msg.style.color = "#7affb3";
-      msg.textContent = "";
-
-      if (!amount || amount <= 0) {
-        msg.style.color = "#ff8c8c";
-        msg.textContent = "ژمارەی دروست بنووسە";
-        return;
-      }
-
-      let currentPoints = parseInt(getStoredValue("points", "5400"));
-      let currentBalance = parseFloat(getStoredValue("balance", "120"));
-
-      if (amount > currentPoints) {
-        msg.style.color = "#ff8c8c";
-        msg.textContent = "پۆینتی تەواوت نیە";
-        return;
-      }
-
-      const addedBalance = amount / 100;
-      currentPoints -= amount;
-      currentBalance += addedBalance;
-
-      setStoredValue("points", currentPoints);
-      setStoredValue("balance", currentBalance.toFixed(2));
-
-      renderStats();
-      msg.textContent = amount + " point گۆڕدرا بۆ $" + addedBalance.toFixed(2);
-      input.value = "";
-    }
-
-    function convertBalanceToPoint() {
-      const input = document.getElementById("balanceInput");
-      const msg = document.getElementById("balanceMsg");
-      const amount = parseFloat(input.value);
-
-      msg.style.color = "#7affb3";
-      msg.textContent = "";
-
-      if (!amount || amount <= 0) {
-        msg.style.color = "#ff8c8c";
-        msg.textContent = "ژمارەی دروست بنووسە";
-        return;
-      }
-
-      let currentPoints = parseInt(getStoredValue("points", "5400"));
-      let currentBalance = parseFloat(getStoredValue("balance", "120"));
-
-      if (amount > currentBalance) {
-        msg.style.color = "#ff8c8c";
-        msg.textContent = "باڵانسی تەواوت نیە";
-        return;
-      }
-
-      const addedPoints = Math.floor(amount * 100);
-      currentBalance -= amount;
-      currentPoints += addedPoints;
-
-      setStoredValue("points", currentPoints);
-      setStoredValue("balance", currentBalance.toFixed(2));
-
-      renderStats();
-      msg.textContent = "$" + amount + " گۆڕدرا بۆ " + addedPoints + " point";
-      input.value = "";
-    }
-
-    function logout() {
-      localStorage.removeItem("userEmail");
-      window.location.href = "login.html";
-    }
+    let currentUser = null;
+    let currentUserData = null;
 
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const menuBtn = document.getElementById("menuBtn");
     const closeDrawer = document.getElementById("closeDrawer");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const bottomLogoutBtn = document.getElementById("bottomLogoutBtn");
 
     function openDrawer() {
       drawer.classList.add("open");
@@ -937,9 +845,134 @@
     closeDrawer.addEventListener("click", hideDrawer);
     overlay.addEventListener("click", hideDrawer);
 
-    function scrollToSection(sectionId, btn) {
-      document.getElementById(sectionId).scrollIntoView({ behavior: "smooth", block: "start" });
+    async function loadUserData(user) {
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
 
+      if (!snap.exists()) {
+        alert("داتای یوزەر نەدۆزرایەوە");
+        return;
+      }
+
+      currentUserData = snap.data();
+
+      document.getElementById("userName").textContent = currentUserData.username || "User";
+      document.getElementById("userId").textContent = "ID: " + (currentUserData.userId || "VIRO-0000");
+      document.getElementById("userEmailText").textContent = user.email || "";
+
+      const firstLetter = (currentUserData.username || "U").charAt(0).toUpperCase();
+      document.getElementById("avatarBox").textContent = firstLetter;
+
+      document.getElementById("balanceText").textContent = "$" + (currentUserData.balance ?? 0);
+      document.getElementById("pointsText").textContent = currentUserData.points ?? 0;
+
+      document.getElementById("drawerName").textContent = currentUserData.username || "User";
+      document.getElementById("drawerId").textContent = currentUserData.userId || "VIRO-0000";
+      document.getElementById("drawerEmail").textContent = user.email || "";
+      document.getElementById("drawerBalance").textContent = "$" + (currentUserData.balance ?? 0);
+      document.getElementById("drawerPoints").textContent = currentUserData.points ?? 0;
+    }
+
+    async function refreshUserData() {
+      if (currentUser) {
+        await loadUserData(currentUser);
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      currentUser = user;
+      await loadUserData(user);
+    });
+
+    async function convertPointToBalance() {
+      const input = document.getElementById("pointInput");
+      const msg = document.getElementById("pointMsg");
+      const amount = parseInt(input.value);
+
+      msg.style.color = "#7affb3";
+      msg.textContent = "";
+
+      if (!amount || amount <= 0) {
+        msg.style.color = "#ff8c8c";
+        msg.textContent = "ژمارەی دروست بنووسە";
+        return;
+      }
+
+      if (!currentUser || !currentUserData) return;
+
+      const currentPoints = Number(currentUserData.points || 0);
+      if (amount > currentPoints) {
+        msg.style.color = "#ff8c8c";
+        msg.textContent = "پۆینتی تەواوت نیە";
+        return;
+      }
+
+      const addedBalance = amount / 100;
+      const userRef = doc(db, "users", currentUser.uid);
+
+      await updateDoc(userRef, {
+        points: increment(-amount),
+        balance: increment(addedBalance)
+      });
+
+      msg.textContent = amount + " point گۆڕدرا بۆ $" + addedBalance.toFixed(2);
+      input.value = "";
+      await refreshUserData();
+    }
+
+    async function convertBalanceToPoint() {
+      const input = document.getElementById("balanceInput");
+      const msg = document.getElementById("balanceMsg");
+      const amount = parseFloat(input.value);
+
+      msg.style.color = "#7affb3";
+      msg.textContent = "";
+
+      if (!amount || amount <= 0) {
+        msg.style.color = "#ff8c8c";
+        msg.textContent = "ژمارەی دروست بنووسە";
+        return;
+      }
+
+      if (!currentUser || !currentUserData) return;
+
+      const currentBalance = Number(currentUserData.balance || 0);
+      if (amount > currentBalance) {
+        msg.style.color = "#ff8c8c";
+        msg.textContent = "باڵانسی تەواوت نیە";
+        return;
+      }
+
+      const addedPoints = Math.floor(amount * 100);
+      const userRef = doc(db, "users", currentUser.uid);
+
+      await updateDoc(userRef, {
+        balance: increment(-amount),
+        points: increment(addedPoints)
+      });
+
+      msg.textContent = "$" + amount + " گۆڕدرا بۆ " + addedPoints + " point";
+      input.value = "";
+      await refreshUserData();
+    }
+
+    async function logout() {
+      await signOut(auth);
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("pointConvertBtn").addEventListener("click", convertPointToBalance);
+    document.getElementById("balanceConvertBtn").addEventListener("click", convertBalanceToPoint);
+    logoutBtn.addEventListener("click", logout);
+    bottomLogoutBtn.addEventListener("click", logout);
+
+    window.scrollToSection = function(sectionId, btn) {
+      document.getElementById(sectionId).scrollIntoView({ behavior: "smooth", block: "start" });
       document.querySelectorAll(".bottom-btn").forEach(b => b.classList.remove("active"));
       if (btn) btn.classList.add("active");
     }
