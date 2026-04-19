@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deposit</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    :root{
+      --bg1:#0a0f1f;
+      --bg2:#121a31;
+      --card:#151f38;
+      --card2:#1a2747;
+      --gold:#ffd54a;
+      --gold2:#ffb800;
+      --text:#ffffff;
+      --muted:#b9c4de;
+      --line:rgba(255,255,255,.08);
+      --success:#29d17f;
+      --danger:#ff5c5c;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at top right, rgba(255,184,0,.10), transparent 25%),
+        linear-gradient(180deg, #08101f, #0b1326 35%, #101a31 100%);
+      color:var(--text);
+      min-height:100vh;
+      padding:16px;
+    }
+
+    .container{
+      width:100%;
+      max-width:540px;
+      margin:0 auto;
+      padding-bottom:24px;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .back-btn,
+    .home-btn{
+      flex:1;
+      border:none;
+      border-radius:14px;
+      padding:14px 12px;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .back-btn{
+      background:var(--card2);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .home-btn{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+    }
+
+    .card{
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+      margin-bottom:16px;
+    }
+
+    .title{
+      font-size:24px;
+      color:var(--gold);
+      margin-bottom:8px;
+      text-align:center;
+    }
+
+    .sub{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:18px;
+      line-height:1.7;
+    }
+
+    .user-box{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:16px;
+    }
+
+    .user-line{
+      margin-bottom:8px;
+      font-size:14px;
+      color:#fff;
+      word-break:break-word;
+    }
+
+    .user-line:last-child{
+      margin-bottom:0;
+    }
+
+    .label{
+      display:block;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#fff;
+      font-weight:bold;
+    }
+
+    .input,
+    .select,
+    .file-input,
+    .textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      padding:14px;
+      font-size:15px;
+      margin-bottom:14px;
+    }
+
+    .input,
+    .select,
+    .textarea{
+      background:#eef3ff;
+      color:#111;
+    }
+
+    .file-wrap{
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:14px;
+    }
+
+    .file-input{
+      background:transparent;
+      color:#fff;
+      margin-bottom:8px;
+      padding:0;
+    }
+
+    .file-note{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .pay-box{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+
+    .pay-title{
+      color:var(--gold);
+      font-size:16px;
+      font-weight:bold;
+      margin-bottom:10px;
+    }
+
+    .pay-item{
+      margin-bottom:8px;
+      color:#fff;
+      font-size:14px;
+      word-break:break-word;
+    }
+
+    .pay-item:last-child{
+      margin-bottom:0;
+    }
+
+    .submit-btn{
+      width:100%;
+      border:none;
+      border-radius:16px;
+      padding:15px;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(255,184,0,.20);
+    }
+
+    .submit-btn:disabled{
+      opacity:.7;
+      cursor:not-allowed;
+    }
+
+    .msg{
+      min-height:22px;
+      margin-top:14px;
+      font-size:14px;
+      text-align:center;
+      line-height:1.7;
+    }
+
+    .success{
+      color:var(--success);
+    }
+
+    .error{
+      color:#ff9a9a;
+    }
+
+    @media (max-width:420px){
+      .top-actions{
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="top-actions">
+      <button class="back-btn" onclick="goBack()">گەڕانەوە</button>
+      <button class="home-btn" onclick="goHome()">Home</button>
+    </div>
+
+    <div class="card">
+      <h1 class="title">پارەدان / Deposit</h1>
+      <p class="sub">
+        تکایە بڕ، شێوازی پارەدان، وێنەی پسووڵەی پارەدان بنێرە،  
+        پاشان داواکارییەکەت دەنێردرێت بۆ پشکنین
+      </p>
+
+      <div class="user-box">
+        <div class="user-line">ناو: <span id="userName">...</span></div>
+        <div class="user-line">ئیمەیڵ: <span id="userEmail">...</span></div>
+        <div class="user-line">ID: <span id="userId">...</span></div>
+      </div>
+
+      <div class="pay-box">
+        <div class="pay-title">زانیاری پارەدان</div>
+        <div class="pay-item">FIB: <span id="fibNumber">N/A</span></div>
+        <div class="pay-item">FastPay: <span id="fastpayNumber">N/A</span></div>
+        <div class="pay-item">Qi Card: <span id="qicardNumber">N/A</span></div>
+      </div>
+
+      <label class="label">بڕی پارە</label>
+      <input type="number" id="amount" class="input" placeholder="نموونە: 25" />
+
+      <label class="label">شێوازی پارەدان</label>
+      <select id="method" class="select">
+        <option value="FIB">FIB</option>
+        <option value="FastPay">FastPay</option>
+        <option value="QiCard">QiCard</option>
+      </select>
+
+      <label class="label">تێبینی</label>
+      <textarea id="note" class="textarea" rows="4" placeholder="ئەگەر تێبینی هەیە لێرە بنووسە"></textarea>
+
+      <div class="file-wrap">
+        <label class="label">وێنەی پسووڵە / Screenshot</label>
+        <input type="file" id="image" class="file-input" accept="image/*" />
+        <div class="file-note">تکایە وێنەی ڕوون هەڵبژێرە (jpg, png, webp)</div>
+      </div>
+
+      <button class="submit-btn" id="submitBtn">ناردنی Deposit</button>
+
+      <div class="msg" id="msgBox"></div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      getStorage,
+      ref,
+      uploadBytes,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
+      authDomain: "viro-bdcc2.firebaseapp.com",
+      projectId: "viro-bdcc2",
+      storageBucket: "viro-bdcc2.firebasestorage.app",
+      messagingSenderId: "532562452622",
+      appId: "1:532562452622:web:e1adc471a9a78b0d3169df",
+      measurementId: "G-BW8WK8BGLH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const userName = document.getElementById("userName");
+    const userEmail = document.getElementById("userEmail");
+    const userIdText = document.getElementById("userId");
+
+    const fibNumber = document.getElementById("fibNumber");
+    const fastpayNumber = document.getElementById("fastpayNumber");
+    const qicardNumber = document.getElementById("qicardNumber");
+
+    const amountInput = document.getElementById("amount");
+    const methodInput = document.getElementById("method");
+    const noteInput = document.getElementById("note");
+    const imageInput = document.getElementById("image");
+    const submitBtn = document.getElementById("submitBtn");
+    const msgBox = document.getElementById("msgBox");
+
+    let currentUser = null;
+    let currentUserData = null;
+
+    function setMessage(text, type = "") {
+      msgBox.textContent = text;
+      msgBox.className = "msg";
+      if (type) msgBox.classList.add(type);
+    }
+
+    window.goBack = function() {
+      window.history.back();
+    }
+
+    window.goHome = function() {
+      window.location.href = "index.html";
+    }
+
+    async function loadPaymentNumbers() {
+      try {
+        const settingsRef = doc(db, "app_settings", "main");
+        const settingsSnap = await getDoc(settingsRef);
+
+        if (settingsSnap.exists()) {
+          const data = settingsSnap.data();
+          fibNumber.textContent = data.fib_number || "N/A";
+          fastpayNumber.textContent = data.fastpay_number || "N/A";
+          qicardNumber.textContent = data.qicard_number || "N/A";
+        }
+      } catch (error) {
+        console.log("Settings not found");
+      }
+    }
+
+    async function loadUserData(user) {
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
+
+      if (!snap.exists()) {
+        setMessage("داتای یوزەر نەدۆزرایەوە", "error");
+        return;
+      }
+
+      currentUserData = snap.data();
+      userName.textContent = currentUserData.username || "User";
+      userEmail.textContent = user.email || "";
+      userIdText.textContent = currentUserData.userId || user.uid;
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      currentUser = user;
+      await loadUserData(user);
+      await loadPaymentNumbers();
+    });
+
+    async function sendDeposit() {
+      setMessage("");
+
+      const amount = Number(amountInput.value);
+      const method = methodInput.value;
+      const note = noteInput.value.trim();
+      const file = imageInput.files[0];
+
+      if (!currentUser) {
+        setMessage("تکایە سەرەتا بچۆ ژوورەوە", "error");
+        return;
+      }
+
+      if (!amount || amount <= 0) {
+        setMessage("تکایە بڕی دروست بنووسە", "error");
+        return;
+      }
+
+      if (!file) {
+        setMessage("تکایە وێنەی پسووڵە هەڵبژێرە", "error");
+        return;
+      }
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "چاوەڕوانبە...";
+
+        const fileName = `deposits/${currentUser.uid}_${Date.now()}_${file.name}`;
+        const storageRef = ref(storage, fileName);
+
+        await uploadBytes(storageRef, file);
+        const imageUrl = await getDownloadURL(storageRef);
+
+        await addDoc(collection(db, "deposits"), {
+          userUid: currentUser.uid,
+          userId: currentUserData?.userId || currentUser.uid,
+          username: currentUserData?.username || "User",
+          email: currentUser.email || "",
+          amount: amount,
+          method: method,
+          note: note,
+          imageUrl: imageUrl,
+          status: "pending",
+          createdAt: serverTimestamp()
+        });
+
+        amountInput.value = "";
+        methodInput.value = "FIB";
+        noteInput.value = "";
+        imageInput.value = "";
+
+        setMessage("داواکارییەکەت بە سەرکەوتوویی نێردرا", "success");
+      } catch (error) {
+        console.error(error);
+        setMessage("هەڵەیەک ڕوویدا لە ناردندا", "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "ناردنی Deposit";
+      }
+    }
+
+    submitBtn.addEventListener("click", sendDeposit);
+  </script>
+</body>
+</html>
