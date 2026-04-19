@@ -24,6 +24,7 @@
       --danger:#ff5c5c;
       --blue:#33c3ff;
       --bg:#0b1326;
+      --orange:#f59e0b;
     }
 
     body{
@@ -202,6 +203,13 @@
     }
 
     .deposit-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .withdraw-card{
       background:rgba(255,255,255,.03);
       border:1px solid var(--line);
       border-radius:18px;
@@ -437,6 +445,39 @@
       <div class="empty" id="emptyBox" style="display:none;">هیچ داواکارییەک نەدۆزرایەوە</div>
     </div>
 
+    <div class="section-card">
+      <div class="section-title">Withdraw Requests</div>
+
+      <div class="summary-grid">
+        <div class="summary-box">
+          <div class="summary-label">کۆی گشتی</div>
+          <div class="summary-value" id="withdrawTotalCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Pending</div>
+          <div class="summary-value" id="withdrawPendingCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Approved</div>
+          <div class="summary-value" id="withdrawApprovedCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Rejected</div>
+          <div class="summary-value" id="withdrawRejectedCount">0</div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" onclick="setWithdrawFilter('all', this)">هەموو</button>
+        <button class="filter-btn" onclick="setWithdrawFilter('pending', this)">Pending</button>
+        <button class="filter-btn" onclick="setWithdrawFilter('approved', this)">Approved</button>
+        <button class="filter-btn" onclick="setWithdrawFilter('rejected', this)">Rejected</button>
+      </div>
+
+      <div class="list" id="withdrawList"></div>
+      <div class="empty" id="withdrawEmptyBox" style="display:none;">هیچ داواکاری ڕاکێشانێک نەدۆزرایەوە</div>
+    </div>
+
   </div>
 
   <script type="module">
@@ -474,8 +515,19 @@
     const approvedCount = document.getElementById("approvedCount");
     const rejectedCount = document.getElementById("rejectedCount");
 
+    const withdrawList = document.getElementById("withdrawList");
+    const withdrawEmptyBox = document.getElementById("withdrawEmptyBox");
+
+    const withdrawTotalCount = document.getElementById("withdrawTotalCount");
+    const withdrawPendingCount = document.getElementById("withdrawPendingCount");
+    const withdrawApprovedCount = document.getElementById("withdrawApprovedCount");
+    const withdrawRejectedCount = document.getElementById("withdrawRejectedCount");
+
     let allDeposits = [];
     let currentFilter = "all";
+
+    let allWithdraws = [];
+    let currentWithdrawFilter = "all";
 
     function showMessage(text, type = "success") {
       msgBox.textContent = text;
@@ -502,6 +554,7 @@
     window.refreshAll = function() {
       loadSettings();
       loadDeposits();
+      loadWithdraws();
     };
 
     async function loadSettings() {
@@ -687,7 +740,7 @@
 
     window.setFilter = function(filter, btn) {
       currentFilter = filter;
-      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".section-card:nth-of-type(3) .filter-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       renderDeposits();
     };
@@ -724,8 +777,175 @@
       }
     };
 
+    function updateWithdrawSummary(items) {
+      withdrawTotalCount.textContent = items.length;
+      withdrawPendingCount.textContent = items.filter(x => (x.data.status || "pending") === "pending").length;
+      withdrawApprovedCount.textContent = items.filter(x => x.data.status === "approved").length;
+      withdrawRejectedCount.textContent = items.filter(x => x.data.status === "rejected").length;
+    }
+
+    function getFilteredWithdraws() {
+      if (currentWithdrawFilter === "all") return allWithdraws;
+      return allWithdraws.filter(item => (item.data.status || "pending") === currentWithdrawFilter);
+    }
+
+    function renderWithdraws() {
+      withdrawList.innerHTML = "";
+
+      const items = getFilteredWithdraws();
+
+      if (items.length === 0) {
+        withdrawEmptyBox.style.display = "block";
+        return;
+      }
+
+      withdrawEmptyBox.style.display = "none";
+
+      items.forEach((item) => {
+        const data = item.data;
+        const status = data.status || "pending";
+        const amount = Number(data.amount || 0);
+
+        const div = document.createElement("div");
+        div.className = "withdraw-card";
+
+        div.innerHTML = `
+          <div class="deposit-top">
+            <div>
+              <div class="deposit-name">${data.username || "User"}</div>
+              <div class="value">${data.email || ""}</div>
+              <div class="status ${status}">${status.toUpperCase()}</div>
+            </div>
+            <div class="deposit-amount">$${amount}</div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="label">User UID</div>
+              <div class="value">${data.userId || data.userDocId || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Game User ID</div>
+              <div class="value">${data.gameUserId || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Method</div>
+              <div class="value">${data.method || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Account / Wallet</div>
+              <div class="value">${data.account || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Created At</div>
+              <div class="value">${formatDate(data.createdAt)}</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="approve-btn" onclick="approveWithdraw('${item.id}', '${data.userId || data.userDocId}', ${amount})" ${status === "approved" ? "disabled" : ""}>Approve</button>
+            <button class="reject-btn" onclick="rejectWithdraw('${item.id}')" ${status === "rejected" ? "disabled" : ""}>Reject</button>
+          </div>
+        `;
+
+        withdrawList.appendChild(div);
+      });
+    }
+
+    async function loadWithdraws() {
+      try {
+        withdrawList.innerHTML = "Loading...";
+        withdrawEmptyBox.style.display = "none";
+
+        const snap = await getDocs(collection(db, "withdraw_requests"));
+
+        allWithdraws = snap.docs.map(d => ({
+          id: d.id,
+          data: d.data()
+        }));
+
+        allWithdraws.sort((a, b) => {
+          const aTime = a.data.createdAt?.seconds || 0;
+          const bTime = b.data.createdAt?.seconds || 0;
+          return bTime - aTime;
+        });
+
+        updateWithdrawSummary(allWithdraws);
+        renderWithdraws();
+      } catch (error) {
+        console.error(error);
+        showMessage("Error loading withdraw requests ❌", "error");
+      }
+    }
+
+    window.setWithdrawFilter = function(filter, btn) {
+      currentWithdrawFilter = filter;
+      document.querySelectorAll(".section-card:nth-of-type(4) .filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderWithdraws();
+    };
+
+    window.approveWithdraw = async function(withdrawId, userUid, amount) {
+      try {
+        if (!userUid) {
+          showMessage("User UID not found ❌", "error");
+          return;
+        }
+
+        const userRef = doc(db, "users", userUid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          showMessage("User not found ❌", "error");
+          return;
+        }
+
+        const userData = userSnap.data();
+        const currentBalance = Number(userData.balance || 0);
+        const withdrawAmount = Number(amount || 0);
+
+        if (withdrawAmount > currentBalance) {
+          showMessage("User balance is not enough ❌", "error");
+          return;
+        }
+
+        await updateDoc(doc(db, "withdraw_requests", withdrawId), {
+          status: "approved"
+        });
+
+        await updateDoc(userRef, {
+          balance: increment(-withdrawAmount)
+        });
+
+        showMessage("Withdraw approved ✅");
+        await loadWithdraws();
+      } catch (error) {
+        console.error(error);
+        showMessage("Approve withdraw failed ❌", "error");
+      }
+    };
+
+    window.rejectWithdraw = async function(withdrawId) {
+      try {
+        await updateDoc(doc(db, "withdraw_requests", withdrawId), {
+          status: "rejected"
+        });
+
+        showMessage("Withdraw rejected ❌", "error");
+        await loadWithdraws();
+      } catch (error) {
+        console.error(error);
+        showMessage("Reject withdraw failed ❌", "error");
+      }
+    };
+
     loadSettings();
     loadDeposits();
+    loadWithdraws();
   </script>
 </body>
 </html>
