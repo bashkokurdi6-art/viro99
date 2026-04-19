@@ -270,7 +270,7 @@
         <div class="file-note">تکایە وێنەی ڕوون هەڵبژێرە (jpg, png, webp)</div>
       </div>
 
-      <button class="submit-btn" id="submitBtn">ناردنی Deposit</button>
+      <button class="submit-btn" id="submitBtn" onclick="sendDeposit()">ناردنی Deposit</button>
 
       <div class="msg" id="msgBox"></div>
     </div>
@@ -329,18 +329,16 @@
 
     window.goBack = function() {
       window.history.back();
-    }
+    };
 
     window.goHome = function() {
       window.location.href = "index.html";
-    }
+    };
 
-    function showMessage(text, type) {
+    function showMessage(text, type = "") {
       msgBox.textContent = text;
       msgBox.className = "msg";
-      if (type) {
-        msgBox.classList.add(type);
-      }
+      if (type) msgBox.classList.add(type);
     }
 
     async function loadPaymentNumbers() {
@@ -387,33 +385,32 @@
 
     async function sendDeposit() {
       showMessage("چاوەڕوانبە...", "");
-
-      const amount = Number(amountInput.value);
-      const method = methodInput.value;
-      const note = noteInput.value.trim();
-      const file = imageInput.files[0];
-
-      if (!currentUser) {
-        showMessage("تکایە سەرەتا بچۆ ژوورەوە", "error");
-        alert("تکایە سەرەتا بچۆ ژوورەوە");
-        return;
-      }
-
-      if (!amount || amount <= 0) {
-        showMessage("تکایە بڕی دروست بنووسە", "error");
-        alert("تکایە بڕی دروست بنووسە");
-        return;
-      }
-
-      if (!file) {
-        showMessage("تکایە وێنەی پسووڵە هەڵبژێرە", "error");
-        alert("تکایە وێنەی پسووڵە هەڵبژێرە");
-        return;
-      }
+      submitBtn.disabled = true;
+      submitBtn.textContent = "چاوەڕوانبە...";
 
       try {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "چاوەڕوانبە...";
+        const amount = Number(amountInput.value);
+        const method = methodInput.value;
+        const note = noteInput.value.trim();
+        const file = imageInput.files[0];
+
+        if (!currentUser) {
+          showMessage("تکایە سەرەتا بچۆ ژوورەوە", "error");
+          alert("تکایە سەرەتا بچۆ ژوورەوە");
+          return;
+        }
+
+        if (!amount || amount <= 0) {
+          showMessage("تکایە بڕی دروست بنووسە", "error");
+          alert("تکایە بڕی دروست بنووسە");
+          return;
+        }
+
+        if (!file) {
+          showMessage("تکایە وێنەی پسووڵە هەڵبژێرە", "error");
+          alert("تکایە وێنەی پسووڵە هەڵبژێرە");
+          return;
+        }
 
         const fileName = `deposits/${currentUser.uid}_${Date.now()}_${file.name}`;
         const storageRef = ref(storage, fileName);
@@ -451,7 +448,7 @@
       }
     }
 
-    submitBtn.addEventListener("click", sendDeposit);
+    window.sendDeposit = sendDeposit;
   </script>
 </body>
 </html>
