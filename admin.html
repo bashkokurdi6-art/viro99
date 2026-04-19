@@ -1,156 +1,974 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
 
-<style>
-body{
-  background:#0b1326;
-  color:white;
-  font-family:Arial;
-  padding:20px;
-}
-.card{
-  background:#151f38;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:15px;
-}
-input{
-  width:100%;
-  padding:10px;
-  margin-bottom:10px;
-  border-radius:8px;
-  border:none;
-}
-button{
-  width:100%;
-  padding:12px;
-  background:#ffd54a;
-  border:none;
-  border-radius:10px;
-  font-weight:bold;
-  cursor:pointer;
-}
-h2{
-  color:#ffd54a;
-}
-</style>
+    :root{
+      --card:#151f38;
+      --card2:#1a2747;
+      --gold:#ffd54a;
+      --gold2:#ffb800;
+      --text:#ffffff;
+      --muted:#b9c4de;
+      --line:rgba(255,255,255,.08);
+      --success:#29d17f;
+      --danger:#ff5c5c;
+      --blue:#33c3ff;
+      --bg:#0b1326;
+      --orange:#f59e0b;
+    }
 
+    body{
+      background:
+        radial-gradient(circle at top right, rgba(255,184,0,.10), transparent 25%),
+        linear-gradient(180deg, #08101f, #0b1326 35%, #101a31 100%);
+      color:var(--text);
+      min-height:100vh;
+      padding:16px;
+    }
+
+    .container{
+      width:100%;
+      max-width:1000px;
+      margin:0 auto;
+      padding-bottom:30px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .title{
+      font-size:30px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font-size:14px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .btn-home{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+    }
+
+    .btn-refresh{
+      background:var(--card2);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .msg{
+      text-align:center;
+      font-weight:bold;
+      margin-bottom:16px;
+      min-height:24px;
+    }
+
+    .success{ color:#7affb3; }
+    .error{ color:#ff9a9a; }
+
+    .section-card{
+      background:linear-gradient(180deg, var(--card), #11192f);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      margin-bottom:16px;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+    }
+
+    .section-title{
+      font-size:22px;
+      color:var(--gold);
+      margin-bottom:14px;
+      font-weight:bold;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .input, .textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      padding:14px;
+      font-size:15px;
+      background:#eef3ff;
+      color:#111;
+      margin-bottom:12px;
+    }
+
+    .textarea{
+      min-height:100px;
+      resize:vertical;
+    }
+
+    .save-btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:14px;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:6px;
+    }
+
+    .filters{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .filter-btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:14px;
+      font-weight:bold;
+      cursor:pointer;
+      background:var(--card2);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .filter-btn.active{
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      border:none;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .summary-box{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .summary-label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .summary-value{
+      font-size:24px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .list{
+      display:grid;
+      gap:14px;
+    }
+
+    .deposit-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .withdraw-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .deposit-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .deposit-name{
+      font-size:18px;
+      font-weight:bold;
+      color:#fff;
+    }
+
+    .deposit-amount{
+      font-size:22px;
+      font-weight:bold;
+      color:var(--gold);
+    }
+
+    .status{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:bold;
+      margin-top:8px;
+    }
+
+    .status.pending{
+      background:rgba(255,184,0,.14);
+      color:#ffd54a;
+      border:1px solid rgba(255,184,0,.25);
+    }
+
+    .status.approved{
+      background:rgba(41,209,127,.14);
+      color:#7affb3;
+      border:1px solid rgba(41,209,127,.25);
+    }
+
+    .status.rejected{
+      background:rgba(255,92,92,.14);
+      color:#ff9a9a;
+      border:1px solid rgba(255,92,92,.25);
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .info-box{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .value{
+      font-size:14px;
+      color:#fff;
+      word-break:break-word;
+      line-height:1.7;
+    }
+
+    .shot{
+      width:100%;
+      max-width:240px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      margin-top:10px;
+      display:block;
+    }
+
+    .shot-link{
+      display:inline-block;
+      margin-top:10px;
+      text-decoration:none;
+      background:linear-gradient(90deg,var(--blue),#7ddcff);
+      color:#08101f;
+      font-weight:bold;
+      font-size:13px;
+      padding:10px 14px;
+      border-radius:12px;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .approve-btn, .reject-btn{
+      flex:1;
+      min-width:120px;
+      border:none;
+      border-radius:14px;
+      padding:13px;
+      font-size:14px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .approve-btn{
+      background:linear-gradient(90deg,#19b86b,#2ed67c);
+      color:#fff;
+    }
+
+    .reject-btn{
+      background:linear-gradient(90deg,#ff4d4d,#ff6b6b);
+      color:#fff;
+    }
+
+    .approve-btn:disabled, .reject-btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
+    .empty{
+      text-align:center;
+      color:var(--muted);
+      padding:20px;
+    }
+
+    @media (max-width:768px){
+      .grid, .info-grid, .summary-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
 
-<div class="card">
-  <h2>Room Settings</h2>
+    <div class="topbar">
+      <div class="title">Admin Panel</div>
+      <div class="top-actions">
+        <button class="btn btn-home" onclick="goHome()">Home</button>
+        <button class="btn btn-refresh" onclick="refreshAll()">Refresh</button>
+      </div>
+    </div>
 
-  <input id="roomEntryPrice" type="number" placeholder="Room Entry Price (مثال: 30)" />
-  <input id="readyPlayers" type="number" placeholder="Ready Players" />
-  <input id="totalPlayers" type="number" placeholder="Total Players" />
-  <input id="roomStatus" placeholder="Room Status" />
+    <div class="msg" id="msgBox"></div>
 
-  <button onclick="saveSettings()">Save Settings</button>
-</div>
+    <div class="section-card">
+      <div class="section-title">Banner Settings</div>
+      <input class="input" id="bannerImage" placeholder="Banner Image URL" />
+      <input class="input" id="bannerTitle" placeholder="Banner Title" />
+      <textarea class="textarea" id="bannerText" placeholder="Banner Text"></textarea>
+      <input class="input" id="fibNumberInput" placeholder="FIB Number" />
+      <input class="input" id="fastpayNumberInput" placeholder="FastPay Number" />
+      <input class="input" id="qicardNumberInput" placeholder="Qi Card Number" />
+    </div>
 
-<div class="card">
-  <h2>Join Requests</h2>
-  <div id="joinList">Loading...</div>
-</div>
+    <div class="section-card">
+      <div class="section-title">Offers + Ready Players</div>
 
-<script type="module">
+      <div class="grid">
+        <div>
+          <input class="input" id="offer1Title" placeholder="Offer 1 Title" />
+          <input class="input" id="offer1Desc" placeholder="Offer 1 Description" />
+          <input class="input" id="offer1Tag" placeholder="Offer 1 Tag" />
+        </div>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        <div>
+          <input class="input" id="offer2Title" placeholder="Offer 2 Title" />
+          <input class="input" id="offer2Desc" placeholder="Offer 2 Description" />
+          <input class="input" id="offer2Tag" placeholder="Offer 2 Tag" />
+        </div>
+      </div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
-  authDomain: "viro-bdcc2.firebaseapp.com",
-  projectId: "viro-bdcc2",
-  storageBucket: "viro-bdcc2.firebasestorage.app",
-  messagingSenderId: "532562452622",
-  appId: "1:532562452622:web:e1adc471a9a78b0d3169df"
-};
+      <div class="grid">
+        <div>
+          <input class="input" id="offer3Title" placeholder="Offer 3 Title" />
+          <input class="input" id="offer3Desc" placeholder="Offer 3 Description" />
+          <input class="input" id="offer3Tag" placeholder="Offer 3 Tag" />
+        </div>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+        <div>
+          <input class="input" id="roomEntryPrice" type="number" placeholder="Room Entry Price" />
+          <input class="input" id="readyPlayers" type="number" placeholder="Ready Players" />
+          <input class="input" id="totalPlayers" type="number" placeholder="Total Players" />
+          <input class="input" id="roomStatus" placeholder="Room Status" />
+        </div>
+      </div>
 
-// ================= LOAD SETTINGS =================
-async function loadSettings(){
-  const ref = doc(db,"app_settings","main");
-  const snap = await getDoc(ref);
+      <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+    </div>
 
-  if(!snap.exists()) return;
+    <div class="section-card">
+      <div class="section-title">Deposits</div>
 
-  const data = snap.data();
+      <div class="summary-grid">
+        <div class="summary-box">
+          <div class="summary-label">کۆی گشتی</div>
+          <div class="summary-value" id="totalCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Pending</div>
+          <div class="summary-value" id="pendingCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Approved</div>
+          <div class="summary-value" id="approvedCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Rejected</div>
+          <div class="summary-value" id="rejectedCount">0</div>
+        </div>
+      </div>
 
-  document.getElementById("roomEntryPrice").value = data.roomEntryPrice || 0;
-  document.getElementById("readyPlayers").value = data.readyPlayers || 0;
-  document.getElementById("totalPlayers").value = data.totalPlayers || 0;
-  document.getElementById("roomStatus").value = data.roomStatus || "Open";
-}
+      <div class="filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">هەموو</button>
+        <button class="filter-btn" onclick="setFilter('pending', this)">Pending</button>
+        <button class="filter-btn" onclick="setFilter('approved', this)">Approved</button>
+        <button class="filter-btn" onclick="setFilter('rejected', this)">Rejected</button>
+      </div>
 
-// ================= SAVE SETTINGS =================
-window.saveSettings = async function(){
+      <div class="list" id="depositList"></div>
+      <div class="empty" id="emptyBox" style="display:none;">هیچ داواکارییەک نەدۆزرایەوە</div>
+    </div>
 
-  await setDoc(doc(db,"app_settings","main"),{
+    <div class="section-card">
+      <div class="section-title">Withdraw Requests</div>
 
-    roomEntryPrice: Number(document.getElementById("roomEntryPrice").value || 0),
-    readyPlayers: Number(document.getElementById("readyPlayers").value || 0),
-    totalPlayers: Number(document.getElementById("totalPlayers").value || 0),
-    roomStatus: document.getElementById("roomStatus").value
+      <div class="summary-grid">
+        <div class="summary-box">
+          <div class="summary-label">کۆی گشتی</div>
+          <div class="summary-value" id="withdrawTotalCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Pending</div>
+          <div class="summary-value" id="withdrawPendingCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Approved</div>
+          <div class="summary-value" id="withdrawApprovedCount">0</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-label">Rejected</div>
+          <div class="summary-value" id="withdrawRejectedCount">0</div>
+        </div>
+      </div>
 
-  },{merge:true});
+      <div class="filters">
+        <button class="filter-btn active" onclick="setWithdrawFilter('all', this)">هەموو</button>
+        <button class="filter-btn" onclick="setWithdrawFilter('pending', this)">Pending</button>
+        <button class="filter-btn" onclick="setWithdrawFilter('approved', this)">Approved</button>
+        <button class="filter-btn" onclick="setWithdrawFilter('rejected', this)">Rejected</button>
+      </div>
 
-  alert("Saved ✔");
-}
+      <div class="list" id="withdrawList"></div>
+      <div class="empty" id="withdrawEmptyBox" style="display:none;">هیچ داواکاری ڕاکێشانێک نەدۆزرایەوە</div>
+    </div>
 
-// ================= LOAD JOIN REQUESTS =================
-async function loadJoin(){
+  </div>
 
-  const list = document.getElementById("joinList");
-  list.innerHTML = "";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      collection,
+      getDocs,
+      updateDoc,
+      increment
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const snap = await getDocs(collection(db,"room_join_requests"));
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRjONj2ubnjWRcAudc75XyICh8KXwrX5I",
+      authDomain: "viro-bdcc2.firebaseapp.com",
+      projectId: "viro-bdcc2",
+      storageBucket: "viro-bdcc2.firebasestorage.app",
+      messagingSenderId: "532562452622",
+      appId: "1:532562452622:web:e1adc471a9a78b0d3169df",
+      measurementId: "G-BW8WK8BGLH"
+    };
 
-  if(snap.empty){
-    list.innerHTML = "No Data";
-    return;
-  }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  snap.forEach(docu=>{
+    const msgBox = document.getElementById("msgBox");
+    const depositList = document.getElementById("depositList");
+    const emptyBox = document.getElementById("emptyBox");
 
-    const d = docu.data();
+    const totalCount = document.getElementById("totalCount");
+    const pendingCount = document.getElementById("pendingCount");
+    const approvedCount = document.getElementById("approvedCount");
+    const rejectedCount = document.getElementById("rejectedCount");
 
-    const div = document.createElement("div");
-    div.style.marginBottom="10px";
-    div.style.padding="10px";
-    div.style.background="#1a2747";
-    div.style.borderRadius="10px";
+    const withdrawList = document.getElementById("withdrawList");
+    const withdrawEmptyBox = document.getElementById("withdrawEmptyBox");
 
-    div.innerHTML = `
-      <b>${d.username || "User"}</b><br>
-      PUBG ID: ${d.pubgId || "N/A"}<br>
-      Amount: $${d.amount || 0}
-    `;
+    const withdrawTotalCount = document.getElementById("withdrawTotalCount");
+    const withdrawPendingCount = document.getElementById("withdrawPendingCount");
+    const withdrawApprovedCount = document.getElementById("withdrawApprovedCount");
+    const withdrawRejectedCount = document.getElementById("withdrawRejectedCount");
 
-    list.appendChild(div);
+    let allDeposits = [];
+    let currentFilter = "all";
 
-  });
-}
+    let allWithdraws = [];
+    let currentWithdrawFilter = "all";
 
-// ================= INIT =================
-loadSettings();
-loadJoin();
+    function showMessage(text, type = "success") {
+      msgBox.textContent = text;
+      msgBox.className = "msg " + type;
+      setTimeout(() => {
+        msgBox.textContent = "";
+        msgBox.className = "msg";
+      }, 3000);
+    }
 
-</script>
+    function formatDate(timestamp) {
+      if (!timestamp) return "N/A";
+      try {
+        return timestamp.toDate().toLocaleString("en-US");
+      } catch {
+        return "N/A";
+      }
+    }
 
+    function getAnyUserId(data) {
+      return data.userUid || data.userId || data.uid || data.userDocId || "";
+    }
+
+    window.goHome = function() {
+      window.location.href = "index.html";
+    };
+
+    window.refreshAll = function() {
+      loadSettings();
+      loadDeposits();
+      loadWithdraws();
+    };
+
+    async function loadSettings() {
+      try {
+        const ref = doc(db, "app_settings", "main");
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        document.getElementById("bannerImage").value = data.bannerImage || "";
+        document.getElementById("bannerTitle").value = data.bannerTitle || "";
+        document.getElementById("bannerText").value = data.bannerText || "";
+        document.getElementById("fibNumberInput").value = data.fib_number || "";
+        document.getElementById("fastpayNumberInput").value = data.fastpay_number || "";
+        document.getElementById("qicardNumberInput").value = data.qicard_number || "";
+
+        document.getElementById("offer1Title").value = data.offer1Title || "";
+        document.getElementById("offer1Desc").value = data.offer1Desc || "";
+        document.getElementById("offer1Tag").value = data.offer1Tag || "";
+
+        document.getElementById("offer2Title").value = data.offer2Title || "";
+        document.getElementById("offer2Desc").value = data.offer2Desc || "";
+        document.getElementById("offer2Tag").value = data.offer2Tag || "";
+
+        document.getElementById("offer3Title").value = data.offer3Title || "";
+        document.getElementById("offer3Desc").value = data.offer3Desc || "";
+        document.getElementById("offer3Tag").value = data.offer3Tag || "";
+
+        document.getElementById("roomEntryPrice").value = data.roomEntryPrice || 0;
+        document.getElementById("readyPlayers").value = data.readyPlayers || 64;
+        document.getElementById("totalPlayers").value = data.totalPlayers || 100;
+        document.getElementById("roomStatus").value = data.roomStatus || "Open";
+      } catch (error) {
+        console.error(error);
+        showMessage("Error loading settings ❌", "error");
+      }
+    }
+
+    window.saveSettings = async function() {
+      try {
+        await setDoc(doc(db, "app_settings", "main"), {
+          bannerImage: document.getElementById("bannerImage").value.trim(),
+          bannerTitle: document.getElementById("bannerTitle").value.trim(),
+          bannerText: document.getElementById("bannerText").value.trim(),
+          fib_number: document.getElementById("fibNumberInput").value.trim(),
+          fastpay_number: document.getElementById("fastpayNumberInput").value.trim(),
+          qicard_number: document.getElementById("qicardNumberInput").value.trim(),
+
+          offer1Title: document.getElementById("offer1Title").value.trim(),
+          offer1Desc: document.getElementById("offer1Desc").value.trim(),
+          offer1Tag: document.getElementById("offer1Tag").value.trim(),
+
+          offer2Title: document.getElementById("offer2Title").value.trim(),
+          offer2Desc: document.getElementById("offer2Desc").value.trim(),
+          offer2Tag: document.getElementById("offer2Tag").value.trim(),
+
+          offer3Title: document.getElementById("offer3Title").value.trim(),
+          offer3Desc: document.getElementById("offer3Desc").value.trim(),
+          offer3Tag: document.getElementById("offer3Tag").value.trim(),
+
+          roomEntryPrice: Number(document.getElementById("roomEntryPrice").value || 0),
+          readyPlayers: Number(document.getElementById("readyPlayers").value || 0),
+          totalPlayers: Number(document.getElementById("totalPlayers").value || 0),
+          roomStatus: document.getElementById("roomStatus").value.trim() || "Open"
+        }, { merge: true });
+
+        showMessage("Settings saved successfully ✅");
+      } catch (error) {
+        console.error(error);
+        showMessage("Error saving settings ❌", "error");
+      }
+    };
+
+    function updateSummary(items) {
+      totalCount.textContent = items.length;
+      pendingCount.textContent = items.filter(x => (x.data.status || "pending") === "pending").length;
+      approvedCount.textContent = items.filter(x => x.data.status === "approved").length;
+      rejectedCount.textContent = items.filter(x => x.data.status === "rejected").length;
+    }
+
+    function getFilteredDeposits() {
+      if (currentFilter === "all") return allDeposits;
+      return allDeposits.filter(item => (item.data.status || "pending") === currentFilter);
+    }
+
+    function renderDeposits() {
+      depositList.innerHTML = "";
+
+      const items = getFilteredDeposits();
+
+      if (items.length === 0) {
+        emptyBox.style.display = "block";
+        return;
+      }
+
+      emptyBox.style.display = "none";
+
+      items.forEach((item) => {
+        const data = item.data;
+        const status = data.status || "pending";
+        const depositUserId = getAnyUserId(data);
+
+        const div = document.createElement("div");
+        div.className = "deposit-card";
+
+        div.innerHTML = `
+          <div class="deposit-top">
+            <div>
+              <div class="deposit-name">${data.username || "User"}</div>
+              <div class="value">${data.email || ""}</div>
+              <div class="status ${status}">${status.toUpperCase()}</div>
+            </div>
+            <div class="deposit-amount">$${data.amount || 0}</div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="label">User UID</div>
+              <div class="value">${data.userUid || data.uid || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">User ID</div>
+              <div class="value">${data.userId || data.userDocId || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Payment Method</div>
+              <div class="value">${data.method || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Created At</div>
+              <div class="value">${formatDate(data.createdAt)}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Note</div>
+              <div class="value">${data.note ? data.note : "هیچ تێبینییەک نیە"}</div>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <div class="label">Screenshot</div>
+            ${
+              data.imageUrl
+              ? `
+                <img src="${data.imageUrl}" class="shot" alt="deposit screenshot">
+                <a href="${data.imageUrl}" target="_blank" class="shot-link">کردنەوەی وێنە</a>
+              `
+              : `<div class="value">وێنە نیە</div>`
+            }
+          </div>
+
+          <div class="actions">
+            <button class="approve-btn" onclick="approveDeposit('${item.id}', '${depositUserId}', ${Number(data.amount || 0)})" ${status === "approved" ? "disabled" : ""}>Approve</button>
+            <button class="reject-btn" onclick="rejectDeposit('${item.id}')" ${status === "rejected" ? "disabled" : ""}>Reject</button>
+          </div>
+        `;
+
+        depositList.appendChild(div);
+      });
+    }
+
+    async function loadDeposits() {
+      try {
+        depositList.innerHTML = "Loading...";
+        emptyBox.style.display = "none";
+
+        const snap = await getDocs(collection(db, "deposits"));
+
+        allDeposits = snap.docs.map(d => ({
+          id: d.id,
+          data: d.data()
+        }));
+
+        allDeposits.sort((a, b) => {
+          const aTime = a.data.createdAt?.seconds || 0;
+          const bTime = b.data.createdAt?.seconds || 0;
+          return bTime - aTime;
+        });
+
+        updateSummary(allDeposits);
+        renderDeposits();
+      } catch (error) {
+        console.error(error);
+        showMessage("Error loading deposits ❌", "error");
+      }
+    }
+
+    window.setFilter = function(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll(".section-card:nth-of-type(3) .filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderDeposits();
+    };
+
+    window.approveDeposit = async function(depositId, userUid, amount) {
+      try {
+        if (!userUid) {
+          showMessage("User UID not found ❌", "error");
+          return;
+        }
+
+        await updateDoc(doc(db, "deposits", depositId), {
+          status: "approved"
+        });
+
+        await updateDoc(doc(db, "users", userUid), {
+          balance: increment(Number(amount))
+        });
+
+        showMessage("Deposit approved ✅");
+        await loadDeposits();
+      } catch (error) {
+        console.error(error);
+        showMessage("Approve failed ❌", "error");
+      }
+    };
+
+    window.rejectDeposit = async function(depositId) {
+      try {
+        await updateDoc(doc(db, "deposits", depositId), {
+          status: "rejected"
+        });
+
+        showMessage("Deposit rejected ❌", "error");
+        await loadDeposits();
+      } catch (error) {
+        console.error(error);
+        showMessage("Reject failed ❌", "error");
+      }
+    };
+
+    function updateWithdrawSummary(items) {
+      withdrawTotalCount.textContent = items.length;
+      withdrawPendingCount.textContent = items.filter(x => (x.data.status || "pending") === "pending").length;
+      withdrawApprovedCount.textContent = items.filter(x => x.data.status === "approved").length;
+      withdrawRejectedCount.textContent = items.filter(x => x.data.status === "rejected").length;
+    }
+
+    function getFilteredWithdraws() {
+      if (currentWithdrawFilter === "all") return allWithdraws;
+      return allWithdraws.filter(item => (item.data.status || "pending") === currentWithdrawFilter);
+    }
+
+    function renderWithdraws() {
+      withdrawList.innerHTML = "";
+
+      const items = getFilteredWithdraws();
+
+      if (items.length === 0) {
+        withdrawEmptyBox.style.display = "block";
+        return;
+      }
+
+      withdrawEmptyBox.style.display = "none";
+
+      items.forEach((item) => {
+        const data = item.data;
+        const status = data.status || "pending";
+        const amount = Number(data.amount || 0);
+        const userUid = getAnyUserId(data);
+
+        const div = document.createElement("div");
+        div.className = "withdraw-card";
+
+        div.innerHTML = `
+          <div class="deposit-top">
+            <div>
+              <div class="deposit-name">${data.username || "User"}</div>
+              <div class="value">${data.email || ""}</div>
+              <div class="status ${status}">${status.toUpperCase()}</div>
+            </div>
+            <div class="deposit-amount">$${amount}</div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="label">User UID</div>
+              <div class="value">${userUid || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Game User ID</div>
+              <div class="value">${data.gameUserId || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Method</div>
+              <div class="value">${data.method || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Account / Wallet</div>
+              <div class="value">${data.account || "N/A"}</div>
+            </div>
+
+            <div class="info-box">
+              <div class="label">Created At</div>
+              <div class="value">${formatDate(data.createdAt)}</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="approve-btn" onclick="approveWithdraw('${item.id}', '${userUid}', ${amount})" ${status === "approved" ? "disabled" : ""}>Approve</button>
+            <button class="reject-btn" onclick="rejectWithdraw('${item.id}')" ${status === "rejected" ? "disabled" : ""}>Reject</button>
+          </div>
+        `;
+
+        withdrawList.appendChild(div);
+      });
+    }
+
+    async function loadWithdraws() {
+      try {
+        withdrawList.innerHTML = "Loading...";
+        withdrawEmptyBox.style.display = "none";
+
+        const snap = await getDocs(collection(db, "withdraw_requests"));
+
+        allWithdraws = snap.docs.map(d => ({
+          id: d.id,
+          data: d.data()
+        }));
+
+        allWithdraws.sort((a, b) => {
+          const aTime = a.data.createdAt?.seconds || 0;
+          const bTime = b.data.createdAt?.seconds || 0;
+          return bTime - aTime;
+        });
+
+        updateWithdrawSummary(allWithdraws);
+        renderWithdraws();
+      } catch (error) {
+        console.error(error);
+        showMessage("Error loading withdraw requests ❌", "error");
+      }
+    }
+
+    window.setWithdrawFilter = function(filter, btn) {
+      currentWithdrawFilter = filter;
+      document.querySelectorAll(".section-card:nth-of-type(4) .filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderWithdraws();
+    };
+
+    window.approveWithdraw = async function(withdrawId, userUid, amount) {
+      try {
+        if (!userUid) {
+          showMessage("User UID not found ❌", "error");
+          return;
+        }
+
+        const userRef = doc(db, "users", userUid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          showMessage("User not found ❌", "error");
+          return;
+        }
+
+        const userData = userSnap.data();
+        const currentBalance = Number(userData.balance || 0);
+        const withdrawAmount = Number(amount || 0);
+
+        if (withdrawAmount > currentBalance) {
+          showMessage("User balance is not enough ❌", "error");
+          return;
+        }
+
+        await updateDoc(doc(db, "withdraw_requests", withdrawId), {
+          status: "approved"
+        });
+
+        await updateDoc(userRef, {
+          balance: increment(-withdrawAmount)
+        });
+
+        showMessage("Withdraw approved ✅");
+        await loadWithdraws();
+      } catch (error) {
+        console.error(error);
+        showMessage("Approve withdraw failed ❌", "error");
+      }
+    };
+
+    window.rejectWithdraw = async function(withdrawId) {
+      try {
+        await updateDoc(doc(db, "withdraw_requests", withdrawId), {
+          status: "rejected"
+        });
+
+        showMessage("Withdraw rejected ❌", "error");
+        await loadWithdraws();
+      } catch (error) {
+        console.error(error);
+        showMessage("Reject withdraw failed ❌", "error");
+      }
+    };
+
+    loadSettings();
+    loadDeposits();
+    loadWithdraws();
+  </script>
 </body>
 </html>
