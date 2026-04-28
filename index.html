@@ -10,44 +10,66 @@
 <meta name="theme-color" content="#0f172a">
 
 <style>
-body {
+body{
   margin:0;
-  font-family: Arial;
-  background:#f5f5f5;
+  font-family:Arial;
+  background:#0b1220;
+  color:white;
 }
 
-header {
-  background:#0f172a;
-  color:white;
+header{
+  background:#020617;
   padding:15px;
   text-align:center;
+  font-size:20px;
+  font-weight:bold;
 }
 
-.section { padding:15px; }
+.section{
+  padding:15px;
+}
 
-.card {
-  background:white;
+.card{
+  background:#111827;
   padding:15px;
   margin:10px 0;
   border-radius:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  box-shadow:0 2px 8px rgba(0,0,0,0.5);
 }
 
-input, textarea {
+input, textarea, select{
   width:100%;
-  padding:10px;
-  margin-top:8px;
+  padding:12px;
+  margin-top:10px;
   border-radius:8px;
-  border:1px solid #ccc;
+  border:none;
+  background:#1f2937;
+  color:white;
 }
 
-button {
-  background:#0f172a;
+button{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  background:#2563eb;
   color:white;
-  padding:10px;
   border:none;
   border-radius:8px;
-  width:100%;
+  font-size:16px;
+}
+
+h3{
+  margin-top:0;
+}
+#status{
+  text-align:center;
+  margin-top:10px;
+  color:#22c55e;
+}
+.offer{
+  background:#1f2937;
+  padding:10px;
+  border-radius:8px;
   margin-top:10px;
 }
 </style>
@@ -56,7 +78,7 @@ button {
 <body>
 
 <header>
-<h2>🕋 Siwak Hajj & Umrah</h2>
+🕋 Siwak Hajj & Umrah
 </header>
 
 <div class="section">
@@ -68,30 +90,53 @@ button {
 
 <div class="card">
 <h3>🕌 Masjid Nabawi</h3>
-<p>Visit and learn about the holy mosque in Medina.</p>
+<p>Information about the holy mosque in Medina.</p>
 </div>
 
 <!-- OFFERS -->
 <div class="card">
 <h3>💰 Latest Offers</h3>
-<div id="offers"></div>
+<div id="offers">Loading...</div>
+</div>
+
+<!-- UPLOAD -->
+<div class="card">
+<h3>🖼️ Upload Visa / Passport</h3>
+
+<input type="file" id="file">
+<button onclick="upload()">Upload Image</button>
+
+<p id="status"></p>
 </div>
 
 <!-- BOOKING FORM -->
 <div class="card">
-<h3>📩 Book Now</h3>
+<h3>📩 Booking</h3>
 
-<form action="https://formspree.io/f/maqagloq" method="POST">
+<form action="https://formspree.io/f/mgorjdjr" method="POST">
 
 <input type="text" name="name" placeholder="Full Name" required>
+
+<input type="tel" name="phone" placeholder="Phone Number" required>
+
 <input type="email" name="email" placeholder="Email" required>
-<textarea name="message" placeholder="Your request..." required></textarea>
 
-<input type="hidden" name="_subject" value="New Booking!">
+<select name="type" required>
+<option value="">Select Package</option>
+<option>Umrah</option>
+<option>Hajj</option>
+</select>
 
-<button>Send Request</button>
+<input type="date" name="date" required>
+
+<textarea name="message" placeholder="Notes"></textarea>
+
+<input type="hidden" name="fileLink" id="fileLink">
+
+<button type="submit">Send Booking</button>
 
 </form>
+
 </div>
 
 </div>
@@ -100,29 +145,56 @@ button {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "XXXX",
   authDomain: "XXXX",
   projectId: "XXXX",
+  storageBucket: "XXXX"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
+// LOAD OFFERS
 const offersDiv = document.getElementById("offers");
+offersDiv.innerHTML = "";
 
 const querySnapshot = await getDocs(collection(db, "offers"));
 querySnapshot.forEach((doc) => {
   const data = doc.data();
 
   offersDiv.innerHTML += `
-    <div style="background:#eee;padding:10px;margin-top:10px;border-radius:8px">
+    <div class="offer">
       <h4>${data.title}</h4>
       <p>Price: ${data.price}$</p>
     </div>
   `;
 });
+
+// UPLOAD IMAGE
+window.upload = async function(){
+  const file = document.getElementById("file").files[0];
+
+  if(!file){
+    alert("Select image first");
+    return;
+  }
+
+  document.getElementById("status").innerText = "Uploading...";
+
+  const storageRef = ref(storage, "visas/" + Date.now() + "_" + file.name);
+
+  await uploadBytes(storageRef, file);
+
+  const url = await getDownloadURL(storageRef);
+
+  document.getElementById("fileLink").value = url;
+
+  document.getElementById("status").innerText = "Uploaded ✅";
+};
 </script>
 
 <!-- SERVICE WORKER -->
