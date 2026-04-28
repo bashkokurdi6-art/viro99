@@ -1,91 +1,51 @@
 <!DOCTYPE html>
-<html lang="ku">
+<html lang="ku" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>سیواک - حەج و عومرە</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f172a">
-
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
 body{
   margin:0;
   font-family:'Noto Sans Arabic', sans-serif;
-  background:linear-gradient(180deg,#020617,#0f172a);
   color:white;
-  direction:rtl;
+
+  /* BACKGROUND */
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
+  url("https://images.unsplash.com/photo-1584551246679-0daf3d275d0f") no-repeat center center/cover;
 }
 
-/* سەرەوە */
+/* HEADER */
 header{
-  padding:20px;
   text-align:center;
-  font-size:22px;
-  font-weight:700;
+  padding:25px;
+  font-size:24px;
+  font-weight:bold;
 }
 
-/* ناوەڕاست */
-.container{
-  padding:15px;
-}
-
-/* کارد */
+/* CARD */
 .card{
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(10px);
-  padding:18px;
-  margin-bottom:15px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.3);
+  background:rgba(0,0,0,0.6);
+  margin:15px;
+  padding:20px;
+  border-radius:15px;
+  backdrop-filter:blur(6px);
 }
 
-/* سەردێر */
-h3{
-  margin-top:0;
-}
-
-/* ئۆفەر */
-.offer{
-  background:rgba(255,255,255,0.08);
-  padding:12px;
-  border-radius:12px;
-  margin-top:10px;
-}
-
-/* خانەکان */
-input, textarea, select{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:10px;
-  border:none;
-  background:#1e293b;
-  color:white;
-  font-size:15px;
-}
-
-/* دوگمە */
+/* BUTTON */
 button{
   width:100%;
   padding:12px;
-  margin-top:12px;
-  background:linear-gradient(45deg,#3b82f6,#2563eb);
+  background:#16a34a;
   border:none;
   border-radius:10px;
   color:white;
-  font-size:16px;
-  font-weight:600;
-}
-
-/* دۆخ */
-#status{
-  text-align:center;
   margin-top:10px;
-  color:#22c55e;
+  font-size:16px;
 }
 </style>
 </head>
@@ -94,119 +54,29 @@ button{
 
 <header>🕋 سیواک - حەج و عومرە</header>
 
-<div class="container">
-
 <div class="card">
-<h3>📖 زانیاری لەسەر حەج</h3>
-<p>فێربە چۆنیەتی جێبەجێکردنی حەج و عومرە.</p>
+<h3>📖 زانیاری حەج</h3>
+<p>هەموو هەنگاوەکانی حەج بە شێوەیەکی سادە.</p>
+<button>بینین</button>
 </div>
 
 <div class="card">
 <h3>🕌 مزگەوتی نەبەوی</h3>
 <p>زانیاری لەسەر مزگەوتی پیرۆزی مەدینە.</p>
+<button>بینین</button>
 </div>
 
 <div class="card">
 <h3>💰 ئۆفەرەکان</h3>
-<div id="offers">... چاوەڕوانی</div>
+<p>باشترین نرخەکانی حەج و عومرە.</p>
+<button>بینین</button>
 </div>
 
 <div class="card">
-<h3>🖼️ ناردنی وێنەی ڤیزا</h3>
-<input type="file" id="file">
-<button onclick="upload()">بارکردن</button>
-<p id="status"></p>
+<h3>📩 حجزکردن</h3>
+<p>داواکاری خۆت بنێرە.</p>
+<button>حجز بکە</button>
 </div>
-
-<div class="card">
-<h3>📩 داواکاری حجز</h3>
-
-<form action="https://formspree.io/f/mgorjdjr" method="POST">
-
-<input type="text" name="name" placeholder="ناوی تەواو" required>
-<input type="tel" name="phone" placeholder="ژمارەی مۆبایل" required>
-<input type="email" name="email" placeholder="ئیمەیڵ" required>
-
-<select name="type" required>
-<option value="">جۆری حجز هەڵبژێرە</option>
-<option>عومرە</option>
-<option>حەج</option>
-</select>
-
-<input type="date" name="date" required>
-
-<textarea name="message" placeholder="تێبینی"></textarea>
-
-<input type="hidden" name="fileLink" id="fileLink">
-
-<button type="submit">ناردنی داواکاری</button>
-
-</form>
-
-</div>
-
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-const firebaseConfig = {
-  apiKey: "XXXX",
-  authDomain: "XXXX",
-  projectId: "XXXX",
-  storageBucket: "XXXX"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-
-/* هێنانی ئۆفەر */
-const offersDiv = document.getElementById("offers");
-offersDiv.innerHTML = "";
-
-const querySnapshot = await getDocs(collection(db, "offers"));
-querySnapshot.forEach((doc) => {
-  const data = doc.data();
-
-  offersDiv.innerHTML += `
-    <div class="offer">
-      <h4>${data.title}</h4>
-      <p>${data.price}$</p>
-    </div>
-  `;
-});
-
-/* بارکردنی وێنە */
-window.upload = async function(){
-  const file = document.getElementById("file").files[0];
-
-  if(!file){
-    alert("تکایە وێنە هەڵبژێرە");
-    return;
-  }
-
-  document.getElementById("status").innerText="... بارکردن";
-
-  const storageRef = ref(storage, "visas/" + Date.now() + "_" + file.name);
-
-  await uploadBytes(storageRef, file);
-
-  const url = await getDownloadURL(storageRef);
-
-  document.getElementById("fileLink").value = url;
-
-  document.getElementById("status").innerText="✔️ بە سەرکەوتوویی بارکرا";
-};
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
-</script>
 
 </body>
 </html>
