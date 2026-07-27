@@ -1,82 +1,32 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>سیواک - حەج و عومرە</title>
-
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07110b">
+<title>VERO FARM</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
-
-body{
-  margin:0;
-  font-family:'Noto Sans Arabic', sans-serif;
-  color:white;
-
-  /* BACKGROUND */
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
-  url("https://images.unsplash.com/photo-1584551246679-0daf3d275d0f") no-repeat center center/cover;
-}
-
-/* HEADER */
-header{
-  text-align:center;
-  padding:25px;
-  font-size:24px;
-  font-weight:bold;
-}
-
-/* CARD */
-.card{
-  background:rgba(0,0,0,0.6);
-  margin:15px;
-  padding:20px;
-  border-radius:15px;
-  backdrop-filter:blur(6px);
-}
-
-/* BUTTON */
-button{
-  width:100%;
-  padding:12px;
-  background:#16a34a;
-  border:none;
-  border-radius:10px;
-  color:white;
-  margin-top:10px;
-  font-size:16px;
-}
-</style>
-</head>
-
-<body>
-
-<header>🕋 سیواک - حەج و عومرە</header>
-
-<div class="card">
-<h3>📖 زانیاری حەج</h3>
-<p>هەموو هەنگاوەکانی حەج بە شێوەیەکی سادە.</p>
-<button>بینین</button>
-</div>
-
-<div class="card">
-<h3>🕌 مزگەوتی نەبەوی</h3>
-<p>زانیاری لەسەر مزگەوتی پیرۆزی مەدینە.</p>
-<button>بینین</button>
-</div>
-
-<div class="card">
-<h3>💰 ئۆفەرەکان</h3>
-<p>باشترین نرخەکانی حەج و عومرە.</p>
-<button>بینین</button>
-</div>
-
-<div class="card">
-<h3>📩 حجزکردن</h3>
-<p>داواکاری خۆت بنێرە.</p>
-<button>حجز بکە</button>
-</div>
-
-</body>
-</html>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800;900&display=swap');
+:root{--g:#48f08b;--g2:#18c96b;--gold:#ffd166;--red:#ff7474;--muted:#a7bead;--line:rgba(130,255,175,.16)}*{box-sizing:border-box}body{margin:0;min-height:100vh;color:#f5fff8;font-family:'Noto Sans Arabic',Tahoma,Arial,sans-serif;background:radial-gradient(circle at 10% 0%,rgba(72,240,139,.15),transparent 35%),radial-gradient(circle at 100% 22%,rgba(255,209,102,.08),transparent 28%),linear-gradient(180deg,#07110b,#030605);overflow-x:hidden}button,input{font:inherit}.app{width:min(100%,540px);margin:auto;padding:16px 14px 100px}.hidden{display:none!important}.glass{background:linear-gradient(145deg,rgba(16,35,23,.84),rgba(7,19,12,.78));border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 60px rgba(0,0,0,.42);backdrop-filter:blur(14px)}.brand{display:flex;align-items:center;gap:11px}.logo{width:54px;height:54px;display:grid;place-items:center;border-radius:18px;background:#12301c;font-size:31px}.brand h1{margin:0;font-size:20px}.brand small,.muted{color:var(--muted);font-size:12px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.logout{border:0;border-radius:13px;padding:9px 12px;background:rgba(255,116,116,.12);color:#ff9e9e;font-weight:900}.auth{padding:22px;margin-top:34px}.auth .brand{justify-content:center}.auth h2,.auth p{text-align:center}.auth p{color:var(--muted);font-size:13px}.grid{display:grid;gap:10px}input{width:100%;border:1px solid rgba(255,255,255,.08);outline:none;color:#fff;background:rgba(255,255,255,.06);border-radius:15px;padding:13px 14px}.btn{border:0;border-radius:15px;padding:12px 16px;font-weight:900;color:#07110b;background:linear-gradient(135deg,var(--g),var(--g2));cursor:pointer}.btn.gold{background:linear-gradient(135deg,#ffe28f,var(--gold))}.btn.red{background:linear-gradient(135deg,#ff9b9b,var(--red));color:#280707}.btn.gray{background:#203328;color:#fff}.btn:disabled{opacity:.45}.switch{text-align:center;color:var(--g);font-weight:800;font-size:13px;margin-top:13px;cursor:pointer}.hero{padding:19px;position:relative;overflow:hidden;margin-bottom:13px}.hero:after{content:'🐔';position:absolute;left:-7px;bottom:-28px;font-size:112px;opacity:.12}.hero h2{margin:5px 0 7px}.hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.9}.hero-title{color:var(--gold);font-weight:900;font-size:12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:13px}.stat{padding:13px 5px;text-align:center;border-radius:19px;background:rgba(28,60,40,.78);border:1px solid var(--line)}.stat .icon{font-size:24px}.stat b{display:block;font-size:17px}.stat span{font-size:10px;color:var(--muted)}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:8px;margin-bottom:13px;position:sticky;top:8px;z-index:20}.tab{border:0;border-radius:13px;padding:9px 4px;background:rgba(255,255,255,.05);color:var(--muted);font-weight:800;font-size:11px}.tab.active{background:var(--g);color:#061109}.section{padding:16px;margin-bottom:13px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.section-head h3{margin:0;font-size:16px}.badge{padding:6px 10px;border-radius:999px;background:var(--gold);color:#07110b;font-size:11px;font-weight:900}.form-row{display:grid;grid-template-columns:1fr auto;gap:9px}.rate{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:10px}.list{display:grid;gap:10px}.card{padding:13px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07)}.card-top,.card-bottom{display:flex;justify-content:space-between;align-items:center;gap:9px}.card-bottom{margin-top:10px}.timer{direction:ltr;color:var(--gold);font-weight:900}.package-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.package{padding:14px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07)}.package h4{margin:0}.points{font-size:19px;font-weight:900;color:var(--g)}.empty{text-align:center;color:var(--muted);padding:22px 8px}.toast{position:fixed;right:50%;bottom:22px;transform:translateX(50%) translateY(120px);width:min(calc(100% - 28px),470px);padding:14px;border-radius:16px;z-index:999;background:#11251a;border:1px solid var(--line);text-align:center;font-weight:800;transition:.3s}.toast.show{transform:translateX(50%) translateY(0)}.toast.error{background:#351616}@media(max-width:420px){.stats{grid-template-columns:repeat(2,1fr)}.package-grid,.form-row{grid-template-columns:1fr}}
+</style></head><body><div class="app">
+<section id="authView" class="auth glass"><div class="brand"><div class="logo">🐣</div><div><h1>VERO FARM</h1><small>Dark Cartoon Farm</small></div></div>
+<div id="loginBox"><h2>چوونەژوورەوە</h2><p>بە ئیمەیڵ و وشەی نهێنی بچۆ ژوورەوە.</p><div class="grid"><input id="loginEmail" type="email" placeholder="ئیمەیڵ"><input id="loginPassword" type="password" placeholder="وشەی نهێنی"><button class="btn" onclick="login()">چوونەژوورەوە</button></div><div class="switch" onclick="showRegister()">هەژمارت نییە؟ تۆماربە</div></div>
+<div id="registerBox" class="hidden"><h2>دروستکردنی هەژمار</h2><div class="grid"><input id="regName" placeholder="ناوی تەواو"><input id="regPhone" placeholder="ژمارەی مۆبایل"><input id="regEmail" type="email" placeholder="ئیمەیڵ"><input id="regPassword" type="password" placeholder="وشەی نهێنی - لانیکەم ٦ پیت"><button class="btn gold" onclick="register()">تۆمارکردن</button></div><div class="switch" onclick="showLogin()">هەژمارت هەیە؟ بچۆ ژوورەوە</div></div></section>
+<main id="gameView" class="hidden"><header class="top"><div class="brand"><div class="logo">🐣</div><div><h1>VERO FARM</h1><small id="userName">بەکارهێنەر</small></div></div><button class="logout" onclick="logout()">چوونەدەرەوە</button></header>
+<section class="hero glass"><div class="hero-title">🎮 DARK FARM GAME</div><h2>کێڵگەکەت گەورە بکە</h2><p>مریشک بکڕە، هێلکە کۆبکەرەوە و بۆ پۆینت یان بەڵانسی ناو یاری بیانگۆڕە.</p></section>
+<section class="stats"><div class="stat"><div class="icon">💎</div><b id="pointsValue">0</b><span>پۆینت</span></div><div class="stat"><div class="icon">🐔</div><b id="chickensValue">0</b><span>مریشک</span></div><div class="stat"><div class="icon">🥚</div><b id="eggsValue">0</b><span>هێلکە</span></div><div class="stat"><div class="icon">🪙</div><b id="balanceValue">0</b><span>بەڵانس</span></div></section>
+<nav class="tabs glass"><button class="tab active" onclick="openTab('farm',this)">کێڵگە</button><button class="tab" onclick="openTab('market',this)">بازاڕ</button><button class="tab" onclick="openTab('history',this)">مێژوو</button><button class="tab" onclick="openTab('profile',this)">پرۆفایل</button></nav>
+<section id="tab-farm"><section class="section glass"><div class="section-head"><h3>🛒 کڕینی مریشک</h3><span class="badge" id="chickenPriceBadge">...</span></div><div class="form-row"><input id="buyQuantity" type="number" min="1" value="1"><button id="buyBtn" class="btn" onclick="buyChickens()">کڕین</button></div><div class="rate"><span id="productionRate"></span><span id="cycleRate"></span></div></section><section class="section glass"><div class="section-head"><h3>🌾 کێڵگەی من</h3><span class="badge" id="batchCount">0</span></div><div id="farmList" class="list"></div></section></section>
+<section id="tab-market" class="hidden"><section class="section glass"><div class="section-head"><h3>💎 پاکێجەکانی پۆینت</h3></div><div id="packagesList" class="package-grid"></div></section><section class="section glass"><div class="section-head"><h3>🥚 هێلکە بۆ پۆینت</h3><span class="badge" id="conversionBadge"></span></div><div class="form-row"><input id="convertEggsInput" type="number"><button class="btn gold" onclick="convertEggs()">گۆڕین</button></div></section><section class="section glass"><div class="section-head"><h3>🪙 پۆینت بۆ بەڵانس</h3><span class="badge" id="balanceRateBadge"></span></div><div class="form-row"><input id="convertPointsInput" type="number"><button class="btn gold" onclick="convertPointsToBalance()">گۆڕین</button></div></section><section class="section glass"><div class="section-head"><h3>📦 داواکارییەکانم</h3></div><div id="requestsList" class="list"></div></section></section>
+<section id="tab-history" class="hidden"><section class="section glass"><div class="section-head"><h3>📜 مێژووی مامەڵەکان</h3></div><div id="transactionsList" class="list"></div></section></section>
+<section id="tab-profile" class="hidden"><section class="section glass"><div class="section-head"><h3>👤 پرۆفایل</h3></div><div class="grid"><input id="profileName"><input id="profilePhone"><button class="btn" onclick="saveProfile()">پاشەکەوتکردن</button><button class="btn gray" onclick="location.href='admin.html'">لاپەڕەی ئەدمین</button></div></section><section class="section glass"><div class="section-head"><h3>🔔 ئاگادارییەکان</h3></div><div id="notificationsList" class="list"></div></section></section>
+</main></div><div id="toast" class="toast"></div>
+<script>
+const URL='https://vhxafelyesuhpivopcni.supabase.co',KEY='sb_publishable_fMc3VhlhSEnyoCAf0DcJWQ_zTsl5tRv',db=supabase.createClient(URL,KEY);let user=null,settings=null,wallet=null,profile=null,chickens=[],timer=null;const $=x=>document.getElementById(x);function msg(m,e=false){const x=$('toast');x.textContent=m;x.className='toast show'+(e?' error':'');clearTimeout(window.t);window.t=setTimeout(()=>x.className='toast',2600)}function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function showLogin(){$('loginBox').classList.remove('hidden');$('registerBox').classList.add('hidden')}function showRegister(){$('loginBox').classList.add('hidden');$('registerBox').classList.remove('hidden')}function openTab(n,b){['farm','market','history','profile'].forEach(x=>$('tab-'+x).classList.add('hidden'));$('tab-'+n).classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+async function register(){const full_name=$('regName').value.trim(),phone=$('regPhone').value.trim(),email=$('regEmail').value.trim(),password=$('regPassword').value;if(!full_name||!email||password.length<6)return msg('زانیارییەکان دروست پڕبکەرەوە.',true);const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name,phone}}});if(error)return msg(error.message,true);if(data.session)await session(data.session);else{msg('هەژمار دروستکرا، ئیمەیڵەکەت بپشکنە.');showLogin()}}
+async function login(){const {error}=await db.auth.signInWithPassword({email:$('loginEmail').value.trim(),password:$('loginPassword').value});if(error)msg(error.message,true)}async function logout(){await db.auth.signOut()}
+async function load(){const [p,w,s,c,pk,rq,tr,n]=await Promise.all([db.from('profiles').select('*').eq('id',user.id).single(),db.from('wallets').select('*').eq('user_id',user.id).single(),db.from('game_settings').select('*').eq('id',1).single(),db.from('user_chickens').select('*').eq('user_id',user.id).eq('is_active',true).order('created_at',{ascending:false}),db.from('point_packages').select('*').eq('is_active',true).order('sort_order'),db.from('point_purchase_requests').select('*').eq('user_id',user.id).order('created_at',{ascending:false}),db.from('game_transactions').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(100),db.from('notifications').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(50)]);const er=p.error||w.error||s.error||c.error||pk.error||rq.error||tr.error||n.error;if(er){console.error(er);return msg('هەڵە لە بارکردن.',true)}profile=p.data;wallet=w.data;settings=s.data;chickens=c.data||[];if(profile.is_blocked){msg('هەژمارەکەت بلۆک کراوە.',true);return logout()}render(pk.data||[],rq.data||[],tr.data||[],n.data||[])}
+function render(pk,rq,tr,n){$('userName').textContent=profile.full_name||user.email;$('profileName').value=profile.full_name||'';$('profilePhone').value=profile.phone||'';$('pointsValue').textContent=Number(wallet.points).toLocaleString('en-US');$('eggsValue').textContent=Number(wallet.eggs).toLocaleString('en-US');$('balanceValue').textContent=Number(wallet.game_balance).toLocaleString('en-US');$('chickensValue').textContent=chickens.reduce((s,x)=>s+Number(x.quantity),0).toLocaleString('en-US');$('chickenPriceBadge').textContent=settings.chicken_price_points+' پۆینت';$('productionRate').textContent='هەر مریشک: '+settings.eggs_per_chicken+' هێلکە';$('cycleRate').textContent='هەر '+settings.egg_cycle_hours+' کاتژمێر';$('conversionBadge').textContent=settings.eggs_per_point+' هێلکە = ١ پۆینت';$('balanceRateBadge').textContent=settings.points_per_balance_unit+' پۆینت = ١ بەڵانس';farm();packages(pk);requests(rq);transactions(tr);notifications(n)}
+function farm(){$('batchCount').textContent=chickens.length+' کۆمەڵە';$('farmList').innerHTML=chickens.length?chickens.map(x=>`<div class="card"><div class="card-top"><strong>🐔 ${x.quantity} مریشک</strong><span class="timer" id="tm-${x.id}">--</span></div><div class="card-bottom"><span class="muted">بەرهەم: ${x.quantity*settings.eggs_per_chicken} هێلکە</span><button class="btn" id="cl-${x.id}" onclick="collect('${x.id}')" disabled>کۆکردنەوە</button></div></div>`).join(''):'<div class="empty">هیچ مریشکێکت نییە.</div>';tick();clearInterval(timer);timer=setInterval(tick,1000)}function tick(){const now=Date.now();chickens.forEach(x=>{const d=new Date(x.next_collect_at).getTime()-now,t=$('tm-'+x.id),b=$('cl-'+x.id);if(!t)return;if(d<=0){t.textContent='READY';b.disabled=false;return}b.disabled=true;const s=Math.floor(d/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),q=s%60;t.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(q).padStart(2,'0')}`})}
+function packages(a){$('packagesList').innerHTML=a.length?a.map(x=>`<div class="package"><h4>${esc(x.title)}</h4><div class="points">${Number(x.points_amount).toLocaleString('en-US')} پۆینت</div><div class="muted">${Number(x.price_amount).toLocaleString('en-US')} ${esc(x.currency)}</div><button class="btn" onclick="requestPkg('${x.id}')">داواکاری</button></div>`).join(''):'<div class="empty">هیچ پاکێجێک نییە.</div>'}function requests(a){const l={pending:'چاوەڕوان',approved:'پەسەندکرا',rejected:'ڕەتکرا',cancelled:'هەڵوەشاوە'};$('requestsList').innerHTML=a.length?a.map(x=>`<div class="card"><div class="card-top"><strong>${esc(x.package_title)}</strong><span class="badge">${l[x.status]}</span></div><div class="muted">${x.requested_points} پۆینت</div>${x.status==='pending'?`<div class="card-bottom"><span></span><button class="btn red" onclick="cancelReq('${x.id}')">هەڵوەشاندنەوە</button></div>`:''}</div>`).join(''):'<div class="empty">هیچ داواکارییەکت نییە.</div>'}function transactions(a){$('transactionsList').innerHTML=a.length?a.map(x=>`<div class="card"><strong>${esc(x.description||x.type)}</strong><div class="muted">${new Date(x.created_at).toLocaleString('en-US')}</div><div class="muted">پۆینت: ${x.points_change} • هێلکە: ${x.eggs_change} • بەڵانس: ${x.balance_change}</div></div>`).join(''):'<div class="empty">هیچ مامەڵەیەک نییە.</div>'}function notifications(a){$('notificationsList').innerHTML=a.length?a.map(x=>`<div class="card"><strong>${esc(x.title)}</strong><div class="muted">${esc(x.message)}</div></div>`).join(''):'<div class="empty">هیچ ئاگادارییەک نییە.</div>'}
+async function buyChickens(){const q=Number($('buyQuantity').value);if(!Number.isInteger(q)||q<=0)return msg('ژمارەی دروست بنووسە.',true);const {error}=await db.rpc('buy_chickens',{p_quantity:q});if(error)return msg(error.message.includes('Not enough')?'پۆینتی پێویستت نییە.':error.message,true);msg('مریشکەکان کڕدران.');load()}async function collect(id){const {error}=await db.rpc('collect_eggs',{p_chicken_id:id});if(error)return msg(error.message,true);msg('هێلکەکان کۆکرانەوە.');load()}async function convertEggs(){const v=Number($('convertEggsInput').value);const {error}=await db.rpc('convert_eggs_to_points',{p_eggs:v});if(error)return msg(error.message,true);msg('گۆڕدرا.');load()}async function convertPointsToBalance(){const v=Number($('convertPointsInput').value);const {error}=await db.rpc('convert_points_to_balance',{p_points:v});if(error)return msg(error.message,true);msg('گۆڕدرا.');load()}async function requestPkg(id){const method=prompt('شێوازی پارەدان:','manual');if(method===null)return;const ref=prompt('ژمارەی مامەڵە یان تێبینی:','')||'';const {error}=await db.rpc('create_point_purchase_request',{p_package_id:id,p_payment_method:method||'manual',p_payment_reference:ref,p_receipt_url:''});if(error)return msg(error.message,true);msg('داواکاری نێردرا.');load()}async function cancelReq(id){if(!confirm('دڵنیایت؟'))return;const {error}=await db.rpc('cancel_point_purchase_request',{p_request_id:id});if(error)return msg(error.message,true);load()}async function saveProfile(){const {error}=await db.from('profiles').update({full_name:$('profileName').value.trim(),phone:$('profilePhone').value.trim()}).eq('id',user.id);if(error)return msg(error.message,true);msg('پاشەکەوتکرا.');load()}
+async function session(s){user=s?.user||null;if(user){$('authView').classList.add('hidden');$('gameView').classList.remove('hidden');await load()}else{clearInterval(timer);$('gameView').classList.add('hidden');$('authView').classList.remove('hidden')}}db.auth.onAuthStateChange((_e,s)=>setTimeout(()=>session(s),0));(async()=>{const {data}=await db.auth.getSession();session(data.session)})();
+</script></body></html>
