@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#07140f" />
+  <title>AI هاوڕێی من</title>
+  <style>
+    :root{
+      --bg:#06110d; --panel:rgba(16,38,29,.82); --panel2:rgba(23,55,42,.72);
+      --line:rgba(204,171,90,.25); --gold:#d8b85f; --text:#f5f7f6;
+      --muted:#aebdb6; --green:#1b7b54; --danger:#c85a5a;
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; color:var(--text);
+      font-family:Tahoma, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(40,124,85,.25), transparent 35%),
+        radial-gradient(circle at 100% 100%, rgba(216,184,95,.14), transparent 38%),
+        linear-gradient(145deg,#040b08,#0a1d15 55%,#07110d);
+      overflow:hidden;
+    }
+    button,input,textarea,select{font:inherit}
+    .app{height:100vh;display:grid;grid-template-columns:320px 1fr}
+    .sidebar{
+      border-left:1px solid var(--line); background:rgba(5,16,11,.86);
+      backdrop-filter:blur(20px); padding:18px; overflow:auto;
+    }
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .avatar{
+      width:58px;height:58px;border-radius:20px;display:grid;place-items:center;
+      font-size:29px;background:linear-gradient(135deg,#226b4d,#c6a64f);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    h1{font-size:20px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:12px}
+    .label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;color:#e8efe9}
+    input[type=range]{width:100%;accent-color:var(--gold)}
+    input[type=text],select,textarea{
+      width:100%;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);
+      color:white;border-radius:14px;padding:11px;outline:none;
+    }
+    option{background:#10271d}
+    .row{display:flex;gap:8px}.row>*{flex:1}
+    .btn{
+      border:0;border-radius:14px;padding:11px 13px;color:white;cursor:pointer;
+      background:linear-gradient(135deg,#1a7450,#12553b);
+      box-shadow:0 7px 18px rgba(0,0,0,.2);
+    }
+    .btn.gold{background:linear-gradient(135deg,#b7953e,#d6b95f);color:#172016}
+    .btn.ghost{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09)}
+    .btn.danger{background:#7d3232}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .status{font-size:12px;color:var(--muted);line-height:1.7}
+    .progress{height:8px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;margin-top:8px}
+    .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1d8158,#e0bd62);transition:.25s}
+    .main{display:flex;flex-direction:column;min-width:0}
+    .topbar{
+      height:70px;display:flex;align-items:center;justify-content:space-between;
+      padding:0 20px;border-bottom:1px solid var(--line);background:rgba(4,13,9,.45);backdrop-filter:blur(14px)
+    }
+    .mood{display:flex;align-items:center;gap:10px}.mood-face{font-size:28px}
+    .chat{flex:1;overflow:auto;padding:20px;scroll-behavior:smooth}
+    .msg{display:flex;margin:10px 0}.msg.user{justify-content:flex-start}.msg.ai{justify-content:flex-end}
+    .bubble{
+      max-width:min(780px,86%);padding:13px 15px;border-radius:19px;line-height:1.8;
+      white-space:pre-wrap;word-break:break-word;border:1px solid rgba(255,255,255,.07)
+    }
+    .user .bubble{background:linear-gradient(135deg,#1c7652,#14543d);border-bottom-right-radius:5px}
+    .ai .bubble{background:rgba(255,255,255,.075);border-bottom-left-radius:5px}
+    .meta{font-size:10px;color:#aab8b0;margin-top:6px}
+    pre{direction:ltr;text-align:left;background:#06100c;padding:12px;border-radius:12px;overflow:auto}
+    code{font-family:Consolas,monospace}
+    .composer{
+      padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+      border-top:1px solid var(--line);background:rgba(5,15,10,.8);backdrop-filter:blur(18px)
+    }
+    .input-wrap{display:flex;gap:9px;align-items:flex-end;max-width:1000px;margin:auto}
+    textarea{resize:none;min-height:48px;max-height:150px;line-height:1.5}
+    .icon-btn{width:48px;height:48px;flex:0 0 48px;border-radius:15px;border:0;color:white;background:#1c6e4e;font-size:20px}
+    .welcome{text-align:center;color:var(--muted);padding:50px 20px}.welcome b{color:var(--gold);font-size:26px}
+    .mobile-menu{display:none}
+    .switch{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+    .switch input{width:20px;height:20px;accent-color:var(--gold)}
+    .small{font-size:11px;color:var(--muted)}
+    @media(max-width:850px){
+      .app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:20;right:0;top:0;bottom:0;width:min(330px,88vw);transform:translateX(110%);transition:.25s;box-shadow:-10px 0 40px #000}
+      .sidebar.open{transform:none}.mobile-menu{display:block}
+      .topbar{padding:0 12px}.chat{padding:13px}.bubble{max-width:91%}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="avatar" id="sideFace">🤖</div>
+      <div><h1 id="sideName">ئارام</h1><div class="sub">هاوڕێی AI ـی تایبەت بە تۆ</div></div>
+    </div>
+
+    <div class="card">
+      <div class="label"><span>ناوی AI</span></div>
+      <input id="aiName" type="text" value="ئارام">
+      <div class="label" style="margin-top:12px"><span>مۆدێلی زیرەکی</span></div>
+      <select id="modelSelect">
+        <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC">Llama 3.2 1B — سووک</option>
+      </select>
+      <button class="btn gold" id="loadBtn" style="width:100%;margin-top:10px">دابەزاندن و چالاککردن</button>
+      <div class="progress"><i id="bar"></i></div>
+      <div class="status" id="status">هێشتا مۆدێل چالاک نەکراوە.</div>
+    </div>
+
+    <div class="card">
+      <div class="label"><span>کەسایەتی</span><span id="personalityValue">هاوڕێیانە</span></div>
+      <select id="personality">
+        <option value="friendly">هاوڕێیانە و دڵسۆز</option>
+        <option value="serious">جددی و پیشەیی</option>
+        <option value="funny">خۆش و نوکتەباز</option>
+        <option value="teacher">مامۆستای ئارام</option>
+        <option value="coder">پڕۆگرامسازی شارەزا</option>
+      </select>
+      <div class="label" style="margin-top:13px"><span>دڵخۆشی</span><span id="happyVal">70%</span></div>
+      <input id="happy" type="range" min="0" max="100" value="70">
+      <div class="label"><span>توڕەیی</span><span id="angryVal">5%</span></div>
+      <input id="angry" type="range" min="0" max="100" value="5">
+      <div class="label"><span>سۆزداری</span><span id="careVal">85%</span></div>
+      <input id="care" type="range" min="0" max="100" value="85">
+      <div class="label"><span>وردبینی و کۆد</span><span id="smartVal">80%</span></div>
+      <input id="smart" type="range" min="0" max="100" value="80">
+    </div>
+
+    <div class="card">
+      <div class="switch"><span>قسەکردن بە دەنگ</span><input id="voiceToggle" type="checkbox"></div>
+      <div class="switch" style="margin-top:10px"><span>بیرگەی درێژخایەن</span><input id="memoryToggle" type="checkbox" checked></div>
+      <div class="small" style="margin-top:10px">گفتوگۆکان تەنها لە مۆبایل/براوزەرەکەتدا پاشەکەوت دەبن.</div>
+    </div>
+
+    <div class="row">
+      <button class="btn ghost" id="exportBtn">هەناردە</button>
+      <button class="btn danger" id="clearBtn">سڕینەوە</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="btn ghost mobile-menu" id="menuBtn">☰</button>
+      <div class="mood"><span class="mood-face" id="moodFace">😊</span><div><b id="topName">ئارام</b><div class="small" id="moodText">دڵخۆش و ئامادەی گفتوگۆیە</div></div></div>
+      <button class="btn ghost" id="stopBtn" disabled>وەستاندن</button>
+    </header>
+
+    <section class="chat" id="chat">
+      <div class="welcome" id="welcome">
+        <b>سڵاو، من هاوڕێی AI ـی تۆم</b>
+        <p>مۆدێلەکە چالاک بکە، دواتر بە کوردی، عەرەبی یان ئینگلیزی قسەم لەگەڵ بکە.</p>
+      </div>
+    </section>
+
+    <footer class="composer">
+      <div class="input-wrap">
+        <button class="icon-btn" id="micBtn" title="دەنگ">🎙️</button>
+        <textarea id="prompt" placeholder="پرسیارەکەت بنووسە..." rows="1"></textarea>
+        <button class="icon-btn" id="sendBtn" title="ناردن">➤</button>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script type="module">
+  const $ = id => document.getElementById(id);
+  let engine = null, generating = false, abortRequested = false;
+  const STORE = "my_private_ai_v1";
+  const state = JSON.parse(localStorage.getItem(STORE) || '{"messages":[]}');
+
+  const els = {
+    chat:$("chat"), prompt:$("prompt"), send:$("sendBtn"), load:$("loadBtn"),
+    status:$("status"), bar:$("bar"), aiName:$("aiName"), model:$("modelSelect"),
+    personality:$("personality"), happy:$("happy"), angry:$("angry"),
+    care:$("care"), smart:$("smart"), voice:$("voiceToggle"), memory:$("memoryToggle")
+  };
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+  }
+  function renderText(text){
+    let safe=escapeHtml(text);
+    safe=safe.replace(/```([\s\S]*?)```/g, (_,c)=>`<pre><code>${c}</code></pre>`);
+    safe=safe.replace(/`([^`]+)`/g,"<code>$1</code>");
+    safe=safe.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+    return safe;
+  }
+  function addMessage(role, text, save=true){
+    $("welcome")?.remove();
+    const wrap=document.createElement("div"); wrap.className=`msg ${role}`;
+    const bubble=document.createElement("div"); bubble.className="bubble";
+    bubble.innerHTML=renderText(text);
+    const meta=document.createElement("div"); meta.className="meta";
+    meta.textContent=role==="user"?"تۆ":els.aiName.value;
+    bubble.appendChild(meta); wrap.appendChild(bubble); els.chat.appendChild(wrap);
+    els.chat.scrollTop=els.chat.scrollHeight;
+    if(save && els.memory.checked){
+      state.messages.push({role: role==="ai"?"assistant":"user", content:text});
+      state.messages=state.messages.slice(-30); persist();
+    }
+    return bubble;
+  }
+  function persist(){
+    state.settings={
+      aiName:els.aiName.value, personality:els.personality.value,
+      happy:els.happy.value, angry:els.angry.value, care:els.care.value,
+      smart:els.smart.value, voice:els.voice.checked, memory:els.memory.checked
+    };
+    localStorage.setItem(STORE,JSON.stringify(state));
+  }
+  function restore(){
+    const s=state.settings||{};
+    for(const k of ["aiName","personality","happy","angry","care","smart"]){
+      if(s[k]!=null && els[k]) els[k].value=s[k];
+    }
+    els.voice.checked=!!s.voice; els.memory.checked=s.memory!==false;
+    state.messages.forEach(m=>addMessage(m.role==="assistant"?"ai":"user",m.content,false));
+    updateUI();
+  }
+  function updateUI(){
+    const name=els.aiName.value.trim()||"ئارام";
+    $("topName").textContent=$("sideName").textContent=name;
+    $("happyVal").textContent=els.happy.value+"%";
+    $("angryVal").textContent=els.angry.value+"%";
+    $("careVal").textContent=els.care.value+"%";
+    $("smartVal").textContent=els.smart.value+"%";
+    const h=+els.happy.value,a=+els.angry.value,c=+els.care.value;
+    let face="😐",txt="ئارام و ئامادەی گفتوگۆیە";
+    if(a>65){face="😠";txt="توڕەیە، بەڵام هێشتا بە ڕێزەوە وەڵام دەداتەوە";}
+    else if(h>75){face="😄";txt="زۆر دڵخۆش و وزەبەخشە";}
+    else if(c>75){face="😊";txt="دڵسۆز و نزیکە لە تۆ";}
+    else if(h<25){face="😔";txt="کەمێک خەمگین و بێدەنگە";}
+    $("moodFace").textContent=$("sideFace").textContent=face;
+    $("moodText").textContent=txt; persist();
+  }
+  function systemPrompt(){
+    const styleMap={
+      friendly:"هاوڕێیانە، گەرم، دڵسۆز و ڕاستگۆ",
+      serious:"جددی، پیشەیی و کورتەبڕ",
+      funny:"خۆش، نوکتەباز، بەڵام بەڕێز",
+      teacher:"مامۆستای ئارام، ڕوونکەرەوە و هەنگاو بە هەنگاو",
+      coder:"ئەندازیاری نەرمەکاڵای شارەزا، کۆدی تەواو و بێ کەم و کوڕی"
+    };
+    return `ناوت ${els.aiName.value||"ئارام"} ـە. تۆ AI ـێکی تایبەت و هاوڕێی نزیکی بەکارهێنەرەکەیت.
+بە زمانی هەمان پرسیار وەڵام بدەوە، کوردی سۆرانی بە شێوەیەکی سروشتی بنووسە.
+کەسایەتی: ${styleMap[els.personality.value]}.
+ئاستی دڵخۆشی ${els.happy.value}/100، توڕەیی ${els.angry.value}/100، سۆزداری ${els.care.value}/100، وردبینی و پڕۆگرامسازی ${els.smart.value}/100.
+توڕەیی نابێت ببێتە هۆی سووکایەتی یان زیان؛ تەنها شێوازی قسەکردن کەمێک توندتر بێت.
+لە کۆددا هەمیشە کۆدی کارپێکراو، تەواو، پارێزراو و ڕوون بدە. هەڵە یان دڵنیانەبوون بشارەوە مەکە.
+هیچ کات بانگەشەی ئەوە مەکە هەستت وەک مرۆڤ واقعیە؛ بڵێ ئەمانە شێوازی کەسایەتی و وەڵامدانەوەن.`;
+  }
+
+  async function loadModel(){
+    if(!("gpu" in navigator)){
+      els.status.textContent="WebGPU لەم براوزەرەدا نیە. Chrome/Edge ـی نوێ و مۆبایلی بەهێز بەکاربهێنە.";
+      return;
+    }
+    els.load.disabled=true; els.status.textContent="کتێبخانەی AI بار دەکرێت...";
+    try{
+      const webllm=await import("https://esm.run/@mlc-ai/web-llm");
+      engine=await webllm.CreateMLCEngine(els.model.value,{
+        initProgressCallback:(p)=>{
+          const pct=Math.max(0,Math.min(100,Math.round((p.progress||0)*100)));
+          els.bar.style.width=pct+"%";
+          els.status.textContent=(p.text||"مۆدێل دادەبەزێت...")+" — "+pct+"%";
+        }
+      });
+      els.status.textContent="✅ AI چالاکە و ئامادەیە.";
+      els.bar.style.width="100%";
+      els.load.textContent="چالاک کرا";
+    }catch(err){
+      console.error(err);
+      els.status.textContent="❌ هەڵە: "+(err?.message||err);
+      els.load.disabled=false;
+    }
+  }
+
+  async function send(){
+    const text=els.prompt.value.trim();
+    if(!text||generating)return;
+    if(!engine){
+      addMessage("ai","تکایە سەرەتا دوگمەی «دابەزاندن و چالاککردن» دابگرە تا مۆدێلەکە لە ناو براوزەرەکەتدا بار بێت.",false);
+      return;
+    }
+    addMessage("user",text); els.prompt.value=""; autoResize();
+    generating=true; abortRequested=false; $("stopBtn").disabled=false; els.send.disabled=true;
+    const bubble=addMessage("ai","",false); bubble.innerHTML='<span class="small">بیر دەکاتەوە...</span>';
+    try{
+      const messages=[
+        {role:"system",content:systemPrompt()},
+        ...state.messages.slice(-18)
+      ];
+      const chunks=await engine.chat.completions.create({
+        messages, temperature:0.75, top_p:0.9, max_tokens:900, stream:true
+      });
+      let out="";
+      for await(const chunk of chunks){
+        if(abortRequested) break;
+        out+=chunk.choices[0]?.delta?.content||"";
+        bubble.innerHTML=renderText(out);
+        els.chat.scrollTop=els.chat.scrollHeight;
+      }
+      const meta=document.createElement("div");meta.className="meta";meta.textContent=els.aiName.value;
+      bubble.appendChild(meta);
+      if(out && els.memory.checked){state.messages.push({role:"assistant",content:out});state.messages=state.messages.slice(-30);persist();}
+      if(els.voice.checked && out) speak(out);
+    }catch(err){
+      bubble.innerHTML=renderText("هەڵەیەک ڕوویدا: "+(err?.message||err));
+    }finally{
+      generating=false;$("stopBtn").disabled=true;els.send.disabled=false;
+    }
+  }
+
+  function speak(text){
+    if(!("speechSynthesis" in window))return;
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text.replace(/```[\s\S]*?```/g," کۆد "));
+    u.lang="ar-IQ";u.rate=.95;speechSynthesis.speak(u);
+  }
+  function startMic(){
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){alert("ناسینەوەی دەنگ لەم براوزەرەدا پشتگیری ناکرێت.");return;}
+    const r=new SR();r.lang="ar-IQ";r.interimResults=false;
+    r.onresult=e=>{els.prompt.value=e.results[0][0].transcript;autoResize();};
+    r.onerror=e=>alert("هەڵەی مایک: "+e.error);r.start();
+  }
+  function autoResize(){els.prompt.style.height="auto";els.prompt.style.height=Math.min(150,els.prompt.scrollHeight)+"px";}
+
+  els.load.onclick=loadModel; els.send.onclick=send;
+  els.prompt.addEventListener("input",autoResize);
+  els.prompt.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
+  $("stopBtn").onclick=()=>{abortRequested=true};
+  $("micBtn").onclick=startMic;
+  $("menuBtn").onclick=()=>$("sidebar").classList.toggle("open");
+  document.addEventListener("click",e=>{
+    if(innerWidth<850 && $("sidebar").classList.contains("open") && !e.target.closest("#sidebar") && !e.target.closest("#menuBtn")) $("sidebar").classList.remove("open");
+  });
+  $("clearBtn").onclick=()=>{
+    if(confirm("هەموو بیرگە و گفتوگۆکان بسڕدرێنەوە؟")){
+      state.messages=[];localStorage.removeItem(STORE);location.reload();
+    }
+  };
+  $("exportBtn").onclick=()=>{
+    const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="AI-memory.json";a.click();URL.revokeObjectURL(a.href);
+  };
+  [els.aiName,els.personality,els.happy,els.angry,els.care,els.smart,els.voice,els.memory].forEach(x=>x.addEventListener("input",updateUI));
+  restore();
+</script>
+</body>
+</html>
